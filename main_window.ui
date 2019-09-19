@@ -547,7 +547,7 @@
               <string/>
              </property>
              <property name="pixmap">
-              <pixmap>x.png</pixmap>
+              <pixmap>../x.png</pixmap>
              </property>
             </widget>
            </item>
@@ -569,7 +569,7 @@
               <string/>
              </property>
              <property name="pixmap">
-              <pixmap>x.png</pixmap>
+              <pixmap>../x.png</pixmap>
              </property>
             </widget>
            </item>
@@ -591,7 +591,7 @@
               <string/>
              </property>
              <property name="pixmap">
-              <pixmap>x.png</pixmap>
+              <pixmap>../x.png</pixmap>
              </property>
             </widget>
            </item>
@@ -613,7 +613,7 @@
               <string/>
              </property>
              <property name="pixmap">
-              <pixmap>x.png</pixmap>
+              <pixmap>../x.png</pixmap>
              </property>
             </widget>
            </item>
@@ -635,7 +635,7 @@
               <string/>
              </property>
              <property name="pixmap">
-              <pixmap>x.png</pixmap>
+              <pixmap>../x.png</pixmap>
              </property>
             </widget>
            </item>
@@ -657,7 +657,7 @@
               <string/>
              </property>
              <property name="pixmap">
-              <pixmap>x.png</pixmap>
+              <pixmap>../x.png</pixmap>
              </property>
             </widget>
            </item>
@@ -679,7 +679,7 @@
               <string/>
              </property>
              <property name="pixmap">
-              <pixmap>x.png</pixmap>
+              <pixmap>../x.png</pixmap>
              </property>
             </widget>
            </item>
@@ -701,7 +701,7 @@
               <string/>
              </property>
              <property name="pixmap">
-              <pixmap>x.png</pixmap>
+              <pixmap>../x.png</pixmap>
              </property>
             </widget>
            </item>
@@ -723,7 +723,7 @@
               <string/>
              </property>
              <property name="pixmap">
-              <pixmap>x.png</pixmap>
+              <pixmap>../x.png</pixmap>
              </property>
             </widget>
            </item>
@@ -748,7 +748,7 @@
               <enum>Qt::RichText</enum>
              </property>
              <property name="pixmap">
-              <pixmap>x.png</pixmap>
+              <pixmap>../x.png</pixmap>
              </property>
             </widget>
            </item>
@@ -770,7 +770,7 @@
               <string/>
              </property>
              <property name="pixmap">
-              <pixmap>x.png</pixmap>
+              <pixmap>../x.png</pixmap>
              </property>
             </widget>
            </item>
@@ -792,7 +792,7 @@
               <string/>
              </property>
              <property name="pixmap">
-              <pixmap>x.png</pixmap>
+              <pixmap>../x.png</pixmap>
              </property>
             </widget>
            </item>
@@ -814,7 +814,7 @@
               <string/>
              </property>
              <property name="pixmap">
-              <pixmap>x.png</pixmap>
+              <pixmap>../x.png</pixmap>
              </property>
             </widget>
            </item>
@@ -836,7 +836,7 @@
               <string/>
              </property>
              <property name="pixmap">
-              <pixmap>x.png</pixmap>
+              <pixmap>../x.png</pixmap>
              </property>
             </widget>
            </item>
@@ -858,7 +858,7 @@
               <string/>
              </property>
              <property name="pixmap">
-              <pixmap>x.png</pixmap>
+              <pixmap>../x.png</pixmap>
              </property>
             </widget>
            </item>
@@ -880,7 +880,7 @@
               <string/>
              </property>
              <property name="pixmap">
-              <pixmap>x.png</pixmap>
+              <pixmap>../x.png</pixmap>
              </property>
             </widget>
            </item>
@@ -902,7 +902,7 @@
               <string/>
              </property>
              <property name="pixmap">
-              <pixmap>x.png</pixmap>
+              <pixmap>../x.png</pixmap>
              </property>
             </widget>
            </item>
@@ -924,7 +924,7 @@
               <string/>
              </property>
              <property name="pixmap">
-              <pixmap>x.png</pixmap>
+              <pixmap>../x.png</pixmap>
              </property>
             </widget>
            </item>
@@ -1093,7 +1093,7 @@
               <string/>
              </property>
              <property name="pixmap">
-              <pixmap>x.png</pixmap>
+              <pixmap>../x.png</pixmap>
              </property>
             </widget>
            </item>
@@ -1115,7 +1115,7 @@
               <string/>
              </property>
              <property name="pixmap">
-              <pixmap>x.png</pixmap>
+              <pixmap>../x.png</pixmap>
              </property>
             </widget>
            </item>
@@ -1137,7 +1137,7 @@
               <string/>
              </property>
              <property name="pixmap">
-              <pixmap>x.png</pixmap>
+              <pixmap>../x.png</pixmap>
              </property>
             </widget>
            </item>
@@ -1159,7 +1159,7 @@
               <string/>
              </property>
              <property name="pixmap">
-              <pixmap>x.png</pixmap>
+              <pixmap>../x.png</pixmap>
              </property>
             </widget>
            </item>
@@ -1181,7 +1181,7 @@
               <string/>
              </property>
              <property name="pixmap">
-              <pixmap>x.png</pixmap>
+              <pixmap>../x.png</pixmap>
              </property>
             </widget>
            </item>
@@ -1203,7 +1203,7 @@
               <string/>
              </property>
              <property name="pixmap">
-              <pixmap>x.png</pixmap>
+              <pixmap>../x.png</pixmap>
              </property>
             </widget>
            </item>
@@ -1225,7 +1225,7 @@
               <string/>
              </property>
              <property name="pixmap">
-              <pixmap>x.png</pixmap>
+              <pixmap>../x.png</pixmap>
              </property>
             </widget>
            </item>
@@ -1247,7 +1247,7 @@
               <string/>
              </property>
              <property name="pixmap">
-              <pixmap>x.png</pixmap>
+              <pixmap>../x.png</pixmap>
              </property>
             </widget>
            </item>
@@ -1269,7 +1269,7 @@
               <string/>
              </property>
              <property name="pixmap">
-              <pixmap>x.png</pixmap>
+              <pixmap>../x.png</pixmap>
              </property>
             </widget>
            </item>
@@ -1291,7 +1291,7 @@
               <string/>
              </property>
              <property name="pixmap">
-              <pixmap>x.png</pixmap>
+              <pixmap>../x.png</pixmap>
              </property>
             </widget>
            </item>
@@ -1313,7 +1313,7 @@
               <string/>
              </property>
              <property name="pixmap">
-              <pixmap>x.png</pixmap>
+              <pixmap>../x.png</pixmap>
              </property>
             </widget>
            </item>
@@ -1335,7 +1335,7 @@
               <string/>
              </property>
              <property name="pixmap">
-              <pixmap>x.png</pixmap>
+              <pixmap>../x.png</pixmap>
              </property>
             </widget>
            </item>
@@ -1364,7 +1364,7 @@
               <string/>
              </property>
              <property name="pixmap">
-              <pixmap>x.png</pixmap>
+              <pixmap>../x.png</pixmap>
              </property>
             </widget>
            </item>
@@ -2052,7 +2052,7 @@
        <string/>
       </property>
       <property name="pixmap">
-       <pixmap>x.png</pixmap>
+       <pixmap>../x.png</pixmap>
       </property>
      </widget>
     </widget>
@@ -2246,23 +2246,23 @@
        <x>10</x>
        <y>20</y>
        <width>231</width>
-       <height>79</height>
+       <height>91</height>
       </rect>
      </property>
      <layout class="QGridLayout" name="gridLayout_16">
       <property name="leftMargin">
-       <number>1</number>
+       <number>2</number>
       </property>
       <property name="topMargin">
-       <number>1</number>
+       <number>2</number>
       </property>
       <property name="rightMargin">
-       <number>1</number>
+       <number>2</number>
       </property>
       <property name="bottomMargin">
-       <number>1</number>
+       <number>2</number>
       </property>
-      <item row="0" column="0">
+      <item row="1" column="1">
        <layout class="QGridLayout" name="gridLayout_15">
         <item row="0" column="0">
          <widget class="QLabel" name="label_74">
@@ -2323,29 +2323,10 @@
         </item>
        </layout>
       </item>
-      <item row="0" column="1">
+      <item row="1" column="2">
        <layout class="QGridLayout" name="gridLayout_14">
-        <item row="0" column="0">
-         <widget class="QLabel" name="label_76">
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>21</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>16777215</width>
-            <height>21</height>
-           </size>
-          </property>
-          <property name="text">
-           <string>unknown</string>
-          </property>
-         </widget>
-        </item>
         <item row="1" column="0">
-         <widget class="QLabel" name="label_77">
+         <widget class="QLabel" name="gyroversion_label">
           <property name="minimumSize">
            <size>
             <width>0</width>
@@ -2364,7 +2345,26 @@
          </widget>
         </item>
         <item row="2" column="0">
-         <widget class="QLabel" name="label_78">
+         <widget class="QLabel" name="uid_label">
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>21</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>21</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>unknown</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="0">
+         <widget class="QLabel" name="mainversion_label">
           <property name="minimumSize">
            <size>
             <width>0</width>
@@ -2384,15 +2384,43 @@
         </item>
        </layout>
       </item>
+      <item row="2" column="1">
+       <widget class="Line" name="line_35">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="2">
+       <widget class="Line" name="line_36">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="Line" name="line_37">
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="3">
+       <widget class="Line" name="line_38">
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
+        </property>
+       </widget>
+      </item>
      </layout>
     </widget>
-    <widget class="QLabel" name="label_72">
+    <widget class="QLabel" name="uidcode_bar_label">
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>80</y>
+       <y>110</y>
        <width>231</width>
-       <height>120</height>
+       <height>91</height>
       </rect>
      </property>
      <property name="text">
