@@ -7,7 +7,7 @@
 # WARNING! All changes made in this file will be lost!
 
 
-import os,sys,time,socket,struct,barcode,shutil
+import os,sys,time,socket,struct,barcode
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import Qt, QThread, pyqtSignal
 from barcode.writer import ImageWriter
@@ -15,26 +15,6 @@ from barcode.writer import ImageWriter
 so = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 TESTBOART_ADDR_PORT = 4822
 TESTBOART_ADDR = ('192.168.192.7', TESTBOART_ADDR_PORT)
-
-def make_folder(path):
-    path=path.strip()
-    path=path.rstrip("\\")
-    isExists=os.path.exists(path)
-    if not isExists:
-        os.makedirs(path) 
-        return True
-    else:
-        return False
-
-def del_file(path):
-    path=path.strip()
-    path=path.rstrip("\\")
-    isExists=os.path.exists(path)
-    if not isExists:
-        return True
-    else:
-        shutil.rmtree(path)
-        return False
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -1024,9 +1004,10 @@ class Ui_MainWindow(object):
             file.write("\t结果：" + "fail\n")
         if warn_result and delay_result and di_result and brake_result and charge_result and emc_result and bootlight_result and do_result and can_result and rs485_result and rs232_result:
             file.write("结论：" + "pass\n")
+            self.statusbar.showMessage("测试结果全部成功，请查看...", 99999)
         else:
             file.write("结论：" + "fail\n")
-        
+            self.statusbar.showMessage("测试结果存在失败，请查看...", 99999)
         file.close
 
     def resetAllAutoTestCounter(self):
@@ -1361,6 +1342,7 @@ class autoTestSendCmdThread(QThread):
                 warnlight_times = int(ui.auto_line_text_warninglight.text())
                 cycle_times = int(ui.auto_line_text_total.text())
                 self.total_times = openpc_times + closepc_times + rs232_times + rs485_times + can_times + do_times + brake_times + bootlight_times+ emc_times+poweroff_times + charge_times + poweron_times + di_times + delay_times + warnlight_times
+                self.total_times = cycle_times*self.total_times
             except:
                 self.abnormal_msg_signal.emit("测试次数必须为整数!")
                 self.total_times = 0
