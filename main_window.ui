@@ -30,6 +30,9 @@
   </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QTabWidget" name="tabWidget">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
     <property name="geometry">
      <rect>
       <x>10</x>
@@ -90,20 +93,6 @@
          <property name="bottomMargin">
           <number>2</number>
          </property>
-         <item>
-          <widget class="QPushButton" name="manual_test_push_openpc">
-           <property name="text">
-            <string>开机</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="manual_test_push_closepc">
-           <property name="text">
-            <string>关机</string>
-           </property>
-          </widget>
-         </item>
          <item>
           <widget class="QPushButton" name="push_reset">
            <property name="text">
@@ -1076,7 +1065,7 @@
             </widget>
            </item>
            <item row="10" column="0">
-            <widget class="QLabel" name="atuo_label_brake_state">
+            <widget class="QLabel" name="auto_label_brake_state">
              <property name="minimumSize">
               <size>
                <width>21</width>
@@ -1098,7 +1087,7 @@
             </widget>
            </item>
            <item row="6" column="0">
-            <widget class="QLabel" name="atuo_label_do_state">
+            <widget class="QLabel" name="auto_label_do_state">
              <property name="minimumSize">
               <size>
                <width>21</width>
@@ -1120,7 +1109,7 @@
             </widget>
            </item>
            <item row="7" column="0">
-            <widget class="QLabel" name="atuo_label_bootlight_state">
+            <widget class="QLabel" name="auto_label_bootlight_state">
              <property name="minimumSize">
               <size>
                <width>21</width>
@@ -1142,7 +1131,7 @@
             </widget>
            </item>
            <item row="12" column="0">
-            <widget class="QLabel" name="atuo_label_delay_state">
+            <widget class="QLabel" name="auto_label_delay_state">
              <property name="minimumSize">
               <size>
                <width>21</width>
@@ -1164,7 +1153,7 @@
             </widget>
            </item>
            <item row="5" column="0">
-            <widget class="QLabel" name="atuo_label_can_state">
+            <widget class="QLabel" name="auto_label_can_state">
              <property name="minimumSize">
               <size>
                <width>21</width>
@@ -1186,7 +1175,7 @@
             </widget>
            </item>
            <item row="3" column="0">
-            <widget class="QLabel" name="atuo_label_rs232_state">
+            <widget class="QLabel" name="auto_label_rs232_state">
              <property name="minimumSize">
               <size>
                <width>21</width>
@@ -1208,7 +1197,7 @@
             </widget>
            </item>
            <item row="15" column="0">
-            <widget class="QLabel" name="atuo_label_poweroff_state">
+            <widget class="QLabel" name="auto_label_poweroff_state">
              <property name="minimumSize">
               <size>
                <width>21</width>
@@ -1230,7 +1219,7 @@
             </widget>
            </item>
            <item row="4" column="0">
-            <widget class="QLabel" name="atuo_label_rs485_state">
+            <widget class="QLabel" name="auto_label_rs485_state">
              <property name="minimumSize">
               <size>
                <width>21</width>
@@ -1252,7 +1241,7 @@
             </widget>
            </item>
            <item row="13" column="0">
-            <widget class="QLabel" name="atuo_label_warninglight_state">
+            <widget class="QLabel" name="auto_label_warninglight_state">
              <property name="minimumSize">
               <size>
                <width>21</width>
@@ -1274,7 +1263,7 @@
             </widget>
            </item>
            <item row="11" column="0">
-            <widget class="QLabel" name="atuo_label_di_state">
+            <widget class="QLabel" name="auto_label_di_state">
              <property name="minimumSize">
               <size>
                <width>21</width>
@@ -1296,7 +1285,7 @@
             </widget>
            </item>
            <item row="9" column="0">
-            <widget class="QLabel" name="atuo_label_charge_state">
+            <widget class="QLabel" name="auto_label_charge_state">
              <property name="minimumSize">
               <size>
                <width>21</width>
@@ -1318,7 +1307,7 @@
             </widget>
            </item>
            <item row="8" column="0">
-            <widget class="QLabel" name="atuo_label_emc_state">
+            <widget class="QLabel" name="auto_label_emc_state">
              <property name="minimumSize">
               <size>
                <width>21</width>
@@ -1347,7 +1336,7 @@
             </widget>
            </item>
            <item row="2" column="0">
-            <widget class="QLabel" name="atuo_label_poweron_state">
+            <widget class="QLabel" name="auto_label_poweron_state">
              <property name="minimumSize">
               <size>
                <width>21</width>
@@ -1651,7 +1640,7 @@
             <number>0</number>
            </property>
            <item row="13" column="0">
-            <widget class="QLineEdit" name="atuo_line_text_warninglight">
+            <widget class="QLineEdit" name="auto_line_text_warninglight">
              <property name="minimumSize">
               <size>
                <width>0</width>
@@ -1677,7 +1666,7 @@
             </widget>
            </item>
            <item row="5" column="0">
-            <widget class="QLineEdit" name="atuo_line_text_can">
+            <widget class="QLineEdit" name="auto_line_text_can">
              <property name="minimumSize">
               <size>
                <width>0</width>
@@ -1696,7 +1685,7 @@
             </widget>
            </item>
            <item row="6" column="0">
-            <widget class="QLineEdit" name="atuo_line_text_do">
+            <widget class="QLineEdit" name="auto_line_text_do">
              <property name="minimumSize">
               <size>
                <width>0</width>
@@ -1722,7 +1711,7 @@
             </widget>
            </item>
            <item row="10" column="0">
-            <widget class="QLineEdit" name="atuo_line_text_brake">
+            <widget class="QLineEdit" name="auto_line_text_brake">
              <property name="minimumSize">
               <size>
                <width>0</width>
@@ -1741,7 +1730,7 @@
             </widget>
            </item>
            <item row="7" column="0">
-            <widget class="QLineEdit" name="atuo_line_text_bootlight">
+            <widget class="QLineEdit" name="auto_line_text_bootlight">
              <property name="minimumSize">
               <size>
                <width>0</width>
@@ -1760,7 +1749,7 @@
             </widget>
            </item>
            <item row="8" column="0">
-            <widget class="QLineEdit" name="atuo_line_text_emc">
+            <widget class="QLineEdit" name="auto_line_text_emc">
              <property name="minimumSize">
               <size>
                <width>0</width>
@@ -1779,9 +1768,9 @@
             </widget>
            </item>
            <item row="15" column="0">
-            <widget class="QLineEdit" name="atuo_line_text_poweroff">
+            <widget class="QLineEdit" name="auto_line_text_poweroff">
              <property name="enabled">
-              <bool>false</bool>
+              <bool>true</bool>
              </property>
              <property name="minimumSize">
               <size>
@@ -1796,12 +1785,12 @@
               </size>
              </property>
              <property name="text">
-              <string>1</string>
+              <string>0</string>
              </property>
             </widget>
            </item>
            <item row="3" column="0">
-            <widget class="QLineEdit" name="atuo_line_text_rs232">
+            <widget class="QLineEdit" name="auto_line_text_rs232">
              <property name="enabled">
               <bool>true</bool>
              </property>
@@ -1821,12 +1810,12 @@
               <string>20</string>
              </property>
              <property name="readOnly">
-              <bool>true</bool>
+              <bool>false</bool>
              </property>
             </widget>
            </item>
            <item row="9" column="0">
-            <widget class="QLineEdit" name="atuo_line_text_charge">
+            <widget class="QLineEdit" name="auto_line_text_charge">
              <property name="minimumSize">
               <size>
                <width>0</width>
@@ -1845,7 +1834,7 @@
             </widget>
            </item>
            <item row="12" column="0">
-            <widget class="QLineEdit" name="atuo_line_text_delay">
+            <widget class="QLineEdit" name="auto_line_text_delay">
              <property name="minimumSize">
               <size>
                <width>0</width>
@@ -1864,7 +1853,7 @@
             </widget>
            </item>
            <item row="4" column="0">
-            <widget class="QLineEdit" name="atuo_line_text_rs485">
+            <widget class="QLineEdit" name="auto_line_text_rs485">
              <property name="minimumSize">
               <size>
                <width>0</width>
@@ -1883,7 +1872,7 @@
             </widget>
            </item>
            <item row="11" column="0">
-            <widget class="QLineEdit" name="atuo_line_text_di">
+            <widget class="QLineEdit" name="auto_line_text_di">
              <property name="minimumSize">
               <size>
                <width>0</width>
@@ -1902,9 +1891,9 @@
             </widget>
            </item>
            <item row="2" column="0">
-            <widget class="QLineEdit" name="atuo_line_text_poweron">
+            <widget class="QLineEdit" name="auto_line_text_poweron">
              <property name="enabled">
-              <bool>false</bool>
+              <bool>true</bool>
              </property>
              <property name="minimumSize">
               <size>
@@ -1919,7 +1908,7 @@
               </size>
              </property>
              <property name="text">
-              <string>1</string>
+              <string>0</string>
              </property>
             </widget>
            </item>
@@ -1956,14 +1945,14 @@
         </widget>
        </item>
        <item row="4" column="1">
-        <widget class="QLineEdit" name="atuo_line_text_total">
+        <widget class="QLineEdit" name="auto_line_text_total">
          <property name="text">
           <string>10</string>
          </property>
         </widget>
        </item>
        <item row="5" column="1">
-        <widget class="QPushButton" name="atuo_push_button_test">
+        <widget class="QPushButton" name="auto_push_button_test">
          <property name="text">
           <string>一键自动测试</string>
          </property>
@@ -2012,7 +2001,7 @@
         </widget>
        </item>
        <item row="6" column="1">
-        <widget class="QPushButton" name="atuo_push_button_report">
+        <widget class="QPushButton" name="auto_push_button_report">
          <property name="text">
           <string>一键生成报告</string>
          </property>
@@ -2056,6 +2045,21 @@
       </property>
      </widget>
     </widget>
+    <widget class="QWidget" name="tab_7">
+     <attribute name="title">
+      <string>测试报告</string>
+     </attribute>
+     <widget class="QTextBrowser" name="textBrowser">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>10</y>
+        <width>471</width>
+        <height>521</height>
+       </rect>
+      </property>
+     </widget>
+    </widget>
    </widget>
    <widget class="QGroupBox" name="groupBox">
     <property name="geometry">
@@ -2087,6 +2091,25 @@
        <property name="spacing">
         <number>2</number>
        </property>
+       <item row="3" column="0">
+        <widget class="QPushButton" name="push_connect">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>21</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>21</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>connect</string>
+         </property>
+        </widget>
+       </item>
        <item row="0" column="0">
         <layout class="QGridLayout" name="gridLayout_10">
          <item row="0" column="0">
@@ -2206,21 +2229,16 @@
         </layout>
        </item>
        <item row="1" column="0">
-        <widget class="QPushButton" name="push_connect">
-         <property name="minimumSize">
-          <size>
-           <width>0</width>
-           <height>21</height>
-          </size>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>16777215</width>
-           <height>21</height>
-          </size>
-         </property>
+        <widget class="QPushButton" name="manual_test_push_openpc">
          <property name="text">
-          <string>connect</string>
+          <string>开机</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QPushButton" name="manual_test_push_closepc">
+         <property name="text">
+          <string>关机</string>
          </property>
         </widget>
        </item>

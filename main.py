@@ -16,6 +16,31 @@ so = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 TESTBOART_ADDR_PORT = 4822
 TESTBOART_ADDR = ('192.168.192.7', TESTBOART_ADDR_PORT)
 
+def sendTestCmd(index, timeout_t):
+    so.connect(TESTBOART_ADDR)
+    print("send index is " + str(index))
+    so.sendto(struct.pack('>HB',0x1234,index),TESTBOART_ADDR)
+    so.settimeout(timeout_t)
+
+def recvTestResult(index):
+    so.connect(TESTBOART_ADDR)
+    try:
+        ret,address= so.recvfrom(1024)  
+    except socket.timeout:
+        ret = b''
+    try:
+        head, item_index, result = struct.unpack('>H2B',ret)
+        print("recv is " + str(hex(head)) + " " + str(hex(item_index)))
+    except:
+        head = 0xFFFF   
+    if head == 0x5678:
+        if item_index == index and result == 0xFF:
+            return True
+        else:
+            return False
+    else:
+        return False
+
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
@@ -26,6 +51,7 @@ class Ui_MainWindow(object):
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.tabWidget = QtWidgets.QTabWidget(self.centralwidget)
+        self.tabWidget.setEnabled(True)
         self.tabWidget.setGeometry(QtCore.QRect(10, 230, 491, 561))
         self.tabWidget.setObjectName("tabWidget")
         self.tab_3 = QtWidgets.QWidget()
@@ -42,12 +68,6 @@ class Ui_MainWindow(object):
         self.horizontalLayout_2.setContentsMargins(2, 2, 2, 2)
         self.horizontalLayout_2.setSpacing(2)
         self.horizontalLayout_2.setObjectName("horizontalLayout_2")
-        self.manual_test_push_openpc = QtWidgets.QPushButton(self.widget)
-        self.manual_test_push_openpc.setObjectName("manual_test_push_openpc")
-        self.horizontalLayout_2.addWidget(self.manual_test_push_openpc)
-        self.manual_test_push_closepc = QtWidgets.QPushButton(self.widget)
-        self.manual_test_push_closepc.setObjectName("manual_test_push_closepc")
-        self.horizontalLayout_2.addWidget(self.manual_test_push_closepc)
         self.push_reset = QtWidgets.QPushButton(self.widget)
         self.push_reset.setObjectName("push_reset")
         self.horizontalLayout_2.addWidget(self.push_reset)
@@ -599,7 +619,7 @@ class Ui_MainWindow(object):
         self.auto_line_text_emc.setObjectName("auto_line_text_emc")
         self.gridLayout_7.addWidget(self.auto_line_text_emc, 8, 0, 1, 1)
         self.auto_line_text_poweroff = QtWidgets.QLineEdit(self.widget1)
-        # self.auto_line_text_poweroff.setEnabled(False)
+        self.auto_line_text_poweroff.setEnabled(True)
         self.auto_line_text_poweroff.setMinimumSize(QtCore.QSize(0, 21))
         self.auto_line_text_poweroff.setMaximumSize(QtCore.QSize(16777215, 21))
         self.auto_line_text_poweroff.setObjectName("auto_line_text_poweroff")
@@ -608,6 +628,7 @@ class Ui_MainWindow(object):
         self.auto_line_text_rs232.setEnabled(True)
         self.auto_line_text_rs232.setMinimumSize(QtCore.QSize(0, 21))
         self.auto_line_text_rs232.setMaximumSize(QtCore.QSize(16777215, 21))
+        self.auto_line_text_rs232.setReadOnly(False)
         self.auto_line_text_rs232.setObjectName("auto_line_text_rs232")
         self.gridLayout_7.addWidget(self.auto_line_text_rs232, 3, 0, 1, 1)
         self.auto_line_text_charge = QtWidgets.QLineEdit(self.widget1)
@@ -631,7 +652,7 @@ class Ui_MainWindow(object):
         self.auto_line_text_di.setObjectName("auto_line_text_di")
         self.gridLayout_7.addWidget(self.auto_line_text_di, 11, 0, 1, 1)
         self.auto_line_text_poweron = QtWidgets.QLineEdit(self.widget1)
-        # self.auto_line_text_poweron.setEnabled(False)
+        self.auto_line_text_poweron.setEnabled(True)
         self.auto_line_text_poweron.setMinimumSize(QtCore.QSize(0, 21))
         self.auto_line_text_poweron.setMaximumSize(QtCore.QSize(16777215, 21))
         self.auto_line_text_poweron.setObjectName("auto_line_text_poweron")
@@ -702,7 +723,20 @@ class Ui_MainWindow(object):
         self.line_34.setFrameShadow(QtWidgets.QFrame.Sunken)
         self.line_34.setObjectName("line_34")
         self.gridLayout_11.addWidget(self.line_34, 9, 1, 1, 1)
+        self.auto_label_rs232_state_3 = QtWidgets.QLabel(self.tab_4)
+        self.auto_label_rs232_state_3.setGeometry(QtCore.QRect(220, 230, 21, 21))
+        self.auto_label_rs232_state_3.setMinimumSize(QtCore.QSize(21, 21))
+        self.auto_label_rs232_state_3.setMaximumSize(QtCore.QSize(21, 21))
+        self.auto_label_rs232_state_3.setText("")
+        self.auto_label_rs232_state_3.setPixmap(QtGui.QPixmap(".\\icon\\x.png"))
+        self.auto_label_rs232_state_3.setObjectName("auto_label_rs232_state_3")
         self.tabWidget.addTab(self.tab_4, "")
+        self.tab_7 = QtWidgets.QWidget()
+        self.tab_7.setObjectName("tab_7")
+        self.textBrowser = QtWidgets.QTextBrowser(self.tab_7)
+        self.textBrowser.setGeometry(QtCore.QRect(10, 10, 471, 521))
+        self.textBrowser.setObjectName("textBrowser")
+        self.tabWidget.addTab(self.tab_7, "")
         self.groupBox = QtWidgets.QGroupBox(self.centralwidget)
         self.groupBox.setGeometry(QtCore.QRect(10, 10, 231, 211))
         self.groupBox.setObjectName("groupBox")
@@ -712,6 +746,11 @@ class Ui_MainWindow(object):
         self.gridLayout_12.setContentsMargins(5, 5, 5, 5)
         self.gridLayout_12.setSpacing(2)
         self.gridLayout_12.setObjectName("gridLayout_12")
+        self.push_connect = QtWidgets.QPushButton(self.groupBox)
+        self.push_connect.setMinimumSize(QtCore.QSize(0, 21))
+        self.push_connect.setMaximumSize(QtCore.QSize(16777215, 21))
+        self.push_connect.setObjectName("push_connect")
+        self.gridLayout_12.addWidget(self.push_connect, 3, 0, 1, 1)
         self.gridLayout_10 = QtWidgets.QGridLayout()
         self.gridLayout_10.setObjectName("gridLayout_10")
         self.verticalLayout = QtWidgets.QVBoxLayout()
@@ -745,11 +784,12 @@ class Ui_MainWindow(object):
         self.verticalLayout_2.addWidget(self.line_port)
         self.gridLayout_10.addLayout(self.verticalLayout_2, 0, 1, 1, 1)
         self.gridLayout_12.addLayout(self.gridLayout_10, 0, 0, 1, 1)
-        self.push_connect = QtWidgets.QPushButton(self.groupBox)
-        self.push_connect.setMinimumSize(QtCore.QSize(0, 21))
-        self.push_connect.setMaximumSize(QtCore.QSize(16777215, 21))
-        self.push_connect.setObjectName("push_connect")
-        self.gridLayout_12.addWidget(self.push_connect, 1, 0, 1, 1)
+        self.manual_test_push_openpc = QtWidgets.QPushButton(self.groupBox)
+        self.manual_test_push_openpc.setObjectName("manual_test_push_openpc")
+        self.gridLayout_12.addWidget(self.manual_test_push_openpc, 1, 0, 1, 1)
+        self.manual_test_push_closepc = QtWidgets.QPushButton(self.groupBox)
+        self.manual_test_push_closepc.setObjectName("manual_test_push_closepc")
+        self.gridLayout_12.addWidget(self.manual_test_push_closepc, 2, 0, 1, 1)
         self.gridLayout_13.addLayout(self.gridLayout_12, 0, 0, 1, 1)
         self.groupBox_2 = QtWidgets.QGroupBox(self.centralwidget)
         self.groupBox_2.setGeometry(QtCore.QRect(250, 10, 251, 211))
@@ -869,6 +909,8 @@ class Ui_MainWindow(object):
         self.auto_push_button_test.clicked.connect(self.onykeyAutoTest)
         self.push_connect.clicked.connect(self.connectFunc)
         self.auto_push_button_report.clicked.connect(self.onkeyReport)
+        self.manual_test_push_openpc.clicked.connect(self.manualOpenPC)
+        self.manual_test_push_closepc.clicked.connect(self.manualClosePC)
 
         self.auto_test_sendcmd_thread = autoTestSendCmdThread()
         self.auto_test_sendcmd_thread.process_bar_signal.connect(self.updateAutoTestProcessBar)
@@ -877,6 +919,12 @@ class Ui_MainWindow(object):
 
         self.listen_reply_thread = listenReplyThread()
         self.resetAllAutoTestCounter()
+
+    def manualOpenPC(self):
+        sendTestCmd(0x11,0.5)
+
+    def manualClosePC(self):
+        sendTestCmd(0x12,0.5)
 
     def onkeyReport(self):
         text_name = self.uid_string
@@ -1008,7 +1056,13 @@ class Ui_MainWindow(object):
         else:
             file.write("结论：" + "fail\n")
             self.statusbar.showMessage("测试结果存在失败，请查看...", 99999)
-        file.close
+        file.close()
+        document = open(key_word_file,'r',encoding = "utf-8") 
+        self.textBrowser.setText("")
+        for i in document.readlines():
+            self.textBrowser.append(i)
+        document.close()
+        self.tabWidget.setCurrentIndex(2)
 
     def resetAllAutoTestCounter(self):
         self.auto_rs232_yes_counter = 0
@@ -1078,13 +1132,93 @@ class Ui_MainWindow(object):
             self.tabWidget.setEnabled(True)
         else:
             self.tabWidget.setEnabled(False)
-            
+    
+    def resetAutoState(self):
+        result_show = QtGui.QPixmap(".\\icon\\x.png")
+        self.auto_label_rs232_state.setPixmap(result_show)
+        self.auto_label_rs485_state.setPixmap(result_show)
+        self.auto_label_can_state.setPixmap(result_show)
+        self.auto_label_do_state.setPixmap(result_show)
+        self.auto_label_bootlight_state.setPixmap(result_show)
+        self.auto_label_emc_state.setPixmap(result_show)
+        self.auto_label_charge_state.setPixmap(result_show)
+        self.auto_label_brake_state.setPixmap(result_show)
+        self.auto_label_di_state.setPixmap(result_show)
+        self.auto_label_delay_state.setPixmap(result_show)
+        self.auto_label_warninglight_state.setPixmap(result_show)
+
+    def onykeyAutoTest(self):
+        self.resetAllAutoTestCounter()
+        self.resetAutoState()
+        self.auto_test_sendcmd_thread.resetTotalTimesCounter()
+        self.auto_test_sendcmd_thread.start()
+        self.auto_test_sendcmd_thread.setRunStartTrigger()
+
+
+    def autoTestSignal(self, item, yes_or_no):
+        item_list = Test_Items()
+        if yes_or_no:
+            result_show = QtGui.QPixmap(".\\icon\\d.png")
+        else:
+            result_show = QtGui.QPixmap(".\\icon\\x.png")
+        if item == item_list.rs232:
+            if yes_or_no:
+                self.auto_rs232_yes_counter = self.auto_rs232_yes_counter + 1
+            self.auto_label_rs232_state.setPixmap(result_show)
+        if item == item_list.rs485:
+            if yes_or_no:
+                self.auto_rs485_yes_counter = self.auto_rs485_yes_counter + 1
+            self.auto_label_rs485_state.setPixmap(result_show)
+        if item == item_list.can:
+            if yes_or_no:
+                self.auto_can_yes_counter = self.auto_can_yes_counter + 1
+            self.auto_label_can_state.setPixmap(result_show)
+        if item == item_list.doOpen:
+            if yes_or_no:
+                self.auto_do_yes_counter = self.auto_do_yes_counter + 1
+            self.auto_label_do_state.setPixmap(result_show)
+        if item == item_list.bootLight:
+            if yes_or_no:
+                self.auto_bootlight_yes_counter = self.auto_bootlight_yes_counter + 1
+            self.auto_label_bootlight_state.setPixmap(result_show)
+        if item == item_list.emcOpen:
+            if yes_or_no:
+                self.auto_emc_yes_counter = self.auto_emc_yes_counter + 1
+            self.auto_label_emc_state.setPixmap(result_show)
+        if item == item_list.chargeGround:
+            if yes_or_no:
+                self.auto_charge_yes_counter = self.auto_charge_yes_counter + 1
+            self.auto_label_charge_state.setPixmap(result_show)
+        if item == item_list.brakeClose:
+            if yes_or_no:
+                self.auto_brake_yes_counter = self.auto_brake_yes_counter + 1
+            self.auto_label_brake_state.setPixmap(result_show)
+        if item == item_list.diBrake:
+            if yes_or_no:
+                self.auto_di_yes_counter = self.auto_di_yes_counter + 1
+            self.auto_label_di_state.setPixmap(result_show)
+        if item == item_list.delayBrake:
+            if yes_or_no:
+                self.auto_delay_yes_counter = self.auto_delay_yes_counter + 1
+            self.auto_label_delay_state.setPixmap(result_show)
+        if item == item_list.warnLightOpen:
+            if yes_or_no:
+                self.auto_warn_yes_counter = self.auto_warn_yes_counter + 1
+            self.auto_label_warninglight_state.setPixmap(result_show)
+
+    def updateAutoTestProcessBar(self, total_times, total_times_counter):
+        self.progressBar.setRange(0, total_times)
+        self.progressBar.setValue(total_times_counter)
+        print("t :" + str(total_times) + " tt  :" + str(total_times_counter))
+        if total_times == total_times_counter:
+            self.onkeyReport()
+
+    def updateStatusBar(self, string): 
+        self.statusbar.showMessage(string, 99999)
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
-        self.manual_test_push_openpc.setText(_translate("MainWindow", "开机"))
-        self.manual_test_push_closepc.setText(_translate("MainWindow", "关机"))
         self.push_reset.setText(_translate("MainWindow", "Reset"))
         self.manual_test_push_rs232.setText(_translate("MainWindow", "rs232测试"))
         self.manual_test_push_485.setText(_translate("MainWindow", "rs485测试"))
@@ -1135,16 +1269,19 @@ class Ui_MainWindow(object):
         self.auto_line_text_rs485.setText(_translate("MainWindow", "20"))
         self.auto_line_text_di.setText(_translate("MainWindow", "10"))
         self.auto_line_text_poweron.setText(_translate("MainWindow", "0"))
-        self.auto_line_text_total.setText(_translate("MainWindow", "1"))
+        self.auto_line_text_total.setText(_translate("MainWindow", "10"))
         self.auto_push_button_test.setText(_translate("MainWindow", "一键自动测试"))
         self.auto_push_button_report.setText(_translate("MainWindow", "一键生成报告"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_4), _translate("MainWindow", "自动测试"))
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_7), _translate("MainWindow", "测试报告"))
         self.groupBox.setTitle(_translate("MainWindow", "connect"))
+        self.push_connect.setText(_translate("MainWindow", "connect"))
         self.label_70.setText(_translate("MainWindow", "IP"))
         self.label_71.setText(_translate("MainWindow", "PORT"))
-        self.line_ip.setText(_translate("MainWindow", "192.168.192.7"))
+        self.line_ip.setText(_translate("MainWindow", "192.168.192.6"))
         self.line_port.setText(_translate("MainWindow", "4822"))
-        self.push_connect.setText(_translate("MainWindow", "connect"))
+        self.manual_test_push_openpc.setText(_translate("MainWindow", "开机"))
+        self.manual_test_push_closepc.setText(_translate("MainWindow", "关机"))
         self.groupBox_2.setTitle(_translate("MainWindow", "info"))
         self.label_74.setText(_translate("MainWindow", "MainVersion:"))
         self.label_73.setText(_translate("MainWindow", "GyroVersion:"))
@@ -1153,76 +1290,7 @@ class Ui_MainWindow(object):
         self.uid_label.setText(_translate("MainWindow", "unknown"))
         self.mainversion_label.setText(_translate("MainWindow", "unknown"))
         self.uidcode_bar_label.setText(_translate("MainWindow", "<html><head/><body><p align=\"center\"><span style=\" font-size:28pt;\">unknown</span></p></body></html>"))
-    
-    def resetAutoState(self):
-        result_show = QtGui.QPixmap(".\\icon\\x.png")
-        self.auto_label_rs232_state.setPixmap(result_show)
-        self.auto_label_rs485_state.setPixmap(result_show)
-        self.auto_label_can_state.setPixmap(result_show)
-        self.auto_label_do_state.setPixmap(result_show)
-        self.auto_label_bootlight_state.setPixmap(result_show)
-        self.auto_label_emc_state.setPixmap(result_show)
-        self.auto_label_charge_state.setPixmap(result_show)
-        self.auto_label_brake_state.setPixmap(result_show)
-        self.auto_label_di_state.setPixmap(result_show)
-        self.auto_label_delay_state.setPixmap(result_show)
-        self.auto_label_warninglight_state.setPixmap(result_show)
 
-    def onykeyAutoTest(self):
-        self.resetAllAutoTestCounter()
-        self.resetAutoState()
-        self.auto_test_sendcmd_thread.resetTotalTimesCounter()
-        self.auto_test_sendcmd_thread.start()
-        self.auto_test_sendcmd_thread.setRunStartTrigger()
-
-
-    def autoTestSignal(self, item, yes_or_no):
-        item_list = Test_Items()
-        if yes_or_no:
-            result_show = QtGui.QPixmap(".\\icon\\d.png")
-        else:
-            result_show = QtGui.QPixmap(".\\icon\\x.png")
-        if item == item_list.rs232:
-            self.auto_rs232_yes_counter = self.auto_rs232_yes_counter + 1
-            self.auto_label_rs232_state.setPixmap(result_show)
-        if item == item_list.rs485:
-            self.auto_rs485_yes_counter = self.auto_rs485_yes_counter + 1
-            self.auto_label_rs485_state.setPixmap(result_show)
-        if item == item_list.can:
-            self.auto_can_yes_counter = self.auto_can_yes_counter + 1
-            self.auto_label_can_state.setPixmap(result_show)
-        if item == item_list.doOpen:
-            self.auto_do_yes_counter = self.auto_do_yes_counter + 1
-            self.auto_label_do_state.setPixmap(result_show)
-        if item == item_list.bootLight:
-            self.auto_bootlight_yes_counter = self.auto_bootlight_yes_counter + 1
-            self.auto_label_bootlight_state.setPixmap(result_show)
-        if item == item_list.emcOpen:
-            self.auto_emc_yes_counter = self.auto_emc_yes_counter + 1
-            self.auto_label_emc_state.setPixmap(result_show)
-        if item == item_list.chargeGround:
-            self.auto_charge_yes_counter = self.auto_charge_yes_counter + 1
-            self.auto_label_charge_state.setPixmap(result_show)
-        if item == item_list.brakeClose:
-            self.auto_brake_yes_counter = self.auto_brake_yes_counter + 1
-            self.auto_label_brake_state.setPixmap(result_show)
-        if item == item_list.diBrake:
-            self.auto_di_yes_counter = self.auto_di_yes_counter + 1
-            self.auto_label_di_state.setPixmap(result_show)
-        if item == item_list.delayBrake:
-            self.auto_delay_yes_counter = self.auto_delay_yes_counter + 1
-            self.auto_label_delay_state.setPixmap(result_show)
-        if item == item_list.warnLightOpen:
-            self.auto_warn_yes_counter = self.auto_warn_yes_counter + 1
-            self.auto_label_warninglight_state.setPixmap(result_show)
-
-    def updateAutoTestProcessBar(self, total_times, total_times_counter):
-        self.progressBar.setRange(0, total_times)
-        self.progressBar.setValue(total_times_counter)
-
-    def updateStatusBar(self, string):
-        self.statusbar.showMessage(string, 99999)
-        
 class Test_Items:
     def __init__(self):
         self.rs232 = 0x01
@@ -1250,32 +1318,6 @@ class Test_Items:
         self.gyroVersionQuery = 0x17
         self.noWork = 0xFF
 
-
-def sendTestCmd(index, timeout_t):
-    so.connect(TESTBOART_ADDR)
-    print("send index is " + str(index))
-    so.sendto(struct.pack('>HB',0x1234,index),TESTBOART_ADDR)
-    so.settimeout(timeout_t)
-
-def recvTestResult(index):
-    so.connect(TESTBOART_ADDR)
-    try:
-        ret,address= so.recvfrom(1024)  
-    except socket.timeout:
-        ret = b''
-    try:
-        head, item_index, result = struct.unpack('>H2B',ret)
-        print("recv is " + str(hex(head)) + " " + str(hex(item_index)))
-    except:
-        head = 0xFFFF   
-    if head == 0x5678:
-        if item_index == index and result == 0xFF:
-            return True
-        else:
-            return False
-    else:
-        return False
-
 class autoTestSendCmdThread(QThread):
     result_signal = pyqtSignal(int, bool)
     process_bar_signal = pyqtSignal(int, int)
@@ -1288,6 +1330,9 @@ class autoTestSendCmdThread(QThread):
         self.total_times_counter += 1
         print(self.total_times_counter)
         self.process_bar_signal.emit(self.total_times, self.total_times_counter)
+
+    def clearLastTest(self):
+        sendTestCmd(0xFF, 0)
 
     def testProcess(self, index, times, timeout_t):
         print(type(index))
@@ -1314,7 +1359,8 @@ class autoTestSendCmdThread(QThread):
                     self.result_signal.emit(index, False)
                 times = times - 1
                 self.processBarPlus()
-        time.sleep(0.2)
+        self.clearLastTest()
+        time.sleep(0.2)     
     
     def setRunStartTrigger(self):
         self.trigger_once = True
@@ -1334,14 +1380,12 @@ class autoTestSendCmdThread(QThread):
                 brake_times = int(ui.auto_line_text_brake.text())
                 bootlight_times = int(ui.auto_line_text_bootlight.text())
                 emc_times = int(ui.auto_line_text_emc.text())
-                poweroff_times = int(ui.auto_line_text_poweroff.text())
                 charge_times = int(ui.auto_line_text_charge.text())
-                poweron_times = int(ui.auto_line_text_poweron.text())
                 di_times = int(ui.auto_line_text_di.text())
                 delay_times = int(ui.auto_line_text_delay.text())
                 warnlight_times = int(ui.auto_line_text_warninglight.text())
                 cycle_times = int(ui.auto_line_text_total.text())
-                self.total_times = openpc_times + closepc_times + rs232_times + rs485_times + can_times + do_times + brake_times + bootlight_times+ emc_times+poweroff_times + charge_times + poweron_times + di_times + delay_times + warnlight_times
+                self.total_times = openpc_times + closepc_times + rs232_times + rs485_times + can_times + do_times + brake_times + bootlight_times+ emc_times + charge_times + di_times + delay_times + warnlight_times
                 self.total_times = cycle_times*self.total_times
             except:
                 self.abnormal_msg_signal.emit("测试次数必须为整数!")
@@ -1351,7 +1395,6 @@ class autoTestSendCmdThread(QThread):
             
             while(cycle_times):
                 self.testProcess(self.item_list.openPC, openpc_times, 30.0)
-                self.testProcess(self.item_list.noWork,1,1)
                 self.testProcess(self.item_list.rs232, rs232_times, 3.0)
                 self.testProcess(self.item_list.rs485, rs485_times, 3.0) 
                 self.testProcess(self.item_list.can, can_times, 2.0)
@@ -1364,7 +1407,6 @@ class autoTestSendCmdThread(QThread):
                 self.testProcess([self.item_list.delayBrake,self.item_list.delayClose], delay_times, 1.5)
                 self.testProcess([self.item_list.warnLightOpen,self.item_list.warnLightClose], warnlight_times, 1.5)
                 self.testProcess(self.item_list.closePC, closepc_times, 60.0)
-                self.testProcess(self.item_list.noWork,1,1)
                 cycle_times = cycle_times - 1
             self.trigger_once = False
 
