@@ -1075,7 +1075,7 @@
              </property>
             </widget>
            </item>
-           <item row="9" column="0">
+           <item row="10" column="0">
             <widget class="QLabel" name="atuo_label_brake_state">
              <property name="minimumSize">
               <size>
@@ -1097,7 +1097,7 @@
              </property>
             </widget>
            </item>
-           <item row="5" column="0">
+           <item row="6" column="0">
             <widget class="QLabel" name="atuo_label_do_state">
              <property name="minimumSize">
               <size>
@@ -1119,118 +1119,8 @@
              </property>
             </widget>
            </item>
-           <item row="11" column="0">
-            <widget class="QLabel" name="atuo_label_delay_state">
-             <property name="minimumSize">
-              <size>
-               <width>21</width>
-               <height>21</height>
-              </size>
-             </property>
-             <property name="maximumSize">
-              <size>
-               <width>21</width>
-               <height>21</height>
-              </size>
-             </property>
-             <property name="text">
-              <string/>
-             </property>
-             <property name="pixmap">
-              <pixmap>x.png</pixmap>
-             </property>
-            </widget>
-           </item>
-           <item row="4" column="0">
-            <widget class="QLabel" name="atuo_label_can_state">
-             <property name="minimumSize">
-              <size>
-               <width>21</width>
-               <height>21</height>
-              </size>
-             </property>
-             <property name="maximumSize">
-              <size>
-               <width>21</width>
-               <height>21</height>
-              </size>
-             </property>
-             <property name="text">
-              <string/>
-             </property>
-             <property name="pixmap">
-              <pixmap>x.png</pixmap>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="0">
-            <widget class="QLabel" name="atuo_label_rs232_state">
-             <property name="minimumSize">
-              <size>
-               <width>21</width>
-               <height>21</height>
-              </size>
-             </property>
-             <property name="maximumSize">
-              <size>
-               <width>21</width>
-               <height>21</height>
-              </size>
-             </property>
-             <property name="text">
-              <string/>
-             </property>
-             <property name="pixmap">
-              <pixmap>x.png</pixmap>
-             </property>
-            </widget>
-           </item>
-           <item row="14" column="0">
-            <widget class="QLabel" name="atuo_label_poweroff_state">
-             <property name="minimumSize">
-              <size>
-               <width>21</width>
-               <height>21</height>
-              </size>
-             </property>
-             <property name="maximumSize">
-              <size>
-               <width>21</width>
-               <height>21</height>
-              </size>
-             </property>
-             <property name="text">
-              <string/>
-             </property>
-             <property name="pixmap">
-              <pixmap>x.png</pixmap>
-             </property>
-            </widget>
-           </item>
-           <item row="13" column="0">
-            <widget class="QLabel" name="atuo_label_poweron_state">
-             <property name="minimumSize">
-              <size>
-               <width>21</width>
-               <height>21</height>
-              </size>
-             </property>
-             <property name="maximumSize">
-              <size>
-               <width>21</width>
-               <height>21</height>
-              </size>
-             </property>
-             <property name="text">
-              <string/>
-             </property>
-             <property name="pixmap">
-              <pixmap>x.png</pixmap>
-             </property>
-            </widget>
-           </item>
-           <item row="3" column="0">
-            <widget class="QLabel" name="atuo_label_rs485_state">
+           <item row="7" column="0">
+            <widget class="QLabel" name="atuo_label_bootlight_state">
              <property name="minimumSize">
               <size>
                <width>21</width>
@@ -1252,6 +1142,116 @@
             </widget>
            </item>
            <item row="12" column="0">
+            <widget class="QLabel" name="atuo_label_delay_state">
+             <property name="minimumSize">
+              <size>
+               <width>21</width>
+               <height>21</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>21</width>
+               <height>21</height>
+              </size>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+             <property name="pixmap">
+              <pixmap>x.png</pixmap>
+             </property>
+            </widget>
+           </item>
+           <item row="5" column="0">
+            <widget class="QLabel" name="atuo_label_can_state">
+             <property name="minimumSize">
+              <size>
+               <width>21</width>
+               <height>21</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>21</width>
+               <height>21</height>
+              </size>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+             <property name="pixmap">
+              <pixmap>x.png</pixmap>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="0">
+            <widget class="QLabel" name="atuo_label_rs232_state">
+             <property name="minimumSize">
+              <size>
+               <width>21</width>
+               <height>21</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>21</width>
+               <height>21</height>
+              </size>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+             <property name="pixmap">
+              <pixmap>x.png</pixmap>
+             </property>
+            </widget>
+           </item>
+           <item row="15" column="0">
+            <widget class="QLabel" name="atuo_label_poweroff_state">
+             <property name="minimumSize">
+              <size>
+               <width>21</width>
+               <height>21</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>21</width>
+               <height>21</height>
+              </size>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+             <property name="pixmap">
+              <pixmap>x.png</pixmap>
+             </property>
+            </widget>
+           </item>
+           <item row="4" column="0">
+            <widget class="QLabel" name="atuo_label_rs485_state">
+             <property name="minimumSize">
+              <size>
+               <width>21</width>
+               <height>21</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>21</width>
+               <height>21</height>
+              </size>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+             <property name="pixmap">
+              <pixmap>x.png</pixmap>
+             </property>
+            </widget>
+           </item>
+           <item row="13" column="0">
             <widget class="QLabel" name="atuo_label_warninglight_state">
              <property name="minimumSize">
               <size>
@@ -1273,7 +1273,7 @@
              </property>
             </widget>
            </item>
-           <item row="10" column="0">
+           <item row="11" column="0">
             <widget class="QLabel" name="atuo_label_di_state">
              <property name="minimumSize">
               <size>
@@ -1295,7 +1295,7 @@
              </property>
             </widget>
            </item>
-           <item row="8" column="0">
+           <item row="9" column="0">
             <widget class="QLabel" name="atuo_label_charge_state">
              <property name="minimumSize">
               <size>
@@ -1317,7 +1317,7 @@
              </property>
             </widget>
            </item>
-           <item row="7" column="0">
+           <item row="8" column="0">
             <widget class="QLabel" name="atuo_label_emc_state">
              <property name="minimumSize">
               <size>
@@ -1346,8 +1346,8 @@
              </property>
             </widget>
            </item>
-           <item row="6" column="0">
-            <widget class="QLabel" name="atuo_label_bootlight_state">
+           <item row="2" column="0">
+            <widget class="QLabel" name="atuo_label_poweron_state">
              <property name="minimumSize">
               <size>
                <width>21</width>
@@ -1650,7 +1650,7 @@
            <property name="horizontalSpacing">
             <number>0</number>
            </property>
-           <item row="12" column="0">
+           <item row="13" column="0">
             <widget class="QLineEdit" name="atuo_line_text_warninglight">
              <property name="minimumSize">
               <size>
@@ -1676,7 +1676,7 @@
              </property>
             </widget>
            </item>
-           <item row="4" column="0">
+           <item row="5" column="0">
             <widget class="QLineEdit" name="atuo_line_text_can">
              <property name="minimumSize">
               <size>
@@ -1695,7 +1695,7 @@
              </property>
             </widget>
            </item>
-           <item row="5" column="0">
+           <item row="6" column="0">
             <widget class="QLineEdit" name="atuo_line_text_do">
              <property name="minimumSize">
               <size>
@@ -1710,7 +1710,7 @@
               </size>
              </property>
              <property name="text">
-              <string>20</string>
+              <string>10</string>
              </property>
             </widget>
            </item>
@@ -1721,7 +1721,7 @@
              </property>
             </widget>
            </item>
-           <item row="9" column="0">
+           <item row="10" column="0">
             <widget class="QLineEdit" name="atuo_line_text_brake">
              <property name="minimumSize">
               <size>
@@ -1740,7 +1740,7 @@
              </property>
             </widget>
            </item>
-           <item row="6" column="0">
+           <item row="7" column="0">
             <widget class="QLineEdit" name="atuo_line_text_bootlight">
              <property name="minimumSize">
               <size>
@@ -1759,7 +1759,7 @@
              </property>
             </widget>
            </item>
-           <item row="7" column="0">
+           <item row="8" column="0">
             <widget class="QLineEdit" name="atuo_line_text_emc">
              <property name="minimumSize">
               <size>
@@ -1778,7 +1778,7 @@
              </property>
             </widget>
            </item>
-           <item row="14" column="0">
+           <item row="15" column="0">
             <widget class="QLineEdit" name="atuo_line_text_poweroff">
              <property name="enabled">
               <bool>false</bool>
@@ -1800,10 +1800,10 @@
              </property>
             </widget>
            </item>
-           <item row="2" column="0">
+           <item row="3" column="0">
             <widget class="QLineEdit" name="atuo_line_text_rs232">
              <property name="enabled">
-              <bool>false</bool>
+              <bool>true</bool>
              </property>
              <property name="minimumSize">
               <size>
@@ -1818,14 +1818,14 @@
               </size>
              </property>
              <property name="text">
-              <string>1</string>
+              <string>20</string>
              </property>
              <property name="readOnly">
               <bool>true</bool>
              </property>
             </widget>
            </item>
-           <item row="8" column="0">
+           <item row="9" column="0">
             <widget class="QLineEdit" name="atuo_line_text_charge">
              <property name="minimumSize">
               <size>
@@ -1844,7 +1844,7 @@
              </property>
             </widget>
            </item>
-           <item row="11" column="0">
+           <item row="12" column="0">
             <widget class="QLineEdit" name="atuo_line_text_delay">
              <property name="minimumSize">
               <size>
@@ -1863,26 +1863,7 @@
              </property>
             </widget>
            </item>
-           <item row="13" column="0">
-            <widget class="QLineEdit" name="atuo_line_text_poweron">
-             <property name="minimumSize">
-              <size>
-               <width>0</width>
-               <height>21</height>
-              </size>
-             </property>
-             <property name="maximumSize">
-              <size>
-               <width>16777215</width>
-               <height>21</height>
-              </size>
-             </property>
-             <property name="text">
-              <string>10</string>
-             </property>
-            </widget>
-           </item>
-           <item row="3" column="0">
+           <item row="4" column="0">
             <widget class="QLineEdit" name="atuo_line_text_rs485">
              <property name="minimumSize">
               <size>
@@ -1901,7 +1882,7 @@
              </property>
             </widget>
            </item>
-           <item row="10" column="0">
+           <item row="11" column="0">
             <widget class="QLineEdit" name="atuo_line_text_di">
              <property name="minimumSize">
               <size>
@@ -1917,6 +1898,28 @@
              </property>
              <property name="text">
               <string>10</string>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="0">
+            <widget class="QLineEdit" name="atuo_line_text_poweron">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>21</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>16777215</width>
+               <height>21</height>
+              </size>
+             </property>
+             <property name="text">
+              <string>1</string>
              </property>
             </widget>
            </item>
@@ -2396,6 +2399,16 @@
       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:28pt;&quot;&gt;unknown&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
     </widget>
+   </widget>
+   <widget class="QLCDNumber" name="lcdNumber">
+    <property name="geometry">
+     <rect>
+      <x>420</x>
+      <y>220</y>
+      <width>71</width>
+      <height>20</height>
+     </rect>
+    </property>
    </widget>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
