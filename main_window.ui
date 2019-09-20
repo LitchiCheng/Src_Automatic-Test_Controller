@@ -41,8 +41,14 @@
       <height>561</height>
      </rect>
     </property>
+    <property name="tabPosition">
+     <enum>QTabWidget::North</enum>
+    </property>
+    <property name="tabShape">
+     <enum>QTabWidget::Rounded</enum>
+    </property>
     <property name="currentIndex">
-     <number>1</number>
+     <number>0</number>
     </property>
     <widget class="QWidget" name="tab_3">
      <attribute name="title">
@@ -960,8 +966,8 @@
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>10</y>
-        <width>471</width>
+        <y>0</y>
+        <width>461</width>
         <height>521</height>
        </rect>
       </property>
@@ -978,29 +984,25 @@
        <property name="bottomMargin">
         <number>5</number>
        </property>
-       <item row="6" column="2">
-        <widget class="Line" name="line_30">
+       <item row="4" column="1">
+        <widget class="QLineEdit" name="auto_line_text_total">
+         <property name="text">
+          <string>10</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item row="8" column="2">
+        <widget class="Line" name="line_33">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
          </property>
         </widget>
        </item>
-       <item row="8" column="1">
-        <widget class="QProgressBar" name="progressBar">
-         <property name="value">
-          <number>0</number>
-         </property>
-        </widget>
-       </item>
-       <item row="5" column="2">
-        <widget class="Line" name="line_29">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="0">
-        <widget class="Line" name="line_23">
+       <item row="8" column="0">
+        <widget class="Line" name="line_32">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
          </property>
@@ -1013,29 +1015,8 @@
          </property>
         </widget>
        </item>
-       <item row="3" column="1">
-        <widget class="QLabel" name="label_69">
-         <property name="text">
-          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;总循环次数&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-         </property>
-        </widget>
-       </item>
-       <item row="8" column="0">
-        <widget class="Line" name="line_32">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="1">
-        <widget class="Line" name="line_14">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="2">
-        <widget class="Line" name="line_12">
+       <item row="1" column="0">
+        <widget class="Line" name="line_11">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
          </property>
@@ -1213,9 +1194,6 @@
              <property name="text">
               <string/>
              </property>
-             <property name="pixmap">
-              <pixmap>../x.png</pixmap>
-             </property>
             </widget>
            </item>
            <item row="4" column="0">
@@ -1351,9 +1329,6 @@
              </property>
              <property name="text">
               <string/>
-             </property>
-             <property name="pixmap">
-              <pixmap>../x.png</pixmap>
              </property>
             </widget>
            </item>
@@ -1656,6 +1631,9 @@
              <property name="text">
               <string>10</string>
              </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
             </widget>
            </item>
            <item row="0" column="0">
@@ -1682,6 +1660,9 @@
              <property name="text">
               <string>20</string>
              </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
             </widget>
            </item>
            <item row="6" column="0">
@@ -1700,6 +1681,9 @@
              </property>
              <property name="text">
               <string>10</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
              </property>
             </widget>
            </item>
@@ -1727,6 +1711,9 @@
              <property name="text">
               <string>10</string>
              </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
             </widget>
            </item>
            <item row="7" column="0">
@@ -1746,6 +1733,9 @@
              <property name="text">
               <string>10</string>
              </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
             </widget>
            </item>
            <item row="8" column="0">
@@ -1764,6 +1754,9 @@
              </property>
              <property name="text">
               <string>10</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
              </property>
             </widget>
            </item>
@@ -1787,6 +1780,9 @@
              <property name="text">
               <string>0</string>
              </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
             </widget>
            </item>
            <item row="3" column="0">
@@ -1808,6 +1804,9 @@
              </property>
              <property name="text">
               <string>20</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
              </property>
              <property name="readOnly">
               <bool>false</bool>
@@ -1831,6 +1830,9 @@
              <property name="text">
               <string>10</string>
              </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
             </widget>
            </item>
            <item row="12" column="0">
@@ -1849,6 +1851,9 @@
              </property>
              <property name="text">
               <string>10</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
              </property>
             </widget>
            </item>
@@ -1869,6 +1874,9 @@
              <property name="text">
               <string>20</string>
              </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
             </widget>
            </item>
            <item row="11" column="0">
@@ -1887,6 +1895,9 @@
              </property>
              <property name="text">
               <string>10</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
              </property>
             </widget>
            </item>
@@ -1910,6 +1921,9 @@
              <property name="text">
               <string>0</string>
              </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
             </widget>
            </item>
           </layout>
@@ -1923,8 +1937,22 @@
          </item>
         </layout>
        </item>
-       <item row="6" column="0">
-        <widget class="Line" name="line_26">
+       <item row="3" column="2">
+        <widget class="Line" name="line_27">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+        </widget>
+       </item>
+       <item row="9" column="1">
+        <widget class="Line" name="line_34">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="2">
+        <widget class="Line" name="line_28">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
          </property>
@@ -1937,50 +1965,57 @@
          </property>
         </widget>
        </item>
-       <item row="7" column="0">
-        <widget class="Line" name="line_31">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="1">
-        <widget class="QLineEdit" name="auto_line_text_total">
+       <item row="6" column="1">
+        <widget class="QPushButton" name="auto_push_button_report">
          <property name="text">
-          <string>10</string>
+          <string>一键生成报告</string>
          </property>
         </widget>
        </item>
-       <item row="5" column="1">
-        <widget class="QPushButton" name="auto_push_button_test">
+       <item row="0" column="1">
+        <widget class="Line" name="line_14">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="1">
+        <widget class="QLabel" name="label_69">
          <property name="text">
-          <string>一键自动测试</string>
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;总循环次数&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
         </widget>
        </item>
-       <item row="1" column="0">
-        <widget class="Line" name="line_11">
+       <item row="6" column="0">
+        <widget class="Line" name="line_26">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
          </property>
         </widget>
        </item>
-       <item row="8" column="2">
-        <widget class="Line" name="line_33">
+       <item row="5" column="2">
+        <widget class="Line" name="line_29">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
          </property>
         </widget>
        </item>
-       <item row="4" column="2">
-        <widget class="Line" name="line_28">
+       <item row="6" column="2">
+        <widget class="Line" name="line_30">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
          </property>
         </widget>
        </item>
-       <item row="4" column="0">
-        <widget class="Line" name="line_24">
+       <item row="8" column="1">
+        <widget class="QProgressBar" name="progressBar">
+         <property name="value">
+          <number>0</number>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0">
+        <widget class="Line" name="line_23">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
          </property>
@@ -1993,26 +2028,44 @@
          </property>
         </widget>
        </item>
-       <item row="3" column="2">
-        <widget class="Line" name="line_27">
+       <item row="1" column="2">
+        <widget class="Line" name="line_12">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
          </property>
         </widget>
        </item>
-       <item row="6" column="1">
-        <widget class="QPushButton" name="auto_push_button_report">
-         <property name="text">
-          <string>一键生成报告</string>
+       <item row="4" column="0">
+        <widget class="Line" name="line_24">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
          </property>
         </widget>
        </item>
-       <item row="9" column="1">
-        <widget class="Line" name="line_34">
+       <item row="7" column="0">
+        <widget class="Line" name="line_31">
          <property name="orientation">
-          <enum>Qt::Horizontal</enum>
+          <enum>Qt::Vertical</enum>
          </property>
         </widget>
+       </item>
+       <item row="5" column="1">
+        <layout class="QHBoxLayout" name="horizontalLayout">
+         <item>
+          <widget class="QPushButton" name="auto_push_button_test">
+           <property name="text">
+            <string>一键自动测试</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="auto_push_button_pause">
+           <property name="text">
+            <string>暂停</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
        </item>
       </layout>
      </widget>
@@ -2091,25 +2144,6 @@
        <property name="spacing">
         <number>2</number>
        </property>
-       <item row="3" column="0">
-        <widget class="QPushButton" name="push_connect">
-         <property name="minimumSize">
-          <size>
-           <width>0</width>
-           <height>21</height>
-          </size>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>16777215</width>
-           <height>21</height>
-          </size>
-         </property>
-         <property name="text">
-          <string>connect</string>
-         </property>
-        </widget>
-       </item>
        <item row="0" column="0">
         <layout class="QGridLayout" name="gridLayout_10">
          <item row="0" column="0">
@@ -2228,17 +2262,36 @@
          </item>
         </layout>
        </item>
-       <item row="1" column="0">
+       <item row="2" column="0">
         <widget class="QPushButton" name="manual_test_push_openpc">
          <property name="text">
           <string>开机</string>
          </property>
         </widget>
        </item>
-       <item row="2" column="0">
+       <item row="3" column="0">
         <widget class="QPushButton" name="manual_test_push_closepc">
          <property name="text">
           <string>关机</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QPushButton" name="push_connect">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>21</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>21</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>connect</string>
          </property>
         </widget>
        </item>
@@ -2249,7 +2302,7 @@
    <widget class="QGroupBox" name="groupBox_2">
     <property name="geometry">
      <rect>
-      <x>250</x>
+      <x>240</x>
       <y>10</y>
       <width>251</width>
       <height>211</height>
@@ -2262,9 +2315,9 @@
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>20</y>
+       <y>10</y>
        <width>231</width>
-       <height>91</height>
+       <height>99</height>
       </rect>
      </property>
      <layout class="QGridLayout" name="gridLayout_16">
@@ -2454,6 +2507,9 @@
       <width>71</width>
       <height>20</height>
      </rect>
+    </property>
+    <property name="smallDecimalPoint">
+     <bool>false</bool>
     </property>
    </widget>
   </widget>
