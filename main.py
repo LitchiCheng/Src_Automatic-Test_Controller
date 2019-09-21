@@ -14,7 +14,7 @@ from barcode.writer import ImageWriter
 
 so = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 TESTBOART_ADDR_PORT = 4822
-TESTBOART_ADDR = ('192.168.192.7', TESTBOART_ADDR_PORT)
+TESTBOART_ADDR = ('192.168.192.6', TESTBOART_ADDR_PORT)
 
 def sendTestCmd(index, timeout_t):
     so.connect(TESTBOART_ADDR)
@@ -889,7 +889,7 @@ class Ui_MainWindow(object):
         MainWindow.setStatusBar(self.statusbar)
 
         self.retranslateUi(MainWindow)
-        self.tabWidget.setCurrentIndex(0)
+        self.tabWidget.setCurrentIndex(1)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
         self.tabWidget.setEnabled(False)
