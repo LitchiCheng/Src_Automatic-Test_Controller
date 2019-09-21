@@ -1380,14 +1380,12 @@ class autoTestSendCmdThread(QThread):
 
     def processBarPlus(self):
         self.total_times_counter += 1
-        print(self.total_times_counter)
         self.process_bar_signal.emit(self.total_times, self.total_times_counter)
 
     def clearLastTest(self):
         sendTestCmd(0xFF, 0)
 
     def testProcess(self, index, times, timeout_t):
-        print(type(index))
         if self.pause_signal:
             return
         if type(index) == list:
@@ -1450,19 +1448,19 @@ class autoTestSendCmdThread(QThread):
             self.process_bar_signal.emit(self.total_times, self.total_times_counter)
             
             while(cycle_times):
-                self.testProcess(self.item_list.openPC, openpc_times, 30.0)
+                self.testProcess(self.item_list.openPC, openpc_times, 60.0)
                 self.testProcess(self.item_list.rs232, rs232_times, 3.0)
-                self.testProcess(self.item_list.rs485, rs485_times, 3.0) 
+                self.testProcess(self.item_list.rs485, rs485_times, 5.0) 
                 self.testProcess(self.item_list.can, can_times, 2.0)
                 self.testProcess([self.item_list.doOpen, self.item_list.doClose], do_times, 2.0)
-                self.testProcess(self.item_list.bootLight, bootlight_times, 1.0)
+                self.testProcess(self.item_list.bootLight, bootlight_times, 2.0)
                 self.testProcess([self.item_list.emcOpen,self.item_list.emcClose], emc_times, 2.0)
-                self.testProcess([self.item_list.chargeGround,self.item_list.chargeBrake], charge_times, 1.0)
+                self.testProcess([self.item_list.chargeGround,self.item_list.chargeBrake], charge_times, 2.0)
                 self.testProcess([self.item_list.brakeClose,self.item_list.brakeOpen], brake_times, 3.0)
                 self.testProcess([self.item_list.diBrake,self.item_list.diGround], di_times, 2.0)
-                self.testProcess([self.item_list.delayBrake,self.item_list.delayClose], delay_times, 1.5)
+                self.testProcess([self.item_list.delayBrake,self.item_list.delayClose], delay_times, 2.0)
                 self.testProcess([self.item_list.warnLightOpen,self.item_list.warnLightClose], warnlight_times, 2.0)
-                self.testProcess(self.item_list.closePC, closepc_times, 60.0)
+                self.testProcess(self.item_list.closePC, closepc_times, 20.0)
                 cycle_times = cycle_times - 1
             self.trigger_once = False
 
