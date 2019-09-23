@@ -961,10 +961,10 @@ class Ui_MainWindow(object):
         self.statusbar.showMessage("test is stop...", 9999)
 
     def manualOpenPC(self):
-        sendTestCmd(0x11,0.5)
+        self.udp.sendTestCmd(0x11,0.5)
 
     def manualClosePC(self):
-        sendTestCmd(0x12,0.5)
+        self.udp.sendTestCmd(0x12,0.5)
 
     def onkeyReport(self):
         text_name = self.uid_string
