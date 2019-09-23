@@ -1,12 +1,3 @@
-# -*- coding: utf-8 -*-
-
-# Form implementation generated from reading ui file 'main_window.ui'
-#
-# Created by: PyQt5 UI code generator 5.13.0
-#
-# WARNING! All changes made in this file will be lost!
-
-
 import os,sys,time,socket,struct,barcode
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import Qt, QThread, pyqtSignal
@@ -1439,16 +1430,17 @@ class autoTestSendCmdThread(QThread):
                 delay_times = int(ui.auto_line_text_delay.text())
                 warnlight_times = int(ui.auto_line_text_warninglight.text())
                 cycle_times = int(ui.auto_line_text_total.text())
+                cycle_time_for_pc = cycle_times
                 self.total_times = openpc_times + closepc_times + rs232_times + rs485_times + can_times + do_times + brake_times + bootlight_times+ emc_times + charge_times + di_times + delay_times + warnlight_times
                 self.total_times = cycle_times*self.total_times
             except:
                 self.abnormal_msg_signal.emit("测试次数必须为整数!")
                 self.total_times = 0
                 cycle_times = 0
+                cycle_time_for_pc = 0
             self.process_bar_signal.emit(self.total_times, self.total_times_counter)
             
             while(cycle_times):
-                self.testProcess(self.item_list.openPC, openpc_times, 60.0)
                 self.testProcess(self.item_list.rs232, rs232_times, 3.0)
                 self.testProcess(self.item_list.rs485, rs485_times, 5.0) 
                 self.testProcess(self.item_list.can, can_times, 2.0)
@@ -1460,8 +1452,11 @@ class autoTestSendCmdThread(QThread):
                 self.testProcess([self.item_list.diBrake,self.item_list.diGround], di_times, 2.0)
                 self.testProcess([self.item_list.delayBrake,self.item_list.delayClose], delay_times, 2.0)
                 self.testProcess([self.item_list.warnLightOpen,self.item_list.warnLightClose], warnlight_times, 2.0)
-                self.testProcess(self.item_list.closePC, closepc_times, 20.0)
                 cycle_times = cycle_times - 1
+            while(cycle_time_for_pc):
+                self.testProcess(self.item_list.openPC, openpc_times, 60.0)
+                self.testProcess(self.item_list.closePC, closepc_times, 20.0)
+                cycle_time_for_pc = cycle_time_for_pc -1
             self.trigger_once = False
 
 class listenReplyThread(QThread):
