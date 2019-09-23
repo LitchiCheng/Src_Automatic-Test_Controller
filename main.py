@@ -3,34 +3,50 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import Qt, QThread, pyqtSignal
 from barcode.writer import ImageWriter
 
-so = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-TESTBOART_ADDR_PORT = 4822
-TESTBOART_ADDR = ('192.168.192.6', TESTBOART_ADDR_PORT)
+class socketTool:
+    def __init__(self, remote_ip ,local_port):
+        self.remote_ip = remote_ip
+        self.remote_port = 4822
+        self.local_port = local_port
+        self.local_ip = ''
+        self.so = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        # self.so.bind((self.local_ip, int(self.local_port)))
+    
+    def connect(self):
+        pass
+        # self.so = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        # self.so.bind((self.local_ip, int(self.local_port)))
 
-def sendTestCmd(index, timeout_t):
-    so.connect(TESTBOART_ADDR)
-    print("send index is " + str(index))
-    so.sendto(struct.pack('>HB',0x1234,index),TESTBOART_ADDR)
-    so.settimeout(timeout_t)
+    def setRemoteIp(self, ip):
+        self.remote_ip = ip
+    
+    def setLocalPort(self, port):
+        self.local_port = port
 
-def recvTestResult(index):
-    so.connect(TESTBOART_ADDR)
-    try:
-        ret,address= so.recvfrom(1024)  
-    except socket.timeout:
-        ret = b''
-    try:
-        head, item_index, result = struct.unpack('>H2B',ret)
-        print("recv is " + str(hex(head)) + " " + str(hex(item_index)))
-    except:
-        head = 0xFFFF   
-    if head == 0x5678:
-        if item_index == index and result == 0xFF:
-            return True
+    def sendTestCmd(self, index, timeout_t):
+        print((self.remote_ip, self.remote_port))
+        print("send index is " + str(index))
+        self.so.sendto(struct.pack('>HB',0x1234,index),(self.remote_ip, self.remote_port))
+        self.so.settimeout(timeout_t)
+
+    def recvTestResult(self, index):   
+        try:
+            ret,address= self.so.recvfrom(1024)
+            print("接收到的" + str(address[0]))      
+        except socket.timeout:
+            ret = b''
+        try:
+            head, item_index, result = struct.unpack('>H2B',ret)
+            print("recv is " + str(hex(head)) + " " + str(hex(item_index)))
+        except:
+            head = 0xFFFF   
+        if head == 0x5678:
+            if item_index == index and result == 0xFF:
+                return True
+            else:
+                return False
         else:
             return False
-    else:
-        return False
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -937,6 +953,8 @@ class Ui_MainWindow(object):
         self.connect_thread.gyro_signal.connect(self.handleGyroVersion)
         self.connect_thread.main_signal.connect(self.handleMainVersion)
         self.connect_thread.uid_signal.connect(self.handleUID)
+
+        self.first_in = True
     
     def autoTestPause(self):
         self.auto_test_sendcmd_thread.pause_signal = True
@@ -1120,7 +1138,19 @@ class Ui_MainWindow(object):
             self.uidcode_bar_label.setPixmap(QtGui.QPixmap(code_bar_address))
         
     def connectFunc(self):
+        if not self.first_in: 
+            # self.udp.so.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+            self.udp.setLocalPort(self.line_port.text())
+            self.udp.setRemoteIp(self.line_ip.text())
+            self.udp.connect()
+        elif self.first_in == True:
+            self.first_in = False
+            self.udp = socketTool(self.line_ip.text(), int(self.line_port.text()))
+        
+        self.connect_thread.setSocket(self.udp.so)
+        self.auto_test_sendcmd_thread.setSocketTool(self.udp)
         self.connect_thread.start()
+        
     
     def resetAutoState(self):
         result_show = QtGui.QPixmap(".\\icon\\x.png")
@@ -1313,13 +1343,18 @@ class connectThread(QThread):
     main_signal = pyqtSignal(str, bool)
     uid_signal = pyqtSignal(str, str)
 
+    def setSocket(self, so):
+        self.so = so
+
     def run(self):
-        TESTBOART_ADDR = (ui.line_ip.text(), int(ui.line_port.text()))
-        so.sendto(struct.pack('>HB',0x1234,0x15),TESTBOART_ADDR)
-        so.settimeout(2)
-        so.connect(TESTBOART_ADDR)
+        
+        TESTBOART_ADDR = (ui.line_ip.text(), 4822)
+       
+        self.so.sendto(struct.pack('>HB',0x1234,0x15),TESTBOART_ADDR)
+        self.so.settimeout(2)
+        # self.so.connect(TESTBOART_ADDR)
         try:
-            ret,address= so.recvfrom(1024)
+            ret,address= self.so.recvfrom(1024)
         except socket.timeout:
             pass
         try:
@@ -1333,10 +1368,10 @@ class connectThread(QThread):
             self.uid_signal.emit("解析失败", "NULL")
 
         self.is_connected = False
-        so.sendto(struct.pack('>HB',0x1234,0x16),TESTBOART_ADDR)
-        so.settimeout(2)
+        self.so.sendto(struct.pack('>HB',0x1234,0x16),TESTBOART_ADDR)
+        self.so.settimeout(2)
         try:
-            ret,address= so.recvfrom(1024)
+            ret,address= self.so.recvfrom(1024)
         except socket.timeout:
             pass
         try:
@@ -1348,10 +1383,10 @@ class connectThread(QThread):
             self.is_connected = False
             self.main_signal.emit("解析失败", self.is_connected)
 
-        so.sendto(struct.pack('>HB',0x1234,0x17),TESTBOART_ADDR)
-        so.settimeout(2)
+        self.so.sendto(struct.pack('>HB',0x1234,0x17),TESTBOART_ADDR)
+        self.so.settimeout(2)
         try:
-            ret,address= so.recvfrom(1024)
+            ret,address= self.so.recvfrom(1024)
         except socket.timeout:
             pass
         try:
@@ -1366,6 +1401,9 @@ class autoTestSendCmdThread(QThread):
     process_bar_signal = pyqtSignal(int, int)
     abnormal_msg_signal = pyqtSignal(str)
 
+    def setSocketTool(self, so):
+        self.socket = so
+
     def resetTotalTimesCounter(self):
         self.total_times_counter = 0
 
@@ -1374,19 +1412,19 @@ class autoTestSendCmdThread(QThread):
         self.process_bar_signal.emit(self.total_times, self.total_times_counter)
 
     def clearLastTest(self):
-        sendTestCmd(0xFF, 0)
+        self.socket.sendTestCmd(0xFF, 0)
 
     def testProcess(self, index, times, timeout_t):
         if self.pause_signal:
             return
         if type(index) == list:
             while(times):  
-                sendTestCmd(index[0], timeout_t)
-                result_1 = recvTestResult(index[0])
+                self.socket.sendTestCmd(index[0], timeout_t)
+                result_1 = self.socket.recvTestResult(index[0])
                 self.clearLastTest()
                 print("result 1 is " + str(result_1))
-                sendTestCmd(index[1], timeout_t)
-                result_2 = recvTestResult(index[1])
+                self.socket.sendTestCmd(index[1], timeout_t)
+                result_2 = self.socket.recvTestResult(index[1])
                 print("result 2 is " + str(result_2))
                 if result_2 and result_1:
                     self.result_signal.emit(index[0], True)
@@ -1396,8 +1434,8 @@ class autoTestSendCmdThread(QThread):
                 self.processBarPlus()
         elif type(index) == int:
             while(times):  
-                sendTestCmd(index, timeout_t)
-                if recvTestResult(index):
+                self.socket.sendTestCmd(index, timeout_t)
+                if self.socket.recvTestResult(index):
                     self.result_signal.emit(index, True)
                 else:
                     self.result_signal.emit(index, False)
