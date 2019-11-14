@@ -1052,25 +1052,25 @@ class Ui_MainWindow(object):
         self.manual_label_state_warn_off.setScaledContents(True)
         self.manual_label_state_warn_on.setScaledContents(True)
 
-        self.auto_push_button_test.clicked.connect(self.onykeyAutoTest)
-        self.push_connect.clicked.connect(self.connectFunc)
-        self.auto_push_button_report.clicked.connect(self.onkeyReport)
-        self.manual_test_push_openpc.clicked.connect(self.manualOpenPC)
-        self.manual_test_push_closepc.clicked.connect(self.manualClosePC)
-        self.auto_push_button_pause.clicked.connect(self.autoTestPause)
+        self.auto_push_button_test.clicked.connect(self.onykeyAutoTest)     #一键自动测试
+        self.push_connect.clicked.connect(self.connectFunc)                 #connect
+        self.auto_push_button_report.clicked.connect(self.onkeyReport)      #一键生成报告
+        self.manual_test_push_openpc.clicked.connect(self.manualOpenPC)     #开机
+        self.manual_test_push_closepc.clicked.connect(self.manualClosePC)   #关机
+        self.auto_push_button_pause.clicked.connect(self.autoTestPause)     #暂停
 
-        self.auto_test_sendcmd_thread = autoTestSendCmdThread()
-        self.auto_test_sendcmd_thread.process_bar_signal.connect(self.updateAutoTestProcessBar)
-        self.auto_test_sendcmd_thread.result_signal.connect(self.autoTestSignal)
-        self.auto_test_sendcmd_thread.abnormal_msg_signal.connect(self.updateStatusBar)
+        self.auto_test_sendcmd_thread = autoTestSendCmdThread()         
+        self.auto_test_sendcmd_thread.process_bar_signal.connect(self.updateAutoTestProcessBar)     #更新进度条
+        self.auto_test_sendcmd_thread.result_signal.connect(self.autoTestSignal)                    #更新测试通过次数
+        self.auto_test_sendcmd_thread.abnormal_msg_signal.connect(self.updateStatusBar)             #更新底部状态栏
 
         self.listen_reply_thread = listenReplyThread()
         self.resetAllAutoTestCounter()
 
         self.connect_thread = connectThread()
-        self.connect_thread.gyro_signal.connect(self.handleGyroVersion)
-        self.connect_thread.main_signal.connect(self.handleMainVersion)
-        self.connect_thread.uid_signal.connect(self.handleUID)
+        self.connect_thread.gyro_signal.connect(self.handleGyroVersion)                  #更新陀螺仪版本              
+        self.connect_thread.main_signal.connect(self.handleMainVersion)                  #更新主版本
+        self.connect_thread.uid_signal.connect(self.handleUID)                           #更新UID
 
         self.first_in = True
     
