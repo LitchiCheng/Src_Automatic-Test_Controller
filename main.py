@@ -1405,19 +1405,21 @@ class Ui_MainWindow(object):
         self.auto_line_text_warninglight.setText(_translate("MainWindow", "1"))
         self.auto_line_text_emc.setText(_translate("MainWindow", "1"))
         self.label_61.setText(_translate("MainWindow", "<html><head/><body><p align=\"center\">状态</p></body></html>"))
-        self.auto_line_text_warninglight_timeout.setText(_translate("MainWindow", "3.0"))
-        self.auto_line_text_rs485_timeout.setText(_translate("MainWindow", "5.0"))
-        self.auto_line_text_brake_timeout.setText(_translate("MainWindow", "3.0"))
-        self.auto_line_text_delay_timeout.setText(_translate("MainWindow", "3.0"))
-        self.auto_line_text_can_timeout.setText(_translate("MainWindow", "3.0"))
-        self.auto_line_text_do_timeout.setText(_translate("MainWindow", "3.0"))
+
+        self.auto_line_text_warninglight_timeout.setText(_translate("MainWindow", "6.0"))
+        self.auto_line_text_rs485_timeout.setText(_translate("MainWindow", "10.0"))
+        self.auto_line_text_brake_timeout.setText(_translate("MainWindow", "6.0"))
+        self.auto_line_text_delay_timeout.setText(_translate("MainWindow", "6.0"))
+        self.auto_line_text_can_timeout.setText(_translate("MainWindow", "6.0"))
+        self.auto_line_text_do_timeout.setText(_translate("MainWindow", "6.0"))
         self.auto_line_text_poweroff_timeout.setText(_translate("MainWindow", "20.0"))
-        self.auto_line_text_charge_timeout.setText(_translate("MainWindow", "3.0"))
-        self.auto_line_text_emc_timeout.setText(_translate("MainWindow", "3.0"))
-        self.auto_line_text_rs232_timeout.setText(_translate("MainWindow", "4.0"))
+        self.auto_line_text_charge_timeout.setText(_translate("MainWindow", "6.0"))
+        self.auto_line_text_emc_timeout.setText(_translate("MainWindow", "6.0"))
+        self.auto_line_text_rs232_timeout.setText(_translate("MainWindow", "8.0"))
         self.auto_line_text_poweron_timeout.setText(_translate("MainWindow", "60.0"))
-        self.auto_line_text_bootlight_timeout.setText(_translate("MainWindow", "3.0"))
-        self.auto_line_text_di_timeout.setText(_translate("MainWindow", "5.0"))
+        self.auto_line_text_bootlight_timeout.setText(_translate("MainWindow", "6.0"))
+        self.auto_line_text_di_timeout.setText(_translate("MainWindow", "10.0"))
+
         self.label_62.setText(_translate("MainWindow", "<html><head/><body><p align=\"center\">超时时间</p></body></html>"))
         self.auto_push_button_report.setText(_translate("MainWindow", "一键生成报告"))
         self.auto_push_button_test.setText(_translate("MainWindow", "一键自动测试"))
@@ -1605,28 +1607,73 @@ class autoTestSendCmdThread(QThread):
                 self.total_times = openpc_times + closepc_times + rs232_times + rs485_times + can_times + do_times + brake_times + bootlight_times+ emc_times + charge_times + di_times + delay_times + warnlight_times
                 self.total_times = cycle_times*self.total_times
             except:
+                openpc_times = 0
+                closepc_times = 0
+                rs232_times = 0
+                rs485_times = 0
+                can_times = 0
+                do_times = 0
+                brake_times = 0
+                bootlight_times = 0
+                emc_times = 0
+                charge_times = 0
+                di_times = 0
+                delay_times = 00
+                warnlight_times = 0
+                
                 self.abnormal_msg_signal.emit("测试次数必须为整数!")
                 self.total_times = 0
                 cycle_times = 0
                 cycle_time_for_pc = 0
+            
+            try:
+                openpc_time = float(ui.auto_line_text_poweron_timeout.text())
+                closepc_time = float(ui.auto_line_text_poweroff_timeout.text())
+                rs232_time = float(ui.auto_line_text_rs232_timeout.text())
+                rs485_time = float(ui.auto_line_text_rs485_timeout.text())
+                can_time = float(ui.auto_line_text_can_timeout.text())
+                do_time = float(ui.auto_line_text_do_timeout.text())
+                brake_time = float(ui.auto_line_text_brake_timeout.text())
+                bootlight_time = float(ui.auto_line_text_bootlight_timeout.text())
+                emc_time = float(ui.auto_line_text_emc_timeout.text())
+                charge_time = float(ui.auto_line_text_charge_timeout.text())
+                di_time = float(ui.auto_line_text_di_timeout.text())
+                delay_time = float(ui.auto_line_text_delay_timeout.text())
+                warnlight_time = float(ui.auto_line_text_warninglight_timeout.text())
+            except:
+                openpc_time = float(0.0)
+                closepc_time = float(0.0)
+                rs232_time = float(0.0)
+                rs485_time = float(0.0)
+                can_time = float(0.0)
+                do_time = float(0.0)
+                brake_time = float(0.0)
+                bootlight_time = float(0.0)
+                emc_time = float(0.0)
+                charge_time = float(0.0)
+                di_time = float(0.0)
+                delay_time = float(0.0)
+                warnlight_time = float(0.0)
+                self.abnormal_msg_signal.emit("超时时间必须为浮点数!")
+
             self.process_bar_signal.emit(self.total_times, self.total_times_counter)
             
             while(cycle_times):
-                self.testProcess(self.item_list.rs232, rs232_times, 3.0)
-                self.testProcess(self.item_list.rs485, rs485_times, 5.0) 
-                self.testProcess(self.item_list.can, can_times, 2.0)
-                self.testProcess([self.item_list.doOpen, self.item_list.doClose], do_times, 2.0)
-                self.testProcess(self.item_list.bootLight, bootlight_times, 2.0)
-                self.testProcess([self.item_list.emcOpen,self.item_list.emcClose], emc_times, 2.0)
-                self.testProcess([self.item_list.chargeGround,self.item_list.chargeBrake], charge_times, 2.0)
-                self.testProcess([self.item_list.brakeClose,self.item_list.brakeOpen], brake_times, 3.0)
-                self.testProcess([self.item_list.diBrake,self.item_list.diGround], di_times, 2.0)
-                self.testProcess([self.item_list.delayBrake,self.item_list.delayClose], delay_times, 2.0)
-                self.testProcess([self.item_list.warnLightOpen,self.item_list.warnLightClose], warnlight_times, 2.0)
+                self.testProcess(self.item_list.rs232, rs232_times, rs232_time)
+                self.testProcess(self.item_list.rs485, rs485_times, rs485_time) 
+                self.testProcess(self.item_list.can, can_times, can_time)
+                self.testProcess([self.item_list.doOpen, self.item_list.doClose], do_times,do_time)
+                self.testProcess(self.item_list.bootLight, bootlight_times, bootlight_time)
+                self.testProcess([self.item_list.emcOpen,self.item_list.emcClose], emc_times, emc_time)
+                self.testProcess([self.item_list.chargeGround,self.item_list.chargeBrake], charge_times, charge_time)
+                self.testProcess([self.item_list.brakeClose,self.item_list.brakeOpen], brake_times, brake_time)
+                self.testProcess([self.item_list.diBrake,self.item_list.diGround], di_times, di_time)
+                self.testProcess([self.item_list.delayBrake,self.item_list.delayClose], delay_times, delay_time)
+                self.testProcess([self.item_list.warnLightOpen,self.item_list.warnLightClose], warnlight_times, warnlight_time)
                 cycle_times = cycle_times - 1
             while(cycle_time_for_pc):
-                self.testProcess(self.item_list.openPC, openpc_times, 60.0)
-                self.testProcess(self.item_list.closePC, closepc_times, 20.0)
+                self.testProcess(self.item_list.openPC, openpc_times, openpc_time)
+                self.testProcess(self.item_list.closePC, closepc_times, closepc_time)
                 cycle_time_for_pc = cycle_time_for_pc -1
             self.trigger_once = False
 
