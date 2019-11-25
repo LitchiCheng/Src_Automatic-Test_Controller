@@ -1090,19 +1090,19 @@ class Ui_MainWindow(object):
         except:
             finished_percent = 0.8
         text_name = self.uid_string
-        rs232_test_times = finished_percent*int(self.auto_line_text_total.text())*int(self.auto_line_text_rs232.text())
-        rs485_test_times = finished_percent*int(self.auto_line_text_total.text())*int(self.auto_line_text_rs485.text())
-        can_test_times = finished_percent*int(self.auto_line_text_total.text())*int(self.auto_line_text_can.text())
-        do_test_times = finished_percent*int(self.auto_line_text_total.text())*int(self.auto_line_text_do.text())
-        bootlight_test_times = finished_percent*int(self.auto_line_text_total.text())*int(self.auto_line_text_bootlight.text())
-        emc_test_times = finished_percent*int(self.auto_line_text_total.text())*int(self.auto_line_text_emc.text())
-        charge_test_times = finished_percent*int(self.auto_line_text_total.text())*int(self.auto_line_text_charge.text())
-        brake_test_times = finished_percent*int(self.auto_line_text_total.text())*int(self.auto_line_text_brake.text())
-        di_test_times = finished_percent*int(self.auto_line_text_total.text())*int(self.auto_line_text_di.text())
-        delay_test_times = finished_percent*int(self.auto_line_text_total.text())*int(self.auto_line_text_delay.text())
-        warn_test_times = finished_percent*int(self.auto_line_text_total.text())*int(self.auto_line_text_warninglight.text())
-        openpc_test_times = finished_percent*int(self.auto_line_text_total.text())*int(self.auto_line_text_poweron.text())
-        closepc_test_times = finished_percent*int(self.auto_line_text_total.text())*int(self.auto_line_text_poweroff.text())
+        rs232_test_times = int(self.auto_line_text_total.text())*int(self.auto_line_text_rs232.text())
+        rs485_test_times = int(self.auto_line_text_total.text())*int(self.auto_line_text_rs485.text())
+        can_test_times = int(self.auto_line_text_total.text())*int(self.auto_line_text_can.text())
+        do_test_times = int(self.auto_line_text_total.text())*int(self.auto_line_text_do.text())
+        bootlight_test_times = int(self.auto_line_text_total.text())*int(self.auto_line_text_bootlight.text())
+        emc_test_times = int(self.auto_line_text_total.text())*int(self.auto_line_text_emc.text())
+        charge_test_times = int(self.auto_line_text_total.text())*int(self.auto_line_text_charge.text())
+        brake_test_times = int(self.auto_line_text_total.text())*int(self.auto_line_text_brake.text())
+        di_test_times = int(self.auto_line_text_total.text())*int(self.auto_line_text_di.text())
+        delay_test_times = int(self.auto_line_text_total.text())*int(self.auto_line_text_delay.text())
+        warn_test_times = int(self.auto_line_text_total.text())*int(self.auto_line_text_warninglight.text())
+        openpc_test_times = int(self.auto_line_text_total.text())*int(self.auto_line_text_poweron.text())
+        closepc_test_times = int(self.auto_line_text_total.text())*int(self.auto_line_text_poweroff.text())
         key_word_file = ".\\report\\" + text_name + ".txt"
         file = open(key_word_file,'w+', encoding='utf-8')
         file.write("******测试报告******\n")
@@ -1117,7 +1117,7 @@ class Ui_MainWindow(object):
         file.write("rs232测试：\n")
         file.write("\t总次数：" + str(rs232_test_times)+"\n")
         file.write("\t成功："+str(self.auto_rs232_yes_counter)+ "\n")
-        rs232_result = self.auto_rs232_yes_counter >= rs232_test_times
+        rs232_result = self.auto_rs232_yes_counter >= finished_percent*rs232_test_times
         if rs232_result:
             file.write("\t结果：" + "pass\n")
         else:
@@ -1126,7 +1126,7 @@ class Ui_MainWindow(object):
         file.write("rs485测试：\n")
         file.write("\t总次数：" + str(rs485_test_times)+"\n")
         file.write("\t成功："+str(self.auto_rs485_yes_counter)+ "\n")
-        rs485_result = self.auto_rs485_yes_counter >= rs485_test_times
+        rs485_result = self.auto_rs485_yes_counter >= finished_percent*rs485_test_times
         if rs485_result:
             file.write("\t结果：" + "pass\n")
         else:
@@ -1135,7 +1135,7 @@ class Ui_MainWindow(object):
         file.write("can测试：\n")
         file.write("\t总次数：" + str(can_test_times)+"\n")
         file.write("\t成功："+str(self.auto_can_yes_counter)+ "\n")
-        can_result = self.auto_can_yes_counter >= can_test_times
+        can_result = self.auto_can_yes_counter >= finished_percent*can_test_times
         if can_result:
             file.write("\t结果：" + "pass\n")
         else:
@@ -1144,7 +1144,7 @@ class Ui_MainWindow(object):
         file.write("DO测试：\n")
         file.write("\t总次数：" + str(do_test_times)+"\n")
         file.write("\t成功："+str(self.auto_do_yes_counter)+ "\n")
-        do_result = self.auto_do_yes_counter >= do_test_times
+        do_result = self.auto_do_yes_counter >= finished_percent*do_test_times
         if do_result:
             file.write("\t结果：" + "pass\n")
         else:
@@ -1153,7 +1153,7 @@ class Ui_MainWindow(object):
         file.write("开机灯测试：\n")
         file.write("\t总次数：" + str(bootlight_test_times)+"\n")
         file.write("\t成功："+str(self.auto_bootlight_yes_counter)+ "\n")
-        bootlight_result = self.auto_bootlight_yes_counter >= bootlight_test_times
+        bootlight_result = self.auto_bootlight_yes_counter >= finished_percent*bootlight_test_times
         if bootlight_result:
             file.write("\t结果：" + "pass\n")
         else:
@@ -1162,7 +1162,7 @@ class Ui_MainWindow(object):
         file.write("急停测试：\n")
         file.write("\t总次数：" + str(emc_test_times)+"\n")
         file.write("\t成功："+str(self.auto_emc_yes_counter)+ "\n")
-        emc_result = self.auto_emc_yes_counter >= emc_test_times
+        emc_result = self.auto_emc_yes_counter >= finished_percent*emc_test_times
         if emc_result:
             file.write("\t结果：" + "pass\n")
         else:
@@ -1171,7 +1171,7 @@ class Ui_MainWindow(object):
         file.write("充电测试：\n")
         file.write("\t总次数：" + str(charge_test_times)+"\n")
         file.write("\t成功："+str(self.auto_charge_yes_counter)+ "\n")
-        charge_result = self.auto_charge_yes_counter >= charge_test_times
+        charge_result = self.auto_charge_yes_counter >= finished_percent*charge_test_times
         if charge_result:
             file.write("\t结果：" + "pass\n")
         else:
@@ -1180,7 +1180,7 @@ class Ui_MainWindow(object):
         file.write("抱闸测试：\n")
         file.write("\t总次数：" + str(brake_test_times)+"\n")
         file.write("\t成功："+str(self.auto_brake_yes_counter)+ "\n")
-        brake_result = self.auto_brake_yes_counter >= brake_test_times
+        brake_result = self.auto_brake_yes_counter >= finished_percent*brake_test_times
         if brake_result:
             file.write("\t结果：" + "pass\n")
         else:
@@ -1189,7 +1189,7 @@ class Ui_MainWindow(object):
         file.write("DI测试：\n")
         file.write("\t总次数：" + str(di_test_times)+"\n")
         file.write("\t成功："+str(self.auto_di_yes_counter)+ "\n")
-        di_result = self.auto_di_yes_counter >= di_test_times
+        di_result = self.auto_di_yes_counter >= finished_percent*di_test_times
         if di_result:
             file.write("\t结果：" + "pass\n")
         else:
@@ -1198,7 +1198,7 @@ class Ui_MainWindow(object):
         file.write("继电器测试：\n")
         file.write("\t总次数：" + str(delay_test_times)+"\n")
         file.write("\t成功："+str(self.auto_delay_yes_counter)+ "\n")
-        delay_result = self.auto_delay_yes_counter >= delay_test_times
+        delay_result = self.auto_delay_yes_counter >= finished_percent*delay_test_times
         if delay_result:
             file.write("\t结果：" + "pass\n")
         else:
@@ -1207,7 +1207,7 @@ class Ui_MainWindow(object):
         file.write("报警灯测试：\n")
         file.write("\t总次数：" + str(warn_test_times)+"\n")
         file.write("\t成功："+str(self.auto_warn_yes_counter)+ "\n")
-        warn_result = self.auto_warn_yes_counter >= warn_test_times
+        warn_result = self.auto_warn_yes_counter >= finished_percent*warn_test_times
         if warn_result:
             file.write("\t结果：" + "pass\n")
         else:
@@ -1498,7 +1498,32 @@ class connectThread(QThread):
             pass
         try:
             head, item_index, uid1,uid2,uid3,uid4,uid5,uid6 = struct.unpack('>H7B',ret)
-            self.uid_string = (str(hex(uid1))+str(hex(uid2))+str(hex(uid3))+str(hex(uid4))+str(hex(uid5))+str(hex(uid1))+str(hex(uid6))).replace("0x","")[:-1]
+            print(str(uid1) + " " + str(hex(uid2)) + " " + str(uid3) + " " + str(uid4) + " " + str(uid5) + " " + str(uid6))
+            if(uid1 != 0):
+                uid1_string = str(hex(uid1))
+            else:
+                uid1_string = "00"
+            if(uid2 != 0):
+                uid2_string = str(hex(uid2))
+            else:
+                uid2_string = "00"
+            if(uid3 != 0):
+                uid3_string = str(hex(uid3))
+            else:
+                uid3_string = "00"
+            if(uid4 != 0):
+                uid4_string = str(hex(uid4))
+            else:
+                uid4_string = "00"
+            if(uid5 != 0):
+                uid5_string = str(hex(uid5))
+            else:
+                uid5_string = "00"
+            if(uid6 != 0):
+                uid6_string = str(hex(uid6))
+            else:
+                uid6_string = "00"
+            self.uid_string = (uid1_string+uid2_string+uid3_string+uid4_string+uid5_string+uid6_string).replace("0x","")[:-1]
             CODE128 = barcode.get_barcode_class('code128')
             code128 = CODE128(self.uid_string,writer=ImageWriter())
             fullname = code128.save('.\\code_image\\' + self.uid_string)
