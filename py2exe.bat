@@ -4,4 +4,5 @@ xcopy .\background dist\main\background /E /Y /I
 xcopy .\report dist\main\report /E /Y /I
 xcopy .\code_image dist\main\code_image /E /Y /I
 copy DejaVuSansMono.ttf dist\main /Y
+copy config.json dist\main /Y
 pause

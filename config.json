@@ -1,0 +1,43 @@
+{
+    "autoTest":                 
+    {
+        "testTimes":           
+        {
+            "openPC":0,
+            "rs232":21,
+            "rs485":20,
+            "can":20,
+            "do":1,
+            "bootlight":10,
+            "emc":1,
+            "charge":1,
+            "brake":1,
+            "di":1,
+            "delay":1,
+            "warninglight":1,
+            "closePC":0
+        },
+        "timeout":
+        {
+            "openPC":60.0,
+            "rs232":15.0,
+            "rs485":15.0,
+            "can":15.0,
+            "do":6.0,
+            "bootlight":6.0,
+            "emc":6.0,
+            "charge":6.0,
+            "brake":10.0,
+            "di":15.0,
+            "delay":6.0,
+            "warninglight":6.0,
+            "closePC":20.0
+        },
+        "totalTimes":2000,
+        "passPercent":95
+    },
+    "manualTest":
+    {
+
+    }
+}

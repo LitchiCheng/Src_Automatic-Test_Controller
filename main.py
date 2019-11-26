@@ -2,6 +2,7 @@ import os,sys,time,socket,struct,barcode
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import Qt, QThread, pyqtSignal
 from barcode.writer import ImageWriter
+import json
 
 class socketTool:
     def __init__(self, remote_ip ,local_port):
@@ -1394,43 +1395,53 @@ class Ui_MainWindow(object):
         self.label_32.setText(_translate("MainWindow", "<html><head/><body><p align=\"center\">关机测试</p></body></html>"))
         self.label_20.setText(_translate("MainWindow", "<html><head/><body><p align=\"center\">rs232测试</p></body></html>"))
         self.label_30.setText(_translate("MainWindow", "<html><head/><body><p align=\"center\">开机测试</p></body></html>"))
-        self.auto_line_text_brake.setText(_translate("MainWindow", "1"))
-        self.auto_line_text_bootlight.setText(_translate("MainWindow", "10"))
-        self.auto_line_text_charge.setText(_translate("MainWindow", "1"))
         self.label_60.setText(_translate("MainWindow", "<html><head/><body><p align=\"center\">测试次数</p></body></html>"))
-        self.auto_line_text_can.setText(_translate("MainWindow", "20"))
-        self.auto_line_text_do.setText(_translate("MainWindow", "1"))
-        self.auto_line_text_di.setText(_translate("MainWindow", "1"))
-        self.auto_line_text_poweron.setText(_translate("MainWindow", "0"))
-        self.auto_line_text_rs485.setText(_translate("MainWindow", "20"))
-        self.auto_line_text_poweroff.setText(_translate("MainWindow", "0"))
-        self.auto_line_text_rs232.setText(_translate("MainWindow", "20"))
-        self.auto_line_text_delay.setText(_translate("MainWindow", "1"))
-        self.auto_line_text_warninglight.setText(_translate("MainWindow", "1"))
-        self.auto_line_text_emc.setText(_translate("MainWindow", "1"))
+
+        config_file = open('config.json')
+        js = json.load(config_file)
+        auto_item_config = js["autoTest"]
+        auto_item_test_times = auto_item_config["testTimes"]
+        auto_item_timeout = auto_item_config["timeout"]
+        auto_item_total_times = auto_item_config["totalTimes"]
+        auto_item_pass_percent = auto_item_config["passPercent"]
+
+        self.auto_line_text_brake.setText(_translate("MainWindow", str(auto_item_test_times["brake"])))
+        self.auto_line_text_bootlight.setText(_translate("MainWindow", str(auto_item_test_times["bootlight"])))
+        self.auto_line_text_charge.setText(_translate("MainWindow", str(auto_item_test_times["charge"])))
+        self.auto_line_text_can.setText(_translate("MainWindow", str(auto_item_test_times["can"])))
+        self.auto_line_text_do.setText(_translate("MainWindow", str(auto_item_test_times["do"])))
+        self.auto_line_text_di.setText(_translate("MainWindow", str(auto_item_test_times["di"])))
+        self.auto_line_text_poweron.setText(_translate("MainWindow", str(auto_item_test_times["openPC"])))
+        self.auto_line_text_rs485.setText(_translate("MainWindow", str(auto_item_test_times["rs485"])))
+        self.auto_line_text_poweroff.setText(_translate("MainWindow", str(auto_item_test_times["closePC"])))
+        self.auto_line_text_rs232.setText(_translate("MainWindow", str(auto_item_test_times["rs232"])))
+        self.auto_line_text_delay.setText(_translate("MainWindow", str(auto_item_test_times["delay"])))
+        self.auto_line_text_warninglight.setText(_translate("MainWindow", str(auto_item_test_times["warninglight"])))
+        self.auto_line_text_emc.setText(_translate("MainWindow", str(auto_item_test_times["emc"])))
+
         self.label_61.setText(_translate("MainWindow", "<html><head/><body><p align=\"center\">状态</p></body></html>"))
 
-        self.auto_line_text_warninglight_timeout.setText(_translate("MainWindow", "6.0"))
-        self.auto_line_text_rs485_timeout.setText(_translate("MainWindow", "10.0"))
-        self.auto_line_text_brake_timeout.setText(_translate("MainWindow", "6.0"))
-        self.auto_line_text_delay_timeout.setText(_translate("MainWindow", "6.0"))
-        self.auto_line_text_can_timeout.setText(_translate("MainWindow", "6.0"))
-        self.auto_line_text_do_timeout.setText(_translate("MainWindow", "6.0"))
-        self.auto_line_text_poweroff_timeout.setText(_translate("MainWindow", "20.0"))
-        self.auto_line_text_charge_timeout.setText(_translate("MainWindow", "6.0"))
-        self.auto_line_text_emc_timeout.setText(_translate("MainWindow", "6.0"))
-        self.auto_line_text_rs232_timeout.setText(_translate("MainWindow", "8.0"))
-        self.auto_line_text_poweron_timeout.setText(_translate("MainWindow", "60.0"))
-        self.auto_line_text_bootlight_timeout.setText(_translate("MainWindow", "6.0"))
-        self.auto_line_text_di_timeout.setText(_translate("MainWindow", "10.0"))
-
         self.label_62.setText(_translate("MainWindow", "<html><head/><body><p align=\"center\">超时时间</p></body></html>"))
+        self.auto_line_text_warninglight_timeout.setText(_translate("MainWindow", str(auto_item_timeout["warninglight"])))
+        self.auto_line_text_rs485_timeout.setText(_translate("MainWindow", str(auto_item_timeout["rs485"])))
+        self.auto_line_text_brake_timeout.setText(_translate("MainWindow", str(auto_item_timeout["brake"])))
+        self.auto_line_text_delay_timeout.setText(_translate("MainWindow", str(auto_item_timeout["delay"])))
+        self.auto_line_text_can_timeout.setText(_translate("MainWindow", str(auto_item_timeout["can"])))
+        self.auto_line_text_do_timeout.setText(_translate("MainWindow", str(auto_item_timeout["do"])))
+        self.auto_line_text_poweroff_timeout.setText(_translate("MainWindow", str(auto_item_timeout["closePC"])))
+        self.auto_line_text_charge_timeout.setText(_translate("MainWindow", str(auto_item_timeout["charge"])))
+        self.auto_line_text_emc_timeout.setText(_translate("MainWindow", str(auto_item_timeout["emc"])))
+        self.auto_line_text_rs232_timeout.setText(_translate("MainWindow", str(auto_item_timeout["rs232"])))
+        self.auto_line_text_poweron_timeout.setText(_translate("MainWindow", str(auto_item_timeout["openPC"])))
+        self.auto_line_text_bootlight_timeout.setText(_translate("MainWindow", str(auto_item_timeout["bootlight"])))
+        self.auto_line_text_di_timeout.setText(_translate("MainWindow", str(auto_item_timeout["di"])))
+
         self.auto_push_button_report.setText(_translate("MainWindow", "一键生成报告"))
         self.auto_push_button_test.setText(_translate("MainWindow", "一键自动测试"))
         self.auto_push_button_pause.setText(_translate("MainWindow", "暂停"))
         self.label_69.setText(_translate("MainWindow", "<html><head/><body><p align=\"center\">总循环次数</p></body></html>"))
-        self.auto_line_text_total.setText(_translate("MainWindow", "2000"))
-        self.auto_line_text_pass_percent.setText(_translate("MainWindow", "98"))
+        self.auto_line_text_total.setText(_translate("MainWindow", str(auto_item_total_times)))
+        self.auto_line_text_pass_percent.setText(_translate("MainWindow", str(auto_item_pass_percent)))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_4), _translate("MainWindow", "自动测试"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_7), _translate("MainWindow", "测试报告"))
         self.groupBox.setTitle(_translate("MainWindow", "connect"))
