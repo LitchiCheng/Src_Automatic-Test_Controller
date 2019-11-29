@@ -3,52 +3,9 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import Qt, QThread, pyqtSignal
 from barcode.writer import ImageWriter
 import json
-
-class socketTool:
-    def __init__(self, remote_ip ,local_port):
-        self.remote_ip = remote_ip
-        self.remote_port = 4822
-        self.local_port = local_port
-        self.local_ip = ''
-        self.so = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        # self.so.bind((self.local_ip, int(self.local_port)))
-    
-    def connect(self):
-        pass
-        # self.so = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        # self.so.bind((self.local_ip, int(self.local_port)))
-
-    def setRemoteIp(self, ip):
-        self.remote_ip = ip
-    
-    def setLocalPort(self, port):
-        self.local_port = port
-
-    def sendTestCmd(self, index, timeout_t):
-        print((self.remote_ip, self.remote_port))
-        print("send index is " + str(index))
-        self.so.sendto(struct.pack('>HB',0x1234,index),(self.remote_ip, self.remote_port))
-        self.so.settimeout(timeout_t)
-
-    def recvTestResult(self, index):   
-        try:
-            ret,address= self.so.recvfrom(1024)
-            print("接收到的" + str(address[0]))      
-        except socket.timeout:
-            ret = b''
-        try:
-            head, item_index, result = struct.unpack('>H2B',ret)
-            print("recv is " + str(hex(head)) + " " + str(hex(item_index)))
-        except:
-            head = 0xFFFF   
-        if head == 0x5678:
-            if item_index == index and result == 0xFF:
-                return True
-            else:
-                return False
-        else:
-            return False
-
+from socket_tool import socketTool
+from test_item import Test_Items
+from connect import connectThread
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -1060,7 +1017,7 @@ class Ui_MainWindow(object):
         self.manual_test_push_closepc.clicked.connect(self.manualClosePC)   #关机
         self.auto_push_button_pause.clicked.connect(self.autoTestPause)     #暂停
 
-        self.auto_test_sendcmd_thread = autoTestSendCmdThread()         
+        self.auto_test_sendcmd_thread = autoTestSendCmdThread()       
         self.auto_test_sendcmd_thread.process_bar_signal.connect(self.updateAutoTestProcessBar)     #更新进度条
         self.auto_test_sendcmd_thread.result_signal.connect(self.autoTestSignal)                    #更新测试通过次数
         self.auto_test_sendcmd_thread.abnormal_msg_signal.connect(self.updateStatusBar)             #更新底部状态栏
@@ -1069,6 +1026,8 @@ class Ui_MainWindow(object):
         self.resetAllAutoTestCounter()
 
         self.connect_thread = connectThread()
+
+        self.connect_thread.setIP(self.line_ip.text())
         self.connect_thread.gyro_signal.connect(self.handleGyroVersion)                  #更新陀螺仪版本              
         self.connect_thread.main_signal.connect(self.handleMainVersion)                  #更新主版本
         self.connect_thread.uid_signal.connect(self.handleUID)                           #更新UID
@@ -1248,10 +1207,11 @@ class Ui_MainWindow(object):
     def handleMainVersion(self, version, is_connected):
         self.mainversion_string = version
         self.mainversion_label.setText(version)
-        if is_connected:
-            self.tabWidget.setEnabled(True)
-        else:
-            self.tabWidget.setEnabled(False)
+        self.tabWidget.setEnabled(True)
+        # if is_connected:
+        #     self.tabWidget.setEnabled(True)
+        # else:
+        #     self.tabWidget.setEnabled(False)
 
     def handleUID(self, version, code_bar_address):
         self.uid_string = version
@@ -1269,8 +1229,10 @@ class Ui_MainWindow(object):
         elif self.first_in == True:
             self.first_in = False
             self.udp = socketTool(self.line_ip.text(), int(self.line_port.text()))
-        
+
+        self.connect_thread.setIP(self.line_ip.text())
         self.connect_thread.setSocket(self.udp.so)
+
         self.auto_test_sendcmd_thread.setSocketTool(self.udp)
         self.connect_thread.start()
         
@@ -1292,6 +1254,37 @@ class Ui_MainWindow(object):
     def onykeyAutoTest(self):
         self.resetAllAutoTestCounter()
         self.resetAutoState()
+
+        self.auto_test_sendcmd_thread.openpc_times = int(self.auto_line_text_poweron.text())
+        self.auto_test_sendcmd_thread.closepc_times = int(self.auto_line_text_poweroff.text())
+        self.auto_test_sendcmd_thread.rs232_times = int(self.auto_line_text_rs232.text())
+        self.auto_test_sendcmd_thread.rs485_times = int(self.auto_line_text_rs485.text())
+        self.auto_test_sendcmd_thread.can_times = int(self.auto_line_text_can.text())
+        self.auto_test_sendcmd_thread.do_times = int(self.auto_line_text_do.text())
+        self.auto_test_sendcmd_thread.brake_times = int(self.auto_line_text_brake.text())
+        self.auto_test_sendcmd_thread.bootlight_times = int(self.auto_line_text_bootlight.text())
+        self.auto_test_sendcmd_thread.emc_times = int(self.auto_line_text_emc.text())
+        self.auto_test_sendcmd_thread.charge_times = int(self.auto_line_text_charge.text())
+        self.auto_test_sendcmd_thread.di_times = int(self.auto_line_text_di.text())
+        self.auto_test_sendcmd_thread.delay_times = int(self.auto_line_text_delay.text())
+        self.auto_test_sendcmd_thread.warnlight_times = int(self.auto_line_text_warninglight.text())
+        self.auto_test_sendcmd_thread.cycle_times = int(self.auto_line_text_total.text())
+
+        self.auto_test_sendcmd_thread.openpc_time = float(self.auto_line_text_poweron_timeout.text())
+        self.auto_test_sendcmd_thread.closepc_time = float(self.auto_line_text_poweroff_timeout.text())
+        self.auto_test_sendcmd_thread.rs232_time = float(self.auto_line_text_rs232_timeout.text())
+        self.auto_test_sendcmd_thread.rs485_time = float(self.auto_line_text_rs485_timeout.text())
+        self.auto_test_sendcmd_thread.can_time = float(self.auto_line_text_can_timeout.text())
+        self.auto_test_sendcmd_thread.do_time = float(self.auto_line_text_do_timeout.text())
+        self.auto_test_sendcmd_thread.brake_time = float(self.auto_line_text_brake_timeout.text())
+        self.auto_test_sendcmd_thread.bootlight_time = float(self.auto_line_text_bootlight_timeout.text())
+        self.auto_test_sendcmd_thread.emc_time = float(self.auto_line_text_emc_timeout.text())
+        self.auto_test_sendcmd_thread.charge_time = float(self.auto_line_text_charge_timeout.text())
+        self.auto_test_sendcmd_thread.di_time = float(self.auto_line_text_di_timeout.text())
+        self.auto_test_sendcmd_thread.delay_time = float(self.auto_line_text_delay_timeout.text())
+        self.auto_test_sendcmd_thread.warnlight_time = float(self.auto_line_text_warninglight_timeout.text())
+
+        
         self.auto_test_sendcmd_thread.resetTotalTimesCounter()
         self.auto_test_sendcmd_thread.start()
         self.auto_test_sendcmd_thread.setRunStartTrigger()
@@ -1461,120 +1454,38 @@ class Ui_MainWindow(object):
         self.mainversion_label.setText(_translate("MainWindow", "unknown"))
         self.uidcode_bar_label.setText(_translate("MainWindow", "<html><head/><body><p align=\"center\"><span style=\" font-size:28pt;\">unknown</span></p></body></html>"))
 
-class Test_Items:
-    def __init__(self):
-        self.rs232 = 0x01
-        self.rs485 = 0x02
-        self.can = 0x03
-        self.doOpen = 0x04
-        self.doClose = 0x05
-        self.bootLight = 0x06
-        self.emcOpen = 0x07
-        self.emcClose = 0x08
-        self.chargeGround = 0x09
-        self.chargeBrake = 0x0A
-        self.brakeOpen = 0x0B
-        self.brakeClose = 0x0C
-        self.diBrake = 0x0D
-        self.diGround = 0x0E
-        self.delayBrake = 0x0F
-        self.delayClose = 0x10
-        self.openPC = 0x11
-        self.closePC = 0x12
-        self.warnLightOpen = 0x13
-        self.warnLightClose = 0x14
-        self.uidQuery = 0x15
-        self.mainVersionQuery = 0x16
-        self.gyroVersionQuery = 0x17
-        self.noWork = 0xFF
-
-class connectThread(QThread):
-    gyro_signal = pyqtSignal(str)
-    main_signal = pyqtSignal(str, bool)
-    uid_signal = pyqtSignal(str, str)
-
-    def setSocket(self, so):
-        self.so = so
-
-    def run(self):
-        
-        TESTBOART_ADDR = (ui.line_ip.text(), 4822)
-       
-        self.so.sendto(struct.pack('>HB',0x1234,0x15),TESTBOART_ADDR)
-        self.so.settimeout(2)
-        # self.so.connect(TESTBOART_ADDR)
-        try:
-            ret,address= self.so.recvfrom(1024)
-        except socket.timeout:
-            pass
-        try:
-            head, item_index, uid1,uid2,uid3,uid4,uid5,uid6 = struct.unpack('>H7B',ret)
-            print(str(uid1) + " " + str(hex(uid2)) + " " + str(uid3) + " " + str(uid4) + " " + str(uid5) + " " + str(uid6))
-            if(uid1 != 0):
-                uid1_string = str(hex(uid1))
-            else:
-                uid1_string = "00"
-            if(uid2 != 0):
-                uid2_string = str(hex(uid2))
-            else:
-                uid2_string = "00"
-            if(uid3 != 0):
-                uid3_string = str(hex(uid3))
-            else:
-                uid3_string = "00"
-            if(uid4 != 0):
-                uid4_string = str(hex(uid4))
-            else:
-                uid4_string = "00"
-            if(uid5 != 0):
-                uid5_string = str(hex(uid5))
-            else:
-                uid5_string = "00"
-            if(uid6 != 0):
-                uid6_string = str(hex(uid6))
-            else:
-                uid6_string = "00"
-            self.uid_string = (uid1_string+uid2_string+uid3_string+uid4_string+uid5_string+uid6_string).replace("0x","")[:-1]
-            CODE128 = barcode.get_barcode_class('code128')
-            code128 = CODE128(self.uid_string,writer=ImageWriter())
-            fullname = code128.save('.\\code_image\\' + self.uid_string)
-            self.uid_signal.emit(self.uid_string, fullname)  
-        except:
-            self.uid_signal.emit("解析失败", "NULL")
-
-        self.is_connected = False
-        self.so.sendto(struct.pack('>HB',0x1234,0x16),TESTBOART_ADDR)
-        self.so.settimeout(2)
-        try:
-            ret,address= self.so.recvfrom(1024)
-        except socket.timeout:
-            pass
-        try:
-            head, item_index, main1,main2,main3 = struct.unpack('>H3BH',ret)
-            self.mainversion_string = str(main1) + "." + str(main2) + "." + str(main3)
-            self.is_connected = True
-            self.main_signal.emit(self.mainversion_string, self.is_connected)
-        except:
-            self.is_connected = False
-            self.main_signal.emit("解析失败", self.is_connected)
-
-        self.so.sendto(struct.pack('>HB',0x1234,0x17),TESTBOART_ADDR)
-        self.so.settimeout(2)
-        try:
-            ret,address= self.so.recvfrom(1024)
-        except socket.timeout:
-            pass
-        try:
-            head, item_index, gyro1,gyro2,gyro3 = struct.unpack('>H4B',ret)
-            self.gyroversion_string = "f"+str(gyro1)+"."+str(gyro2)+"."+str(gyro3)
-            self.gyro_signal.emit(self.gyroversion_string)
-        except:
-            self.gyro_signal.emit("解析失败")
-
 class autoTestSendCmdThread(QThread):
     result_signal = pyqtSignal(int, bool)
     process_bar_signal = pyqtSignal(int, int)
     abnormal_msg_signal = pyqtSignal(str)
+    openpc_times = 0
+    closepc_times = 0
+    rs232_times = 0
+    rs485_times = 0
+    can_times = 0
+    do_times = 0
+    brake_times = 0
+    bootlight_times = 0
+    emc_times = 0
+    charge_times = 0
+    di_times = 0
+    delay_times = 0
+    warnlight_times = 0
+    cycle_times = 0
+
+    openpc_time = float(0.0)
+    closepc_time = float(0.0)
+    rs232_time = float(0.0)
+    rs485_time = float(0.0)
+    can_time = float(0.0)
+    do_time = float(0.0)
+    brake_time = float(0.0)
+    bootlight_time = float(0.0)
+    emc_time = float(0.0)
+    charge_time = float(0.0)
+    di_time = float(0.0)
+    delay_time = float(0.0)
+    warnlight_time = float(0.0)
 
     def setSocketTool(self, so):
         self.socket = so
@@ -1629,94 +1540,34 @@ class autoTestSendCmdThread(QThread):
         if self.trigger_once:
             self.total_times_counter = 0
             self.item_list = Test_Items() 
-            self.abnormal_msg_signal.emit("auto test starts...") 
-            try:
-                openpc_times = int(ui.auto_line_text_poweron.text())
-                closepc_times = int(ui.auto_line_text_poweroff.text())
-                rs232_times = int(ui.auto_line_text_rs232.text())
-                rs485_times = int(ui.auto_line_text_rs485.text())
-                can_times = int(ui.auto_line_text_can.text())
-                do_times = int(ui.auto_line_text_do.text())
-                brake_times = int(ui.auto_line_text_brake.text())
-                bootlight_times = int(ui.auto_line_text_bootlight.text())
-                emc_times = int(ui.auto_line_text_emc.text())
-                charge_times = int(ui.auto_line_text_charge.text())
-                di_times = int(ui.auto_line_text_di.text())
-                delay_times = int(ui.auto_line_text_delay.text())
-                warnlight_times = int(ui.auto_line_text_warninglight.text())
-                cycle_times = int(ui.auto_line_text_total.text())
-                cycle_time_for_pc = cycle_times
-                self.total_times = openpc_times + closepc_times + rs232_times + rs485_times + can_times + do_times + brake_times + bootlight_times+ emc_times + charge_times + di_times + delay_times + warnlight_times
-                self.total_times = cycle_times*self.total_times
-            except:
-                openpc_times = 0
-                closepc_times = 0
-                rs232_times = 0
-                rs485_times = 0
-                can_times = 0
-                do_times = 0
-                brake_times = 0
-                bootlight_times = 0
-                emc_times = 0
-                charge_times = 0
-                di_times = 0
-                delay_times = 00
-                warnlight_times = 0
-                
-                self.abnormal_msg_signal.emit("测试次数必须为整数!")
-                self.total_times = 0
-                cycle_times = 0
-                cycle_time_for_pc = 0
+            self.abnormal_msg_signal.emit("auto test starts...")  
             
-            try:
-                openpc_time = float(ui.auto_line_text_poweron_timeout.text())
-                closepc_time = float(ui.auto_line_text_poweroff_timeout.text())
-                rs232_time = float(ui.auto_line_text_rs232_timeout.text())
-                rs485_time = float(ui.auto_line_text_rs485_timeout.text())
-                can_time = float(ui.auto_line_text_can_timeout.text())
-                do_time = float(ui.auto_line_text_do_timeout.text())
-                brake_time = float(ui.auto_line_text_brake_timeout.text())
-                bootlight_time = float(ui.auto_line_text_bootlight_timeout.text())
-                emc_time = float(ui.auto_line_text_emc_timeout.text())
-                charge_time = float(ui.auto_line_text_charge_timeout.text())
-                di_time = float(ui.auto_line_text_di_timeout.text())
-                delay_time = float(ui.auto_line_text_delay_timeout.text())
-                warnlight_time = float(ui.auto_line_text_warninglight_timeout.text())
-            except:
-                openpc_time = float(0.0)
-                closepc_time = float(0.0)
-                rs232_time = float(0.0)
-                rs485_time = float(0.0)
-                can_time = float(0.0)
-                do_time = float(0.0)
-                brake_time = float(0.0)
-                bootlight_time = float(0.0)
-                emc_time = float(0.0)
-                charge_time = float(0.0)
-                di_time = float(0.0)
-                delay_time = float(0.0)
-                warnlight_time = float(0.0)
-                self.abnormal_msg_signal.emit("超时时间必须为浮点数!")
+            
+            self.cycle_time_for_pc = self.cycle_times
+            self.total_times = self.openpc_times + self.closepc_times + self.rs232_times + self.rs485_times + self.can_times + self.do_times + self.brake_times + self.bootlight_times+ self.emc_times + self.charge_times + self.di_times + self.delay_times + self.warnlight_times
+            self.total_times = self.cycle_times*self.total_times
+            
 
             self.process_bar_signal.emit(self.total_times, self.total_times_counter)
             
-            while(cycle_times):
-                self.testProcess(self.item_list.rs232, rs232_times, rs232_time)
-                self.testProcess(self.item_list.rs485, rs485_times, rs485_time) 
-                self.testProcess(self.item_list.can, can_times, can_time)
-                self.testProcess([self.item_list.doOpen, self.item_list.doClose], do_times,do_time)
-                self.testProcess(self.item_list.bootLight, bootlight_times, bootlight_time)
-                self.testProcess([self.item_list.emcOpen,self.item_list.emcClose], emc_times, emc_time)
-                self.testProcess([self.item_list.chargeGround,self.item_list.chargeBrake], charge_times, charge_time)
-                self.testProcess([self.item_list.brakeClose,self.item_list.brakeOpen], brake_times, brake_time)
-                self.testProcess([self.item_list.diBrake,self.item_list.diGround], di_times, di_time)
-                self.testProcess([self.item_list.delayBrake,self.item_list.delayClose], delay_times, delay_time)
-                self.testProcess([self.item_list.warnLightOpen,self.item_list.warnLightClose], warnlight_times, warnlight_time)
-                cycle_times = cycle_times - 1
-            while(cycle_time_for_pc):
+            while(self.cycle_times):
+                self.testProcess(self.item_list.rs232, self.rs232_times, self.rs232_time)
+                
+                self.testProcess(self.item_list.rs485, self.rs485_times, self.rs485_time) 
+                self.testProcess(self.item_list.can, self.can_times, self.can_time)
+                self.testProcess([self.item_list.doOpen, self.item_list.doClose], self.do_times,self.do_time)
+                self.testProcess(self.item_list.bootLight, self.bootlight_times, self.bootlight_time)
+                self.testProcess([self.item_list.emcOpen,self.item_list.emcClose], self.emc_times, self.emc_time)
+                self.testProcess([self.item_list.chargeGround,self.item_list.chargeBrake], self.charge_times, self.charge_time)
+                self.testProcess([self.item_list.brakeClose,self.item_list.brakeOpen], self.brake_times, self.brake_time)
+                self.testProcess([self.item_list.diBrake,self.item_list.diGround], self.di_times, self.di_time)
+                self.testProcess([self.item_list.delayBrake,self.item_list.delayClose], self.delay_times, self.delay_time)
+                self.testProcess([self.item_list.warnLightOpen,self.item_list.warnLightClose], self.warnlight_times, self.warnlight_time)
+                self.cycle_times = self.cycle_times - 1
+            while(self.cycle_time_for_pc):
                 self.testProcess(self.item_list.openPC, openpc_times, openpc_time)
                 self.testProcess(self.item_list.closePC, closepc_times, closepc_time)
-                cycle_time_for_pc = cycle_time_for_pc -1
+                self.cycle_time_for_pc = self.cycle_time_for_pc -1
             self.trigger_once = False
 
 class listenReplyThread(QThread):
