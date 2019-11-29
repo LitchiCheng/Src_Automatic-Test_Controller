@@ -28,8 +28,7 @@ class socketTool:
 
     def recvTestResult(self, index):   
         try:
-            ret,address= self.so.recvfrom(1024)
-            # print("接收到的" + str(address[0]))      
+            ret,address= self.so.recvfrom(1024)    
         except socket.timeout:
             ret = b''
         try:
