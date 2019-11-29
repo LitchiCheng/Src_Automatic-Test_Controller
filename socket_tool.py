@@ -1,4 +1,4 @@
-import socket
+import socket,struct
 class socketTool:
     def __init__(self, remote_ip ,local_port):
         self.remote_ip = remote_ip
@@ -20,20 +20,22 @@ class socketTool:
         self.local_port = port
 
     def sendTestCmd(self, index, timeout_t):
-        print((self.remote_ip, self.remote_port))
-        print("send index is " + str(index))
+        print("************************************************************************")
+        # print((self.remote_ip, self.remote_port))
+        print("send cmd index is " + str(hex(index)))
         self.so.sendto(struct.pack('>HB',0x1234,index),(self.remote_ip, self.remote_port))
         self.so.settimeout(timeout_t)
 
     def recvTestResult(self, index):   
         try:
             ret,address= self.so.recvfrom(1024)
-            print("接收到的" + str(address[0]))      
+            # print("接收到的" + str(address[0]))      
         except socket.timeout:
             ret = b''
         try:
             head, item_index, result = struct.unpack('>H2B',ret)
-            print("recv is " + str(hex(head)) + " " + str(hex(item_index)))
+            print("recv cmd index is " + str(hex(item_index)) + " result is " + str(hex(result)))
+            # print("************************************************************************")
         except:
             head = 0xFFFF   
         if head == 0x5678:
