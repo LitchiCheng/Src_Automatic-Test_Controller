@@ -1025,7 +1025,7 @@ class Ui_MainWindow(object):
 
         self.listen_reply_thread = listenReplyThread()
         self.resetAllAutoTestCounter()
-
+        
         self.connect_thread = connectThread()
 
         self.connect_thread.setIP(self.line_ip.text())
@@ -1034,7 +1034,6 @@ class Ui_MainWindow(object):
         self.connect_thread.uid_signal.connect(self.handleUID)                           #更新UID
 
         self.first_in = True
-        # self.tabWidget.setEnabled(True)
     
     def autoTestPause(self):
         self.auto_test_sendcmd_thread.pause_signal = True
@@ -1218,6 +1217,11 @@ class Ui_MainWindow(object):
     def handleUID(self, version, code_bar_address):
         self.uid_string = version
         self.uid_label.setText(version)
+
+        CODE128 = barcode.get_barcode_class('code128')
+        code128 = CODE128(self.uid_string,writer=ImageWriter())
+        code_bar_address = code128.save('.\\code_image\\' + self.uid_string)
+        
         if code_bar_address != "NULL":
             self.uidcode_bar_label.setScaledContents(True)
             self.uidcode_bar_label.setPixmap(QtGui.QPixmap(code_bar_address))

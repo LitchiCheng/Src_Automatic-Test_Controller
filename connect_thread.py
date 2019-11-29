@@ -48,9 +48,7 @@ class connectThread(QThread):
             else:
                 uid6_string = "00"
             self.uid_string = (uid1_string+uid2_string+uid3_string+uid4_string+uid5_string+uid6_string).replace("0x","")[:-1]
-            CODE128 = barcode.get_barcode_class('code128')
-            code128 = CODE128(self.uid_string,writer=ImageWriter())
-            fullname = code128.save('.\\code_image\\' + self.uid_string)
+            fullname = " "
             self.uid_signal.emit(self.uid_string, fullname)  
         except:
             self.uid_signal.emit("解析失败", "NULL")
