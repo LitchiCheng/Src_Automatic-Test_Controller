@@ -6,12 +6,9 @@ class socketTool:
         self.local_port = local_port
         self.local_ip = ''
         self.so = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        # self.so.bind((self.local_ip, int(self.local_port)))
     
     def connect(self):
         pass
-        # self.so = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        # self.so.bind((self.local_ip, int(self.local_port)))
 
     def setRemoteIp(self, ip):
         self.remote_ip = ip
@@ -21,7 +18,6 @@ class socketTool:
 
     def sendTestCmd(self, index, timeout_t):
         print("************************************************************************")
-        # print((self.remote_ip, self.remote_port))
         print("send cmd index is " + str(hex(index)))
         self.so.sendto(struct.pack('>HB',0x1234,index),(self.remote_ip, self.remote_port))
         self.so.settimeout(timeout_t)
@@ -34,7 +30,6 @@ class socketTool:
         try:
             head, item_index, result = struct.unpack('>H2B',ret)
             print("recv cmd index is " + str(hex(item_index)) + " result is " + str(hex(result)))
-            # print("************************************************************************")
         except:
             head = 0xFFFF   
         if head == 0x5678:

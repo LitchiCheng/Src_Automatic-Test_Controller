@@ -1023,7 +1023,6 @@ class Ui_MainWindow(object):
         self.auto_test_sendcmd_thread.result_signal.connect(self.autoTestSignal)                    #更新测试通过次数
         self.auto_test_sendcmd_thread.abnormal_msg_signal.connect(self.updateStatusBar)             #更新底部状态栏
 
-        self.listen_reply_thread = listenReplyThread()
         self.resetAllAutoTestCounter()
         
         self.connect_thread = connectThread()
@@ -1034,329 +1033,6 @@ class Ui_MainWindow(object):
         self.connect_thread.uid_signal.connect(self.handleUID)                           #更新UID
 
         self.first_in = True
-    
-    def autoTestPause(self):
-        self.auto_test_sendcmd_thread.pause_signal = True
-        self.statusbar.showMessage("test is stop...", 9999)
-
-    def manualOpenPC(self):
-        self.udp.sendTestCmd(0x11,0.5)
-
-    def manualClosePC(self):
-        self.udp.sendTestCmd(0x12,0.5)
-
-    def onkeyReport(self):
-        try:
-            finished_percent = float(int(self.auto_line_text_pass_percent.text()) / 100)
-        except:
-            finished_percent = 0.8
-        text_name = self.uid_string
-        rs232_test_times = int(self.auto_line_text_total.text())*int(self.auto_line_text_rs232.text())
-        rs485_test_times = int(self.auto_line_text_total.text())*int(self.auto_line_text_rs485.text())
-        can_test_times = int(self.auto_line_text_total.text())*int(self.auto_line_text_can.text())
-        do_test_times = int(self.auto_line_text_total.text())*int(self.auto_line_text_do.text())
-        bootlight_test_times = int(self.auto_line_text_total.text())*int(self.auto_line_text_bootlight.text())
-        emc_test_times = int(self.auto_line_text_total.text())*int(self.auto_line_text_emc.text())
-        charge_test_times = int(self.auto_line_text_total.text())*int(self.auto_line_text_charge.text())
-        brake_test_times = int(self.auto_line_text_total.text())*int(self.auto_line_text_brake.text())
-        di_test_times = int(self.auto_line_text_total.text())*int(self.auto_line_text_di.text())
-        delay_test_times = int(self.auto_line_text_total.text())*int(self.auto_line_text_delay.text())
-        warn_test_times = int(self.auto_line_text_total.text())*int(self.auto_line_text_warninglight.text())
-        openpc_test_times = int(self.auto_line_text_total.text())*int(self.auto_line_text_poweron.text())
-        closepc_test_times = int(self.auto_line_text_total.text())*int(self.auto_line_text_poweroff.text())
-        key_word_file = ".\\report\\" + text_name + ".txt"
-        file = open(key_word_file,'w+', encoding='utf-8')
-        file.write("******测试报告******\n")
-        file.write("时间：" + time.strftime('%Y-%m-%d-%H-%M-%S',time.localtime(time.time())) + "\n")
-        file.write("UID："+ self.uid_string + "\n")
-        file.write("主控版本：" + self.mainversion_string + "\n")
-        file.write("陀螺仪版本：" + self.gyroversion_string + "\n")
-        file.write("总循环次数：" + self.auto_line_text_total.text() + "\n")
-        file.write("开机次数：" + str(openpc_test_times) + "\n")
-        file.write("关机次数：" + str(closepc_test_times) + "\n")
-
-        file.write("rs232测试：\n")
-        file.write("\t总次数：" + str(rs232_test_times)+"\n")
-        file.write("\t成功："+str(self.auto_rs232_yes_counter)+ "\n")
-        rs232_result = self.auto_rs232_yes_counter >= finished_percent*rs232_test_times
-        if rs232_result:
-            file.write("\t结果：" + "pass\n")
-        else:
-            file.write("\t结果：" + "fail\n")
-
-        file.write("rs485测试：\n")
-        file.write("\t总次数：" + str(rs485_test_times)+"\n")
-        file.write("\t成功："+str(self.auto_rs485_yes_counter)+ "\n")
-        rs485_result = self.auto_rs485_yes_counter >= finished_percent*rs485_test_times
-        if rs485_result:
-            file.write("\t结果：" + "pass\n")
-        else:
-            file.write("\t结果：" + "fail\n")
-
-        file.write("can测试：\n")
-        file.write("\t总次数：" + str(can_test_times)+"\n")
-        file.write("\t成功："+str(self.auto_can_yes_counter)+ "\n")
-        can_result = self.auto_can_yes_counter >= finished_percent*can_test_times
-        if can_result:
-            file.write("\t结果：" + "pass\n")
-        else:
-            file.write("\t结果：" + "fail\n")
-
-        file.write("DO测试：\n")
-        file.write("\t总次数：" + str(do_test_times)+"\n")
-        file.write("\t成功："+str(self.auto_do_yes_counter)+ "\n")
-        do_result = self.auto_do_yes_counter >= finished_percent*do_test_times
-        if do_result:
-            file.write("\t结果：" + "pass\n")
-        else:
-            file.write("\t结果：" + "fail\n")
-
-        file.write("开机灯测试：\n")
-        file.write("\t总次数：" + str(bootlight_test_times)+"\n")
-        file.write("\t成功："+str(self.auto_bootlight_yes_counter)+ "\n")
-        bootlight_result = self.auto_bootlight_yes_counter >= finished_percent*bootlight_test_times
-        if bootlight_result:
-            file.write("\t结果：" + "pass\n")
-        else:
-            file.write("\t结果：" + "fail\n")
-
-        file.write("急停测试：\n")
-        file.write("\t总次数：" + str(emc_test_times)+"\n")
-        file.write("\t成功："+str(self.auto_emc_yes_counter)+ "\n")
-        emc_result = self.auto_emc_yes_counter >= finished_percent*emc_test_times
-        if emc_result:
-            file.write("\t结果：" + "pass\n")
-        else:
-            file.write("\t结果：" + "fail\n")
-
-        file.write("充电测试：\n")
-        file.write("\t总次数：" + str(charge_test_times)+"\n")
-        file.write("\t成功："+str(self.auto_charge_yes_counter)+ "\n")
-        charge_result = self.auto_charge_yes_counter >= finished_percent*charge_test_times
-        if charge_result:
-            file.write("\t结果：" + "pass\n")
-        else:
-            file.write("\t结果：" + "fail\n")
-
-        file.write("抱闸测试：\n")
-        file.write("\t总次数：" + str(brake_test_times)+"\n")
-        file.write("\t成功："+str(self.auto_brake_yes_counter)+ "\n")
-        brake_result = self.auto_brake_yes_counter >= finished_percent*brake_test_times
-        if brake_result:
-            file.write("\t结果：" + "pass\n")
-        else:
-            file.write("\t结果：" + "fail\n") 
-
-        file.write("DI测试：\n")
-        file.write("\t总次数：" + str(di_test_times)+"\n")
-        file.write("\t成功："+str(self.auto_di_yes_counter)+ "\n")
-        di_result = self.auto_di_yes_counter >= finished_percent*di_test_times
-        if di_result:
-            file.write("\t结果：" + "pass\n")
-        else:
-            file.write("\t结果：" + "fail\n") 
-
-        file.write("继电器测试：\n")
-        file.write("\t总次数：" + str(delay_test_times)+"\n")
-        file.write("\t成功："+str(self.auto_delay_yes_counter)+ "\n")
-        delay_result = self.auto_delay_yes_counter >= finished_percent*delay_test_times
-        if delay_result:
-            file.write("\t结果：" + "pass\n")
-        else:
-            file.write("\t结果：" + "fail\n")
-
-        file.write("报警灯测试：\n")
-        file.write("\t总次数：" + str(warn_test_times)+"\n")
-        file.write("\t成功："+str(self.auto_warn_yes_counter)+ "\n")
-        warn_result = self.auto_warn_yes_counter >= finished_percent*warn_test_times
-        if warn_result:
-            file.write("\t结果：" + "pass\n")
-        else:
-            file.write("\t结果：" + "fail\n")
-        if warn_result and delay_result and di_result and brake_result and charge_result and emc_result and bootlight_result and do_result and can_result and rs485_result and rs232_result:
-            file.write("结论：" + "pass\n")
-            self.statusbar.showMessage("测试结果全部成功，请查看...", 99999)
-        else:
-            file.write("结论：" + "fail\n")
-            self.statusbar.showMessage("测试结果存在失败，请查看...", 99999)
-        file.close()
-        document = open(key_word_file,'r',encoding = "utf-8") 
-        self.textBrowser.setText("")
-        for i in document.readlines():
-            self.textBrowser.append(i)
-        document.close()
-        self.tabWidget.setCurrentIndex(2)
-
-    def resetAllAutoTestCounter(self):
-        self.auto_rs232_yes_counter = 0
-        self.auto_rs485_yes_counter = 0
-        self.auto_can_yes_counter = 0
-        self.auto_can_yes_counter = 0
-        self.auto_do_yes_counter = 0
-        self.auto_bootlight_yes_counter =0
-        self.auto_emc_yes_counter =0 
-        self.auto_charge_yes_counter =0
-        self.auto_brake_yes_counter =0
-        self.auto_di_yes_counter =0
-        self.auto_delay_yes_counter =0
-        self.auto_warn_yes_counter =0
-
-    def handleGyroVersion(self, version):
-        self.gyroversion_string = version
-        self.gyroversion_label.setText(version)
-        
-    def handleMainVersion(self, version, is_connected):
-        self.mainversion_string = version
-        self.mainversion_label.setText(version)
-        # self.tabWidget.setEnabled(True)
-        if is_connected:
-            self.tabWidget.setEnabled(True)
-        else:
-            self.tabWidget.setEnabled(False)
-
-    def handleUID(self, version, code_bar_address):
-        self.uid_string = version
-        self.uid_label.setText(version)
-
-        CODE128 = barcode.get_barcode_class('code128')
-        code128 = CODE128(self.uid_string,writer=ImageWriter())
-        code_bar_address = code128.save('.\\code_image\\' + self.uid_string)
-        
-        if code_bar_address != "NULL":
-            self.uidcode_bar_label.setScaledContents(True)
-            self.uidcode_bar_label.setPixmap(QtGui.QPixmap(code_bar_address))
-        
-    def connectFunc(self):
-        if not self.first_in: 
-            # self.udp.so.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-            self.udp.setLocalPort(self.line_port.text())
-            self.udp.setRemoteIp(self.line_ip.text())
-            self.udp.connect()
-        elif self.first_in == True:
-            self.first_in = False
-            self.udp = socketTool(self.line_ip.text(), int(self.line_port.text()))
-
-        self.connect_thread.setIP(self.line_ip.text())
-        self.connect_thread.setSocket(self.udp.so)
-
-        self.auto_test_sendcmd_thread.setSocketTool(self.udp)
-        self.connect_thread.start()
-        
-    
-    def resetAutoState(self):
-        result_show = QtGui.QPixmap(".\\icon\\x.png")
-        self.auto_label_rs232_state.setPixmap(result_show)
-        self.auto_label_rs485_state.setPixmap(result_show)
-        self.auto_label_can_state.setPixmap(result_show)
-        self.auto_label_do_state.setPixmap(result_show)
-        self.auto_label_bootlight_state.setPixmap(result_show)
-        self.auto_label_emc_state.setPixmap(result_show)
-        self.auto_label_charge_state.setPixmap(result_show)
-        self.auto_label_brake_state.setPixmap(result_show)
-        self.auto_label_di_state.setPixmap(result_show)
-        self.auto_label_delay_state.setPixmap(result_show)
-        self.auto_label_warninglight_state.setPixmap(result_show)
-
-    def onykeyAutoTest(self):
-
-        self.resetAllAutoTestCounter()
-        self.resetAutoState()
-
-        self.auto_test_sendcmd_thread.openpc_times = int(self.auto_line_text_poweron.text())
-        self.auto_test_sendcmd_thread.closepc_times = int(self.auto_line_text_poweroff.text())
-        self.auto_test_sendcmd_thread.rs232_times = int(self.auto_line_text_rs232.text())
-        self.auto_test_sendcmd_thread.rs485_times = int(self.auto_line_text_rs485.text())
-        self.auto_test_sendcmd_thread.can_times = int(self.auto_line_text_can.text())
-        self.auto_test_sendcmd_thread.do_times = int(self.auto_line_text_do.text())
-        self.auto_test_sendcmd_thread.brake_times = int(self.auto_line_text_brake.text())
-        self.auto_test_sendcmd_thread.bootlight_times = int(self.auto_line_text_bootlight.text())
-        self.auto_test_sendcmd_thread.emc_times = int(self.auto_line_text_emc.text())
-        self.auto_test_sendcmd_thread.charge_times = int(self.auto_line_text_charge.text())
-        self.auto_test_sendcmd_thread.di_times = int(self.auto_line_text_di.text())
-        self.auto_test_sendcmd_thread.delay_times = int(self.auto_line_text_delay.text())
-        self.auto_test_sendcmd_thread.warnlight_times = int(self.auto_line_text_warninglight.text())
-        self.auto_test_sendcmd_thread.cycle_times = int(self.auto_line_text_total.text())
-
-        self.auto_test_sendcmd_thread.openpc_time = float(self.auto_line_text_poweron_timeout.text())
-        self.auto_test_sendcmd_thread.closepc_time = float(self.auto_line_text_poweroff_timeout.text())
-        self.auto_test_sendcmd_thread.rs232_time = float(self.auto_line_text_rs232_timeout.text())
-        self.auto_test_sendcmd_thread.rs485_time = float(self.auto_line_text_rs485_timeout.text())
-        self.auto_test_sendcmd_thread.can_time = float(self.auto_line_text_can_timeout.text())
-        self.auto_test_sendcmd_thread.do_time = float(self.auto_line_text_do_timeout.text())
-        self.auto_test_sendcmd_thread.brake_time = float(self.auto_line_text_brake_timeout.text())
-        self.auto_test_sendcmd_thread.bootlight_time = float(self.auto_line_text_bootlight_timeout.text())
-        self.auto_test_sendcmd_thread.emc_time = float(self.auto_line_text_emc_timeout.text())
-        self.auto_test_sendcmd_thread.charge_time = float(self.auto_line_text_charge_timeout.text())
-        self.auto_test_sendcmd_thread.di_time = float(self.auto_line_text_di_timeout.text())
-        self.auto_test_sendcmd_thread.delay_time = float(self.auto_line_text_delay_timeout.text())
-        self.auto_test_sendcmd_thread.warnlight_time = float(self.auto_line_text_warninglight_timeout.text())
-
-        
-        self.auto_test_sendcmd_thread.resetTotalTimesCounter()
-        self.auto_test_sendcmd_thread.setRunStartTrigger()
-        self.auto_test_sendcmd_thread.start()
-        
-
-    def autoTestSignal(self, item, yes_or_no):
-        item_list = Test_Items()
-        if yes_or_no:
-            result_show = QtGui.QPixmap(".\\icon\\d.png")
-        else:
-            result_show = QtGui.QPixmap(".\\icon\\x.png")
-        if item == item_list.rs232:
-            if yes_or_no:
-                self.auto_rs232_yes_counter = self.auto_rs232_yes_counter + 1
-            self.auto_label_rs232_state.setPixmap(result_show)
-        if item == item_list.rs485:
-            if yes_or_no:
-                self.auto_rs485_yes_counter = self.auto_rs485_yes_counter + 1
-            self.auto_label_rs485_state.setPixmap(result_show)
-        if item == item_list.can:
-            if yes_or_no:
-                self.auto_can_yes_counter = self.auto_can_yes_counter + 1
-            self.auto_label_can_state.setPixmap(result_show)
-        if item == item_list.doOpen:
-            if yes_or_no:
-                self.auto_do_yes_counter = self.auto_do_yes_counter + 1
-            self.auto_label_do_state.setPixmap(result_show)
-        if item == item_list.bootLight:
-            if yes_or_no:
-                self.auto_bootlight_yes_counter = self.auto_bootlight_yes_counter + 1
-            self.auto_label_bootlight_state.setPixmap(result_show)
-        if item == item_list.emcOpen:
-            if yes_or_no:
-                self.auto_emc_yes_counter = self.auto_emc_yes_counter + 1
-            self.auto_label_emc_state.setPixmap(result_show)
-        if item == item_list.chargeGround:
-            if yes_or_no:
-                self.auto_charge_yes_counter = self.auto_charge_yes_counter + 1
-            self.auto_label_charge_state.setPixmap(result_show)
-        if item == item_list.brakeClose:
-            if yes_or_no:
-                self.auto_brake_yes_counter = self.auto_brake_yes_counter + 1
-            self.auto_label_brake_state.setPixmap(result_show)
-        if item == item_list.diBrake:
-            if yes_or_no:
-                self.auto_di_yes_counter = self.auto_di_yes_counter + 1
-            self.auto_label_di_state.setPixmap(result_show)
-        if item == item_list.delayBrake:
-            if yes_or_no:
-                self.auto_delay_yes_counter = self.auto_delay_yes_counter + 1
-            self.auto_label_delay_state.setPixmap(result_show)
-        if item == item_list.warnLightOpen:
-            if yes_or_no:
-                self.auto_warn_yes_counter = self.auto_warn_yes_counter + 1
-            self.auto_label_warninglight_state.setPixmap(result_show)
-
-    def updateAutoTestProcessBar(self, total_times, total_times_counter):
-        self.progressBar.setRange(0, total_times)
-        self.progressBar.setValue(total_times_counter)
-        print("total_times :" + str(total_times) + " now_times  :" + str(total_times_counter))
-        if total_times == total_times_counter:
-            self.onkeyReport()
-
-    def updateStatusBar(self, string): 
-        self.statusbar.showMessage(string, 99999)
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
@@ -1461,8 +1137,246 @@ class Ui_MainWindow(object):
         self.mainversion_label.setText(_translate("MainWindow", "unknown"))
         self.uidcode_bar_label.setText(_translate("MainWindow", "<html><head/><body><p align=\"center\"><span style=\" font-size:28pt;\">unknown</span></p></body></html>"))
 
-class listenReplyThread(QThread):
-    signal = pyqtSignal()           
+    def autoTestPause(self):
+        self.auto_test_sendcmd_thread.pause_signal = True
+        self.statusbar.showMessage("test is stop...", 9999)
+
+    def manualOpenPC(self):
+        self.udp.sendTestCmd(0x11,0.5)
+
+    def manualClosePC(self):
+        self.udp.sendTestCmd(0x12,0.5)
+
+    def itemResultFormat(self, file, item_name_str, test_total_times, yes_count, finish_factor):
+        file.write(item_name_str + ":\n")
+        file.write("\t总次数：" + str(test_total_times)+"\n")
+        file.write("\t成功："+str(yes_count)+ "\n")
+        rs232_result = yes_count >= finish_factor*test_total_times
+        if rs232_result:
+            file.write("\t结果：" + "pass\n")
+        else:
+            file.write("\t结果：" + "fail\n")
+
+    def onkeyReport(self):
+        try:
+            finished_percent = float(int(self.auto_line_text_pass_percent.text()) / 100)
+        except:
+            finished_percent = 0.8
+        text_name = self.uid_string
+        rs232_test_times = int(self.auto_line_text_total.text())*int(self.auto_line_text_rs232.text())
+        rs485_test_times = int(self.auto_line_text_total.text())*int(self.auto_line_text_rs485.text())
+        can_test_times = int(self.auto_line_text_total.text())*int(self.auto_line_text_can.text())
+        do_test_times = int(self.auto_line_text_total.text())*int(self.auto_line_text_do.text())
+        bootlight_test_times = int(self.auto_line_text_total.text())*int(self.auto_line_text_bootlight.text())
+        emc_test_times = int(self.auto_line_text_total.text())*int(self.auto_line_text_emc.text())
+        charge_test_times = int(self.auto_line_text_total.text())*int(self.auto_line_text_charge.text())
+        brake_test_times = int(self.auto_line_text_total.text())*int(self.auto_line_text_brake.text())
+        di_test_times = int(self.auto_line_text_total.text())*int(self.auto_line_text_di.text())
+        delay_test_times = int(self.auto_line_text_total.text())*int(self.auto_line_text_delay.text())
+        warn_test_times = int(self.auto_line_text_total.text())*int(self.auto_line_text_warninglight.text())
+        openpc_test_times = int(self.auto_line_text_total.text())*int(self.auto_line_text_poweron.text())
+        closepc_test_times = int(self.auto_line_text_total.text())*int(self.auto_line_text_poweroff.text())
+        key_word_file = ".\\report\\" + text_name + ".txt"
+        file = open(key_word_file,'w+', encoding='utf-8')
+        file.write("******测试报告******\n")
+        file.write("时间：" + time.strftime('%Y-%m-%d-%H-%M-%S',time.localtime(time.time())) + "\n")
+        file.write("UID："+ self.uid_string + "\n")
+        file.write("主控版本：" + self.mainversion_string + "\n")
+        file.write("陀螺仪版本：" + self.gyroversion_string + "\n")
+        file.write("总循环次数：" + self.auto_line_text_total.text() + "\n")
+        file.write("开机次数：" + str(openpc_test_times) + "\n")
+        file.write("关机次数：" + str(closepc_test_times) + "\n")
+
+        rs232_result = self.itemResultFormat(file, "rs232测试",rs232_test_times, self.auto_rs232_yes_counter, finished_percent)
+        rs485_result = self.itemResultFormat(file, "rs485测试",rs485_test_times, self.auto_rs485_yes_counter, finished_percent)
+        can_result = self.itemResultFormat(file, "can测试",can_test_times, self.auto_can_yes_counter, finished_percent)
+        do_result = self.itemResultFormat(file, "DO测试",do_test_times, self.auto_do_yes_counter, finished_percent)
+        bootlight_result = self.itemResultFormat(file, "开机灯测试",bootlight_test_times, self.auto_bootlight_yes_counter, finished_percent)
+        emc_result = self.itemResultFormat(file, "急停测试",emc_test_times, self.auto_emc_yes_counter, finished_percent)
+        charge_result = self.itemResultFormat(file, "充电测试",charge_test_times, self.auto_charge_yes_counter, finished_percent)
+        brake_result = self.itemResultFormat(file, "抱闸测试",brake_test_times, self.auto_brake_yes_counter, finished_percent)
+        di_result = self.itemResultFormat(file, "DI测试",di_test_times, self.auto_di_yes_counter, finished_percent)
+        delay_result = self.itemResultFormat(file, "继电器测试",delay_test_times, self.auto_delay_yes_counter, finished_percent)
+        warn_result = self.itemResultFormat(file, "报警灯测试",warn_test_times, self.auto_warn_yes_counter, finished_percent)
+
+        if warn_result and delay_result and di_result and brake_result and charge_result and emc_result and bootlight_result and do_result and can_result and rs485_result and rs232_result:
+            file.write("结论：" + "pass\n")
+            self.statusbar.showMessage("测试结果全部成功，请查看...", 99999)
+        else:
+            file.write("结论：" + "fail\n")
+            self.statusbar.showMessage("测试结果存在失败，请查看...", 99999)
+        file.close()
+        document = open(key_word_file,'r',encoding = "utf-8") 
+        self.textBrowser.setText("")
+        for i in document.readlines():
+            self.textBrowser.append(i)
+        document.close()
+        self.tabWidget.setCurrentIndex(2)
+
+    def handleGyroVersion(self, version):
+        self.gyroversion_string = version
+        self.gyroversion_label.setText(version)
+        
+    def handleMainVersion(self, version, is_connected):
+        self.mainversion_string = version
+        self.mainversion_label.setText(version)
+        if is_connected:
+            self.tabWidget.setEnabled(True)
+        else:
+            self.tabWidget.setEnabled(False)
+
+    def handleUID(self, version, code_bar_address):
+        self.uid_string = version
+        self.uid_label.setText(version)
+        CODE128 = barcode.get_barcode_class('code128')
+        code128 = CODE128(self.uid_string,writer=ImageWriter())
+        code_bar_address = code128.save('.\\code_image\\' + self.uid_string)
+        if code_bar_address != "NULL":
+            self.uidcode_bar_label.setScaledContents(True)
+            self.uidcode_bar_label.setPixmap(QtGui.QPixmap(code_bar_address))
+        
+    def connectFunc(self):
+        if not self.first_in: 
+            self.udp.setLocalPort(self.line_port.text())
+            self.udp.setRemoteIp(self.line_ip.text())
+            self.udp.connect()
+        elif self.first_in == True:
+            self.first_in = False
+            self.udp = socketTool(self.line_ip.text(), int(self.line_port.text()))
+
+        self.connect_thread.setIP(self.line_ip.text())
+        self.connect_thread.setSocket(self.udp.so)
+
+        self.auto_test_sendcmd_thread.setSocketTool(self.udp)
+        self.connect_thread.start()
+        
+    
+    def resetAutoState(self):
+        result_show = QtGui.QPixmap(".\\icon\\x.png")
+        self.auto_label_rs232_state.setPixmap(result_show)
+        self.auto_label_rs485_state.setPixmap(result_show)
+        self.auto_label_can_state.setPixmap(result_show)
+        self.auto_label_do_state.setPixmap(result_show)
+        self.auto_label_bootlight_state.setPixmap(result_show)
+        self.auto_label_emc_state.setPixmap(result_show)
+        self.auto_label_charge_state.setPixmap(result_show)
+        self.auto_label_brake_state.setPixmap(result_show)
+        self.auto_label_di_state.setPixmap(result_show)
+        self.auto_label_delay_state.setPixmap(result_show)
+        self.auto_label_warninglight_state.setPixmap(result_show)
+
+    def resetAllAutoTestCounter(self):
+        self.auto_rs232_yes_counter = 0
+        self.auto_rs485_yes_counter = 0
+        self.auto_can_yes_counter = 0
+        self.auto_can_yes_counter = 0
+        self.auto_do_yes_counter = 0
+        self.auto_bootlight_yes_counter =0
+        self.auto_emc_yes_counter =0 
+        self.auto_charge_yes_counter =0
+        self.auto_brake_yes_counter =0
+        self.auto_di_yes_counter =0
+        self.auto_delay_yes_counter =0
+        self.auto_warn_yes_counter =0
+
+    def onykeyAutoTest(self):
+        self.resetAllAutoTestCounter()
+        self.resetAutoState()
+
+        self.auto_test_sendcmd_thread.openpc_times = int(self.auto_line_text_poweron.text())
+        self.auto_test_sendcmd_thread.closepc_times = int(self.auto_line_text_poweroff.text())
+        self.auto_test_sendcmd_thread.rs232_times = int(self.auto_line_text_rs232.text())
+        self.auto_test_sendcmd_thread.rs485_times = int(self.auto_line_text_rs485.text())
+        self.auto_test_sendcmd_thread.can_times = int(self.auto_line_text_can.text())
+        self.auto_test_sendcmd_thread.do_times = int(self.auto_line_text_do.text())
+        self.auto_test_sendcmd_thread.brake_times = int(self.auto_line_text_brake.text())
+        self.auto_test_sendcmd_thread.bootlight_times = int(self.auto_line_text_bootlight.text())
+        self.auto_test_sendcmd_thread.emc_times = int(self.auto_line_text_emc.text())
+        self.auto_test_sendcmd_thread.charge_times = int(self.auto_line_text_charge.text())
+        self.auto_test_sendcmd_thread.di_times = int(self.auto_line_text_di.text())
+        self.auto_test_sendcmd_thread.delay_times = int(self.auto_line_text_delay.text())
+        self.auto_test_sendcmd_thread.warnlight_times = int(self.auto_line_text_warninglight.text())
+        self.auto_test_sendcmd_thread.cycle_times = int(self.auto_line_text_total.text())
+
+        self.auto_test_sendcmd_thread.openpc_time = float(self.auto_line_text_poweron_timeout.text())
+        self.auto_test_sendcmd_thread.closepc_time = float(self.auto_line_text_poweroff_timeout.text())
+        self.auto_test_sendcmd_thread.rs232_time = float(self.auto_line_text_rs232_timeout.text())
+        self.auto_test_sendcmd_thread.rs485_time = float(self.auto_line_text_rs485_timeout.text())
+        self.auto_test_sendcmd_thread.can_time = float(self.auto_line_text_can_timeout.text())
+        self.auto_test_sendcmd_thread.do_time = float(self.auto_line_text_do_timeout.text())
+        self.auto_test_sendcmd_thread.brake_time = float(self.auto_line_text_brake_timeout.text())
+        self.auto_test_sendcmd_thread.bootlight_time = float(self.auto_line_text_bootlight_timeout.text())
+        self.auto_test_sendcmd_thread.emc_time = float(self.auto_line_text_emc_timeout.text())
+        self.auto_test_sendcmd_thread.charge_time = float(self.auto_line_text_charge_timeout.text())
+        self.auto_test_sendcmd_thread.di_time = float(self.auto_line_text_di_timeout.text())
+        self.auto_test_sendcmd_thread.delay_time = float(self.auto_line_text_delay_timeout.text())
+        self.auto_test_sendcmd_thread.warnlight_time = float(self.auto_line_text_warninglight_timeout.text())
+
+        self.auto_test_sendcmd_thread.resetTotalTimesCounter()
+        self.auto_test_sendcmd_thread.setRunStartTrigger()
+        self.auto_test_sendcmd_thread.start()
+        
+
+    def autoTestSignal(self, item, yes_or_no):
+        item_list = Test_Items()
+        if yes_or_no:
+            result_show = QtGui.QPixmap(".\\icon\\d.png")
+        else:
+            result_show = QtGui.QPixmap(".\\icon\\x.png")
+        if item == item_list.rs232:
+            if yes_or_no:
+                self.auto_rs232_yes_counter = self.auto_rs232_yes_counter + 1
+            self.auto_label_rs232_state.setPixmap(result_show)
+        if item == item_list.rs485:
+            if yes_or_no:
+                self.auto_rs485_yes_counter = self.auto_rs485_yes_counter + 1
+            self.auto_label_rs485_state.setPixmap(result_show)
+        if item == item_list.can:
+            if yes_or_no:
+                self.auto_can_yes_counter = self.auto_can_yes_counter + 1
+            self.auto_label_can_state.setPixmap(result_show)
+        if item == item_list.doOpen:
+            if yes_or_no:
+                self.auto_do_yes_counter = self.auto_do_yes_counter + 1
+            self.auto_label_do_state.setPixmap(result_show)
+        if item == item_list.bootLight:
+            if yes_or_no:
+                self.auto_bootlight_yes_counter = self.auto_bootlight_yes_counter + 1
+            self.auto_label_bootlight_state.setPixmap(result_show)
+        if item == item_list.emcOpen:
+            if yes_or_no:
+                self.auto_emc_yes_counter = self.auto_emc_yes_counter + 1
+            self.auto_label_emc_state.setPixmap(result_show)
+        if item == item_list.chargeGround:
+            if yes_or_no:
+                self.auto_charge_yes_counter = self.auto_charge_yes_counter + 1
+            self.auto_label_charge_state.setPixmap(result_show)
+        if item == item_list.brakeClose:
+            if yes_or_no:
+                self.auto_brake_yes_counter = self.auto_brake_yes_counter + 1
+            self.auto_label_brake_state.setPixmap(result_show)
+        if item == item_list.diBrake:
+            if yes_or_no:
+                self.auto_di_yes_counter = self.auto_di_yes_counter + 1
+            self.auto_label_di_state.setPixmap(result_show)
+        if item == item_list.delayBrake:
+            if yes_or_no:
+                self.auto_delay_yes_counter = self.auto_delay_yes_counter + 1
+            self.auto_label_delay_state.setPixmap(result_show)
+        if item == item_list.warnLightOpen:
+            if yes_or_no:
+                self.auto_warn_yes_counter = self.auto_warn_yes_counter + 1
+            self.auto_label_warninglight_state.setPixmap(result_show)
+
+    def updateAutoTestProcessBar(self, total_times, total_times_counter):
+        self.progressBar.setRange(0, total_times)
+        self.progressBar.setValue(total_times_counter)
+        print("total_times :" + str(total_times) + " now_times  :" + str(total_times_counter))
+        if total_times == total_times_counter:
+            self.onkeyReport()
+
+    def updateStatusBar(self, string): 
+        self.statusbar.showMessage(string, 99999)         
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
