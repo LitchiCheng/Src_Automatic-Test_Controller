@@ -1244,18 +1244,22 @@ class Ui_MainWindow(object):
     def handleGyroVersion(self, version):
         self.gyroversion_string = version
         self.gyroversion_label.setText(version)
+        if version == "解析失败" or self.forbidden:
+            self.tabWidget.setEnabled(False)
+        else:
+            self.tabWidget.setEnabled(True)   
         
     def handleMainVersion(self, version, is_connected):
         self.mainversion_string = version
         self.mainversion_label.setText(version)
-        if is_connected:
-            self.tabWidget.setEnabled(True)
-        else:
-            self.tabWidget.setEnabled(False)
+        if version == "解析失败":
+            self.forbidden = True
 
     def handleUID(self, version, code_bar_address):
         self.uid_string = version
         self.uid_label.setText(version)
+        if version == "解析失败":
+            self.forbidden = True
         if code_bar_address != "NULL":
             self.uidcode_bar_label.setScaledContents(True)
             self.uidcode_bar_label.setPixmap(QtGui.QPixmap(code_bar_address))
