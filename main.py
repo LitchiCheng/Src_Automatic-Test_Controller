@@ -1496,10 +1496,14 @@ class connectThread(QThread):
     def setSocket(self, so):
         self.so = so
 
-    def run(self):
-        
-        TESTBOART_ADDR = (ui.line_ip.text(), 4822)
-       
+    def hex2string(hex_int):
+        if(hex_int < 0x10):
+            return "0"+str(hex(hex_int)).replace("0x","")
+        else:
+            return str(hex(hex_int))
+
+    def run(self):     
+        TESTBOART_ADDR = (ui.line_ip.text(), 4822) 
         self.so.sendto(struct.pack('>HB',0x1234,0x15),TESTBOART_ADDR)
         self.so.settimeout(2)
         # self.so.connect(TESTBOART_ADDR)
@@ -1510,31 +1514,13 @@ class connectThread(QThread):
         try:
             head, item_index, uid1,uid2,uid3,uid4,uid5,uid6 = struct.unpack('>H7B',ret)
             print(str(uid1) + " " + str(hex(uid2)) + " " + str(uid3) + " " + str(uid4) + " " + str(uid5) + " " + str(uid6))
-            if(uid1 != 0):
-                uid1_string = str(hex(uid1))
-            else:
-                uid1_string = "00"
-            if(uid2 != 0):
-                uid2_string = str(hex(uid2))
-            else:
-                uid2_string = "00"
-            if(uid3 != 0):
-                uid3_string = str(hex(uid3))
-            else:
-                uid3_string = "00"
-            if(uid4 != 0):
-                uid4_string = str(hex(uid4))
-            else:
-                uid4_string = "00"
-            if(uid5 != 0):
-                uid5_string = str(hex(uid5))
-            else:
-                uid5_string = "00"
-            if(uid6 != 0):
-                uid6_string = str(hex(uid6))
-            else:
-                uid6_string = "00"
-            self.uid_string = (uid1_string+uid2_string+uid3_string+uid4_string+uid5_string+uid6_string).replace("0x","")[:-1]
+            uid1_string = hex2string(uid1)
+            uid2_string = hex2string(uid2)
+            uid3_string = hex2string(uid3)
+            uid4_string = hex2string(uid4)
+            uid5_string = hex2string(uid5)
+            uid6_string = hex2string(uid6)
+            self.uid_string = (uid1_string+uid2_string+uid3_string+uid4_string+uid5_string+uid6_string)[:-1]
             CODE128 = barcode.get_barcode_class('code128')
             code128 = CODE128(self.uid_string,writer=ImageWriter())
             fullname = code128.save('.\\code_image\\' + self.uid_string)
