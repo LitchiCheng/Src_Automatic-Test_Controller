@@ -1520,7 +1520,7 @@ class connectThread(QThread):
             uid4_string = hex2string(uid4)
             uid5_string = hex2string(uid5)
             uid6_string = hex2string(uid6)
-            self.uid_string = (uid1_string+uid2_string+uid3_string+uid4_string+uid5_string+uid6_string)[:-1]
+            self.uid_string = ((uid1_string+uid2_string+uid3_string+uid4_string+uid5_string+uid6_string)[:-1]).upper()
             CODE128 = barcode.get_barcode_class('code128')
             code128 = CODE128(self.uid_string,writer=ImageWriter())
             fullname = code128.save('.\\code_image\\' + self.uid_string)
