@@ -30,7 +30,8 @@ class socketTool:
         self.so.sendto(struct.pack('>HB',0x1234,index),(self.remote_ip, self.remote_port))
         self.so.settimeout(timeout_t)
 
-    def recvTestResult(self, index):   
+    def recvTestResult(self, index):
+        ret = b''   
         try:
             ret,address= self.so.recvfrom(1024)
             print("接收到的" + str(address[0]))      
@@ -1074,6 +1075,7 @@ class Ui_MainWindow(object):
         self.connect_thread.uid_signal.connect(self.handleUID)                           #更新UID
 
         self.first_in = True
+        self.forbidden = False
     
     def autoTestPause(self):
         self.auto_test_sendcmd_thread.pause_signal = True
@@ -1277,6 +1279,7 @@ class Ui_MainWindow(object):
         self.connect_thread.setSocket(self.udp.so)
         self.auto_test_sendcmd_thread.setSocketTool(self.udp)
         self.connect_thread.start()
+        self.forbidden = False
         
     
     def resetAutoState(self):
@@ -1500,37 +1503,14 @@ class connectThread(QThread):
     def setSocket(self, so):
         self.so = so
 
-    def hex2string(hex_int):
+    def hex2string(self, hex_int):
         if(hex_int < 0x10):
             return "0"+str(hex(hex_int)).replace("0x","")
         else:
-            return str(hex(hex_int))
+            return str(hex(hex_int)).replace("0x","")
 
     def run(self):     
-        TESTBOART_ADDR = (ui.line_ip.text(), 4822) 
-        self.so.sendto(struct.pack('>HB',0x1234,0x15),TESTBOART_ADDR)
-        self.so.settimeout(2)
-        # self.so.connect(TESTBOART_ADDR)
-        try:
-            ret,address= self.so.recvfrom(1024)
-        except socket.timeout:
-            pass
-        try:
-            head, item_index, uid1,uid2,uid3,uid4,uid5,uid6 = struct.unpack('>H7B',ret)
-            print(str(uid1) + " " + str(hex(uid2)) + " " + str(uid3) + " " + str(uid4) + " " + str(uid5) + " " + str(uid6))
-            uid1_string = hex2string(uid1)
-            uid2_string = hex2string(uid2)
-            uid3_string = hex2string(uid3)
-            uid4_string = hex2string(uid4)
-            uid5_string = hex2string(uid5)
-            uid6_string = hex2string(uid6)
-            self.uid_string = ((uid1_string+uid2_string+uid3_string+uid4_string+uid5_string+uid6_string)[:-1]).upper()
-            CODE128 = barcode.get_barcode_class('code128')
-            code128 = CODE128(self.uid_string,writer=ImageWriter())
-            fullname = code128.save('.\\code_image\\' + self.uid_string)
-            self.uid_signal.emit(self.uid_string, fullname)  
-        except:
-            self.uid_signal.emit("解析失败", "NULL")
+        TESTBOART_ADDR = (ui.line_ip.text(), 4822)
 
         self.is_connected = False
         self.so.sendto(struct.pack('>HB',0x1234,0x16),TESTBOART_ADDR)
@@ -1546,7 +1526,7 @@ class connectThread(QThread):
             self.main_signal.emit(self.mainversion_string, self.is_connected)
         except:
             self.is_connected = False
-            self.main_signal.emit("解析失败", self.is_connected)
+            self.main_signal.emit("解析失败", self.is_connected) 
 
         self.so.sendto(struct.pack('>HB',0x1234,0x17),TESTBOART_ADDR)
         self.so.settimeout(2)
@@ -1557,9 +1537,38 @@ class connectThread(QThread):
         try:
             head, item_index, gyro1,gyro2,gyro3 = struct.unpack('>H4B',ret)
             self.gyroversion_string = "f"+str(gyro1)+"."+str(gyro2)+"."+str(gyro3)
-            self.gyro_signal.emit(self.gyroversion_string)
+            if self.gyroversion_string == "f0.0.0":
+                self.gyro_signal.emit("解析失败")
+            else:
+                self.gyro_signal.emit(self.gyroversion_string)
         except:
             self.gyro_signal.emit("解析失败")
+
+        self.so.sendto(struct.pack('>HB',0x1234,0x15),TESTBOART_ADDR)
+        self.so.settimeout(2)
+        # self.so.connect(TESTBOART_ADDR)
+        ret = b''
+        try:
+            ret,address= self.so.recvfrom(1024)
+        except socket.timeout:
+            pass
+        try:
+            head, item_index, uid1,uid2,uid3,uid4,uid5,uid6 = struct.unpack('>H7B',ret)
+            print(str(hex(uid1)) + " " + str(hex(uid2)) + " " + str(hex(uid3)) + " " + str(hex(uid4)) + " " + str(hex(uid5)) + " " + str(hex(uid6)))
+            uid1_string = self.hex2string(uid1)
+            uid2_string = self.hex2string(uid2)
+            uid3_string = self.hex2string(uid3)
+            uid4_string = self.hex2string(uid4)
+            uid5_string = self.hex2string(uid5)
+            uid6_string = self.hex2string(uid6)
+            self.uid_string = ((uid1_string+uid2_string+uid3_string+uid4_string+uid5_string+uid6_string)[:-1]).upper()
+            CODE128 = barcode.get_barcode_class('code128')
+            code128 = CODE128(self.uid_string,writer=ImageWriter())
+            fullname = code128.save('.\\code_image\\' + self.uid_string)
+            self.uid_signal.emit(self.uid_string, fullname)  
+        except Exception as e:
+            print(e)
+            self.uid_signal.emit("解析失败", "NULL")
 
 class autoTestSendCmdThread(QThread):
     result_signal = pyqtSignal(int, bool)
