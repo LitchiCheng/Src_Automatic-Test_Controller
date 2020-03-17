@@ -4,6 +4,33 @@ from PyQt5.QtCore import Qt, QThread, pyqtSignal
 from barcode.writer import ImageWriter
 import json
 
+class Test_Items:
+    def __init__(self):
+        self.rs232 = 0x01
+        self.rs485 = 0x02
+        self.can = 0x03
+        self.doOpen = 0x04
+        self.doClose = 0x05
+        self.bootLight = 0x06
+        self.emcOpen = 0x07
+        self.emcClose = 0x08
+        self.chargeGround = 0x09
+        self.chargeBrake = 0x0A
+        self.brakeOpen = 0x0B
+        self.brakeClose = 0x0C
+        self.diBrake = 0x0D
+        self.diGround = 0x0E
+        self.delayBrake = 0x0F
+        self.delayClose = 0x10
+        self.openPC = 0x11
+        self.closePC = 0x12
+        self.warnLightOpen = 0x13
+        self.warnLightClose = 0x14
+        self.uidQuery = 0x15
+        self.mainVersionQuery = 0x16
+        self.gyroVersionQuery = 0x17
+        self.noWork = 0xFF
+
 class socketTool:
     def __init__(self, remote_ip ,local_port):
         self.remote_ip = remote_ip
@@ -184,11 +211,11 @@ class Ui_MainWindow(object):
         self.manual_test_push_delay_brake.setMaximumSize(QtCore.QSize(16777215, 21))
         self.manual_test_push_delay_brake.setObjectName("manual_test_push_delay_brake")
         self.gridLayout_3.addWidget(self.manual_test_push_delay_brake, 14, 0, 1, 1)
-        self.manual_test_push_brake_on_2 = QtWidgets.QPushButton(self.layoutWidget)
-        self.manual_test_push_brake_on_2.setMinimumSize(QtCore.QSize(122, 21))
-        self.manual_test_push_brake_on_2.setMaximumSize(QtCore.QSize(16777215, 21))
-        self.manual_test_push_brake_on_2.setObjectName("manual_test_push_brake_on_2")
-        self.gridLayout_3.addWidget(self.manual_test_push_brake_on_2, 15, 0, 1, 1)
+        self.manual_test_push_delay_on = QtWidgets.QPushButton(self.layoutWidget)
+        self.manual_test_push_delay_on.setMinimumSize(QtCore.QSize(122, 21))
+        self.manual_test_push_delay_on.setMaximumSize(QtCore.QSize(16777215, 21))
+        self.manual_test_push_delay_on.setObjectName("manual_test_push_delay_on")
+        self.gridLayout_3.addWidget(self.manual_test_push_delay_on, 15, 0, 1, 1)
         self.manual_test_push_warn_on = QtWidgets.QPushButton(self.layoutWidget)
         self.manual_test_push_warn_on.setMinimumSize(QtCore.QSize(122, 21))
         self.manual_test_push_warn_on.setMaximumSize(QtCore.QSize(16777215, 21))
@@ -1076,6 +1103,80 @@ class Ui_MainWindow(object):
 
         self.first_in = True
         self.forbidden = False
+ 
+        self.item = Test_Items()
+        self.manual_test_push_rs232.clicked.connect(self.manual232)
+        self.manual_test_push_485.clicked.connect(self.manual485)
+        self.manual_test_push_can.clicked.connect(self.manualcan)
+        self.manual_test_push_do_on.clicked.connect(self.manualdoOpen)
+        self.manual_test_push_do_off.clicked.connect(self.manualdoClose)
+        self.manual_test_push_bootlight.clicked.connect(self.manualbootLight)
+        self.manual_test_push_emc_on.clicked.connect(self.manualemcOpen)
+        self.manual_test_push_emc_off.clicked.connect(self.manualemcClose)
+        self.manual_test_push_charge_groud.clicked.connect(self.manualchargeGround)
+        self.manual_test_push_charge_brake.clicked.connect(self.manualchargeBrake)
+        self.manual_test_push_brake_on.clicked.connect(self.manualbrakeOpen)
+        self.manual_test_push_brake_off.clicked.connect(self.manualbrakeClose)
+        self.manual_test_push_di_brake.clicked.connect(self.manualdiBrake)
+        self.manual_test_push_di_ground.clicked.connect(self.manualdiGround)
+        self.manual_test_push_delay_brake.clicked.connect(self.manualdelayBrake)
+        self.manual_test_push_delay_on.clicked.connect(self.manualdelayClose)
+        self.manual_test_push_warn_on.clicked.connect(self.manualwarnLightOpen)
+        self.manual_test_push_warn_off.clicked.connect(self.manualwarnLightClose)
+
+    def manual232(self):
+        self.udp.sendTestCmd(self.item.rs232, 0.5)
+
+    def manual485(self):
+        self.udp.sendTestCmd(self.item.rs485, 0.5)
+
+    def manualcan(self):
+        self.udp.sendTestCmd(self.item.can, 0.5)
+
+    def manualdoOpen(self):
+        self.udp.sendTestCmd(self.item.doOpen, 0.5)
+
+    def manualdoClose(self):
+        self.udp.sendTestCmd(self.item.doClose, 0.5)
+
+    def manualbootLight(self):
+        self.udp.sendTestCmd(self.item.bootLight, 0.5)
+
+    def manualemcOpen(self):
+        self.udp.sendTestCmd(self.item.emcOpen, 0.5)
+
+    def manualemcClose(self):
+        self.udp.sendTestCmd(self.item.emcClose, 0.5)
+
+    def manualchargeGround(self):
+        self.udp.sendTestCmd(self.item.chargeGround, 0.5)
+
+    def manualchargeBrake(self):
+        self.udp.sendTestCmd(self.item.chargeBrake, 0.5)
+    
+    def manualbrakeOpen(self):
+        self.udp.sendTestCmd(self.item.brakeOpen, 0.5)
+    
+    def manualbrakeClose(self):
+        self.udp.sendTestCmd(self.item.brakeClose, 0.5)
+    
+    def manualdiBrake(self):
+        self.udp.sendTestCmd(self.item.diBrake, 0.5)
+
+    def manualdiGround(self):
+        self.udp.sendTestCmd(self.item.diGround, 0.5)
+
+    def manualdelayBrake(self):
+        self.udp.sendTestCmd(self.item.delayBrake, 0.5)
+
+    def manualdelayClose(self):
+        self.udp.sendTestCmd(self.item.delayClose, 0.5)
+
+    def manualwarnLightOpen(self):
+        self.udp.sendTestCmd(self.item.warnLightOpen, 0.5)
+
+    def manualwarnLightClose(self):
+        self.udp.sendTestCmd(self.item.warnLightClose, 0.5)
     
     def autoTestPause(self):
         self.auto_test_sendcmd_thread.pause_signal = True
@@ -1384,7 +1485,7 @@ class Ui_MainWindow(object):
         self.manual_test_push_di_brake.setText(_translate("MainWindow", "DI断开测试"))
         self.manual_test_push_di_ground.setText(_translate("MainWindow", "DI接地测试"))
         self.manual_test_push_delay_brake.setText(_translate("MainWindow", "delay断开测试"))
-        self.manual_test_push_brake_on_2.setText(_translate("MainWindow", "delay闭合测试"))
+        self.manual_test_push_delay_on.setText(_translate("MainWindow", "delay闭合测试"))
         self.manual_test_push_warn_on.setText(_translate("MainWindow", "warninglight开测试"))
         self.manual_test_push_warn_off.setText(_translate("MainWindow", "warninglight关测试"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_3), _translate("MainWindow", "手动测试"))
@@ -1468,32 +1569,6 @@ class Ui_MainWindow(object):
         self.mainversion_label.setText(_translate("MainWindow", "unknown"))
         self.uidcode_bar_label.setText(_translate("MainWindow", "<html><head/><body><p align=\"center\"><span style=\" font-size:28pt;\">unknown</span></p></body></html>"))
 
-class Test_Items:
-    def __init__(self):
-        self.rs232 = 0x01
-        self.rs485 = 0x02
-        self.can = 0x03
-        self.doOpen = 0x04
-        self.doClose = 0x05
-        self.bootLight = 0x06
-        self.emcOpen = 0x07
-        self.emcClose = 0x08
-        self.chargeGround = 0x09
-        self.chargeBrake = 0x0A
-        self.brakeOpen = 0x0B
-        self.brakeClose = 0x0C
-        self.diBrake = 0x0D
-        self.diGround = 0x0E
-        self.delayBrake = 0x0F
-        self.delayClose = 0x10
-        self.openPC = 0x11
-        self.closePC = 0x12
-        self.warnLightOpen = 0x13
-        self.warnLightClose = 0x14
-        self.uidQuery = 0x15
-        self.mainVersionQuery = 0x16
-        self.gyroVersionQuery = 0x17
-        self.noWork = 0xFF
 
 class connectThread(QThread):
     gyro_signal = pyqtSignal(str)
