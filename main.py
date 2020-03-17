@@ -1775,6 +1775,8 @@ class autoTestSendCmdThread(QThread):
             self.process_bar_signal.emit(self.total_times, self.total_times_counter)
             
             while(cycle_times):
+                if self.pause_signal:
+                    break
                 self.testProcess(self.item_list.rs232, rs232_times, rs232_time)
                 self.testProcess(self.item_list.rs485, rs485_times, rs485_time) 
                 self.testProcess(self.item_list.can, can_times, can_time)
@@ -1788,6 +1790,8 @@ class autoTestSendCmdThread(QThread):
                 self.testProcess([self.item_list.warnLightOpen,self.item_list.warnLightClose], warnlight_times, warnlight_time)
                 cycle_times = cycle_times - 1
             while(cycle_time_for_pc):
+                if self.pause_signal:
+                    break
                 self.testProcess(self.item_list.openPC, openpc_times, openpc_time)
                 self.testProcess(self.item_list.closePC, closepc_times, closepc_time)
                 cycle_time_for_pc = cycle_time_for_pc -1
