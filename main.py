@@ -4,6 +4,7 @@ from PyQt5.QtCore import Qt, QThread, pyqtSignal
 from barcode.writer import ImageWriter
 import json
 
+hardware = 0
 class Test_Items:
     def __init__(self):
         self.rs232 = 0x01
@@ -1281,14 +1282,15 @@ class Ui_MainWindow(object):
         else:
             file.write("\t结果：" + "fail\n")
 
-        file.write("抱闸测试：\n")
-        file.write("\t总次数：" + str(brake_test_times)+"\n")
-        file.write("\t成功："+str(self.auto_brake_yes_counter)+ "\n")
-        brake_result = self.auto_brake_yes_counter >= finished_percent*brake_test_times
-        if brake_result:
-            file.write("\t结果：" + "pass\n")
-        else:
-            file.write("\t结果：" + "fail\n") 
+        if hardware <= 9:
+            file.write("抱闸测试：\n")
+            file.write("\t总次数：" + str(brake_test_times)+"\n")
+            file.write("\t成功："+str(self.auto_brake_yes_counter)+ "\n")
+            brake_result = self.auto_brake_yes_counter >= finished_percent*brake_test_times
+            if brake_result:
+                file.write("\t结果：" + "pass\n")
+            else:
+                file.write("\t结果：" + "fail\n") 
 
         file.write("DI测试：\n")
         file.write("\t总次数：" + str(di_test_times)+"\n")
@@ -1307,21 +1309,31 @@ class Ui_MainWindow(object):
             file.write("\t结果：" + "pass\n")
         else:
             file.write("\t结果：" + "fail\n")
+            
+        if hardware <= 9:
+            file.write("报警灯测试：\n")
+            file.write("\t总次数：" + str(warn_test_times)+"\n")
+            file.write("\t成功："+str(self.auto_warn_yes_counter)+ "\n")
+            warn_result = self.auto_warn_yes_counter >= finished_percent*warn_test_times
+            if warn_result:
+                file.write("\t结果：" + "pass\n")
+            else:
+                file.write("\t结果：" + "fail\n")
 
-        file.write("报警灯测试：\n")
-        file.write("\t总次数：" + str(warn_test_times)+"\n")
-        file.write("\t成功："+str(self.auto_warn_yes_counter)+ "\n")
-        warn_result = self.auto_warn_yes_counter >= finished_percent*warn_test_times
-        if warn_result:
-            file.write("\t结果：" + "pass\n")
-        else:
-            file.write("\t结果：" + "fail\n")
-        if warn_result and delay_result and di_result and brake_result and charge_result and emc_result and bootlight_result and do_result and can_result and rs485_result and rs232_result:
-            file.write("结论：" + "pass\n")
-            self.statusbar.showMessage("测试结果全部成功，请查看...", 99999)
-        else:
-            file.write("结论：" + "fail\n")
-            self.statusbar.showMessage("测试结果存在失败，请查看...", 99999)
+        if hardware <= 9:       
+            if warn_result and delay_result and di_result and brake_result and charge_result and emc_result and bootlight_result and do_result and can_result and rs485_result and rs232_result:
+                file.write("结论：" + "pass\n")
+                self.statusbar.showMessage("测试结果全部成功，请查看...", 99999)
+            else:
+                file.write("结论：" + "fail\n")
+                self.statusbar.showMessage("测试结果存在失败，请查看...", 99999)
+        else:#1.3.0硬件去除抱闸测试和报警灯测试
+            if  delay_result and di_result and charge_result and emc_result and bootlight_result and do_result and can_result and rs485_result and rs232_result:
+                file.write("结论：" + "pass\n")
+                self.statusbar.showMessage("测试结果全部成功，请查看...", 99999)
+            else:
+                file.write("结论：" + "fail\n")
+                self.statusbar.showMessage("测试结果存在失败，请查看...", 99999)
         file.close()
         document = open(key_word_file,'r',encoding = "utf-8") 
         self.textBrowser.setText("")
@@ -1384,7 +1396,7 @@ class Ui_MainWindow(object):
         
     
     def resetAutoState(self):
-        result_show = QtGui.QPixmap(".\\icon\\x.png")
+        result_show = QtGui.QPixmap(".\\icon\\d.png")
         self.auto_label_rs232_state.setPixmap(result_show)
         self.auto_label_rs485_state.setPixmap(result_show)
         self.auto_label_can_state.setPixmap(result_show)
@@ -1595,8 +1607,9 @@ class connectThread(QThread):
         except socket.timeout:
             pass
         try:
-            head, item_index, main1,main2,main3 = struct.unpack('>H3BH',ret)
-            self.mainversion_string = str(main1) + "." + str(main2) + "." + str(main3)
+            head, item_index, main1,main2,main3, hardware_version = struct.unpack('>H3BHB',ret)
+            hardware = hardware_version
+            self.mainversion_string = str(main1) + "." + str(main2) + "." + str(main3) + "H" + str(hardware_version)
             self.is_connected = True
             self.main_signal.emit(self.mainversion_string, self.is_connected)
         except:
@@ -1784,10 +1797,12 @@ class autoTestSendCmdThread(QThread):
                 self.testProcess(self.item_list.bootLight, bootlight_times, bootlight_time)
                 self.testProcess([self.item_list.emcOpen,self.item_list.emcClose], emc_times, emc_time)
                 self.testProcess([self.item_list.chargeGround,self.item_list.chargeBrake], charge_times, charge_time)
-                self.testProcess([self.item_list.brakeClose,self.item_list.brakeOpen], brake_times, brake_time)
+                if hardware <= 9:
+                    self.testProcess([self.item_list.brakeClose,self.item_list.brakeOpen], brake_times, brake_time)
                 self.testProcess([self.item_list.diBrake,self.item_list.diGround], di_times, di_time)
                 self.testProcess([self.item_list.delayBrake,self.item_list.delayClose], delay_times, delay_time)
-                self.testProcess([self.item_list.warnLightOpen,self.item_list.warnLightClose], warnlight_times, warnlight_time)
+                if hardware <= 9: 
+                    self.testProcess([self.item_list.warnLightOpen,self.item_list.warnLightClose], warnlight_times, warnlight_time)
                 cycle_times = cycle_times - 1
             while(cycle_time_for_pc):
                 if self.pause_signal:
