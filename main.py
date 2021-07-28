@@ -1706,7 +1706,8 @@ class autoTestSendCmdThread(QThread):
                 times = times - 1
                 self.processBarPlus()
         self.clearLastTest()
-        time.sleep(0.2)     
+        if(times > 0):
+            time.sleep(0.2)     
     
     def setRunStartTrigger(self):
         self.trigger_once = True
