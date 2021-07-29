@@ -2,9 +2,9 @@ import os,sys,time,socket,struct,barcode
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import Qt, QThread, pyqtSignal
 from barcode.writer import ImageWriter
+from pystrich.code128 import Code128Encoder
 import json
 
-hardware = 0
 class Test_Items:
     def __init__(self):
         self.rs232 = 0x01
@@ -1282,15 +1282,14 @@ class Ui_MainWindow(object):
         else:
             file.write("\t结果：" + "fail\n")
 
-        if hardware <= 9:
-            file.write("抱闸测试：\n")
-            file.write("\t总次数：" + str(brake_test_times)+"\n")
-            file.write("\t成功："+str(self.auto_brake_yes_counter)+ "\n")
-            brake_result = self.auto_brake_yes_counter >= finished_percent*brake_test_times
-            if brake_result:
-                file.write("\t结果：" + "pass\n")
-            else:
-                file.write("\t结果：" + "fail\n") 
+        file.write("抱闸测试：\n")
+        file.write("\t总次数：" + str(brake_test_times)+"\n")
+        file.write("\t成功："+str(self.auto_brake_yes_counter)+ "\n")
+        brake_result = self.auto_brake_yes_counter >= finished_percent*brake_test_times
+        if brake_result:
+            file.write("\t结果：" + "pass\n")
+        else:
+            file.write("\t结果：" + "fail\n") 
 
         file.write("DI测试：\n")
         file.write("\t总次数：" + str(di_test_times)+"\n")
@@ -1309,31 +1308,21 @@ class Ui_MainWindow(object):
             file.write("\t结果：" + "pass\n")
         else:
             file.write("\t结果：" + "fail\n")
-            
-        if hardware <= 9:
-            file.write("报警灯测试：\n")
-            file.write("\t总次数：" + str(warn_test_times)+"\n")
-            file.write("\t成功："+str(self.auto_warn_yes_counter)+ "\n")
-            warn_result = self.auto_warn_yes_counter >= finished_percent*warn_test_times
-            if warn_result:
-                file.write("\t结果：" + "pass\n")
-            else:
-                file.write("\t结果：" + "fail\n")
 
-        if hardware <= 9:       
-            if warn_result and delay_result and di_result and brake_result and charge_result and emc_result and bootlight_result and do_result and can_result and rs485_result and rs232_result:
-                file.write("结论：" + "pass\n")
-                self.statusbar.showMessage("测试结果全部成功，请查看...", 99999)
-            else:
-                file.write("结论：" + "fail\n")
-                self.statusbar.showMessage("测试结果存在失败，请查看...", 99999)
-        else:#1.3.0硬件去除抱闸测试和报警灯测试
-            if  delay_result and di_result and charge_result and emc_result and bootlight_result and do_result and can_result and rs485_result and rs232_result:
-                file.write("结论：" + "pass\n")
-                self.statusbar.showMessage("测试结果全部成功，请查看...", 99999)
-            else:
-                file.write("结论：" + "fail\n")
-                self.statusbar.showMessage("测试结果存在失败，请查看...", 99999)
+        file.write("报警灯测试：\n")
+        file.write("\t总次数：" + str(warn_test_times)+"\n")
+        file.write("\t成功："+str(self.auto_warn_yes_counter)+ "\n")
+        warn_result = self.auto_warn_yes_counter >= finished_percent*warn_test_times
+        if warn_result:
+            file.write("\t结果：" + "pass\n")
+        else:
+            file.write("\t结果：" + "fail\n")
+        if warn_result and delay_result and di_result and brake_result and charge_result and emc_result and bootlight_result and do_result and can_result and rs485_result and rs232_result:
+            file.write("结论：" + "pass\n")
+            self.statusbar.showMessage("测试结果全部成功，请查看...", 99999)
+        else:
+            file.write("结论：" + "fail\n")
+            self.statusbar.showMessage("测试结果存在失败，请查看...", 99999)
         file.close()
         document = open(key_word_file,'r',encoding = "utf-8") 
         self.textBrowser.setText("")
@@ -1396,7 +1385,7 @@ class Ui_MainWindow(object):
         
     
     def resetAutoState(self):
-        result_show = QtGui.QPixmap(".\\icon\\d.png")
+        result_show = QtGui.QPixmap(".\\icon\\x.png")
         self.auto_label_rs232_state.setPixmap(result_show)
         self.auto_label_rs485_state.setPixmap(result_show)
         self.auto_label_can_state.setPixmap(result_show)
@@ -1480,7 +1469,7 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "AutoTest v1.2"))
         self.push_reset.setText(_translate("MainWindow", "Reset"))
         self.manual_test_push_rs232.setText(_translate("MainWindow", "rs232测试"))
         self.manual_test_push_485.setText(_translate("MainWindow", "rs485测试"))
@@ -1607,9 +1596,8 @@ class connectThread(QThread):
         except socket.timeout:
             pass
         try:
-            head, item_index, main1,main2,main3, hardware_version = struct.unpack('>H3BHB',ret)
-            hardware = hardware_version
-            self.mainversion_string = str(main1) + "." + str(main2) + "." + str(main3) + "H" + str(hardware_version)
+            head, item_index, main1,main2,main3 = struct.unpack('>H3BH',ret)
+            self.mainversion_string = str(main1) + "." + str(main2) + "." + str(main3)
             self.is_connected = True
             self.main_signal.emit(self.mainversion_string, self.is_connected)
         except:
@@ -1650,9 +1638,10 @@ class connectThread(QThread):
             uid5_string = self.hex2string(uid5)
             uid6_string = self.hex2string(uid6)
             self.uid_string = ((uid1_string+uid2_string+uid3_string+uid4_string+uid5_string+uid6_string)[:-1]).upper()
-            CODE128 = barcode.get_barcode_class('code128')
-            code128 = CODE128(self.uid_string,writer=ImageWriter())
-            fullname = code128.save('.\\code_image\\' + self.uid_string)
+            print(self.uid_string)
+            encoder=Code128Encoder(self.uid_string)
+            encoder.save('.\\code_image\\' + self.uid_string + ".png", bar_width=2)
+            fullname = '.\\code_image\\' + self.uid_string + ".png"
             self.uid_signal.emit(self.uid_string, fullname)  
         except Exception as e:
             print(e)
@@ -1677,7 +1666,7 @@ class autoTestSendCmdThread(QThread):
         self.socket.sendTestCmd(0xFF, 0)
 
     def testProcess(self, index, times, timeout_t):
-        if self.pause_signal:
+        if self.pause_signal or times == 0:
             return
         if type(index) == list:
             while(times):  
@@ -1706,8 +1695,7 @@ class autoTestSendCmdThread(QThread):
                 times = times - 1
                 self.processBarPlus()
         self.clearLastTest()
-        if(times > 0):
-            time.sleep(0.2)     
+        time.sleep(0.2)     
     
     def setRunStartTrigger(self):
         self.trigger_once = True
@@ -1798,12 +1786,10 @@ class autoTestSendCmdThread(QThread):
                 self.testProcess(self.item_list.bootLight, bootlight_times, bootlight_time)
                 self.testProcess([self.item_list.emcOpen,self.item_list.emcClose], emc_times, emc_time)
                 self.testProcess([self.item_list.chargeGround,self.item_list.chargeBrake], charge_times, charge_time)
-                if hardware <= 9:
-                    self.testProcess([self.item_list.brakeClose,self.item_list.brakeOpen], brake_times, brake_time)
+                self.testProcess([self.item_list.brakeClose,self.item_list.brakeOpen], brake_times, brake_time)
                 self.testProcess([self.item_list.diBrake,self.item_list.diGround], di_times, di_time)
                 self.testProcess([self.item_list.delayBrake,self.item_list.delayClose], delay_times, delay_time)
-                if hardware <= 9: 
-                    self.testProcess([self.item_list.warnLightOpen,self.item_list.warnLightClose], warnlight_times, warnlight_time)
+                self.testProcess([self.item_list.warnLightOpen,self.item_list.warnLightClose], warnlight_times, warnlight_time)
                 cycle_times = cycle_times - 1
             while(cycle_time_for_pc):
                 if self.pause_signal:
