@@ -1133,7 +1133,7 @@ class Ui_MainWindow(object):
         self.manual_test_push_warn_off.clicked.connect(self.manualwarnLightClose)
 
     def printBarcode(self):
-        if self.uid_string != "":
+        if self.uid_string != "" or self.uid_string != "解析失败":
             pDll = CDLL("./postek_q8/postekq8.dll")
             charPointer = bytes(self.uid_string,"gbk")
             pDll.printBarCode(charPointer)
@@ -1482,7 +1482,7 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "AutoTest v1.2"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "AutoTest v1.3"))
         self.push_reset.setText(_translate("MainWindow", "Reset"))
         self.manual_test_push_rs232.setText(_translate("MainWindow", "rs232测试"))
         self.manual_test_push_485.setText(_translate("MainWindow", "rs485测试"))
