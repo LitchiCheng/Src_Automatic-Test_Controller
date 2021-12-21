@@ -3,6 +3,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import Qt, QThread, pyqtSignal
 from barcode.writer import ImageWriter
 import json
+from ctypes import *
 
 hardware = 0
 class Test_Items:
@@ -960,6 +961,10 @@ class Ui_MainWindow(object):
         self.manual_test_push_closepc = QtWidgets.QPushButton(self.groupBox)
         self.manual_test_push_closepc.setObjectName("manual_test_push_closepc")
         self.gridLayout_12.addWidget(self.manual_test_push_closepc, 3, 0, 1, 1)
+        self.manual_print_barcode= QtWidgets.QPushButton(self.groupBox)
+        self.manual_print_barcode.setObjectName("manual_print_barcode")
+        self.gridLayout_12.addWidget(self.manual_print_barcode, 4, 0, 1, 1)
+
         self.push_connect = QtWidgets.QPushButton(self.groupBox)
         self.push_connect.setMinimumSize(QtCore.QSize(0, 21))
         self.push_connect.setMaximumSize(QtCore.QSize(16777215, 21))
@@ -1088,6 +1093,7 @@ class Ui_MainWindow(object):
         self.manual_test_push_openpc.clicked.connect(self.manualOpenPC)     #开机
         self.manual_test_push_closepc.clicked.connect(self.manualClosePC)   #关机
         self.auto_push_button_pause.clicked.connect(self.autoTestPause)     #暂停
+        self.manual_print_barcode.clicked.connect(self.printBarcode) #打印条形码
 
         self.auto_test_sendcmd_thread = autoTestSendCmdThread()         
         self.auto_test_sendcmd_thread.process_bar_signal.connect(self.updateAutoTestProcessBar)     #更新进度条
@@ -1104,6 +1110,7 @@ class Ui_MainWindow(object):
 
         self.first_in = True
         self.forbidden = False
+        self.uid_string = ""
  
         self.item = Test_Items()
         self.manual_test_push_rs232.clicked.connect(self.manual232)
@@ -1124,6 +1131,12 @@ class Ui_MainWindow(object):
         self.manual_test_push_delay_on.clicked.connect(self.manualdelayClose)
         self.manual_test_push_warn_on.clicked.connect(self.manualwarnLightOpen)
         self.manual_test_push_warn_off.clicked.connect(self.manualwarnLightClose)
+
+    def printBarcode(self):
+        if self.uid_string != "":
+            pDll = CDLL("./postek_q8/postekq8.dll")
+            charPointer = bytes(self.uid_string,"gbk")
+            pDll.printBarCode(charPointer)
 
     def manual232(self):
         self.udp.sendTestCmd(self.item.rs232, 0.5)
@@ -1571,6 +1584,7 @@ class Ui_MainWindow(object):
         self.line_port.setText(_translate("MainWindow", "4822"))
         self.manual_test_push_openpc.setText(_translate("MainWindow", "开机"))
         self.manual_test_push_closepc.setText(_translate("MainWindow", "关机"))
+        self.manual_print_barcode.setText(_translate("MainWindow", "打印条形码"))
         self.push_connect.setText(_translate("MainWindow", "connect"))
         self.groupBox_2.setTitle(_translate("MainWindow", "info"))
         self.label_74.setText(_translate("MainWindow", "MainVersion:"))
@@ -1656,6 +1670,7 @@ class connectThread(QThread):
             self.uid_signal.emit(self.uid_string, fullname)  
         except Exception as e:
             print(e)
+            self.uid_string = ""
             self.uid_signal.emit("解析失败", "NULL")
 
 class autoTestSendCmdThread(QThread):
