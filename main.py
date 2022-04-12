@@ -1482,7 +1482,7 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "AutoTest v1.3"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "AutoTest v1.4"))
         self.push_reset.setText(_translate("MainWindow", "Reset"))
         self.manual_test_push_rs232.setText(_translate("MainWindow", "rs232测试"))
         self.manual_test_push_485.setText(_translate("MainWindow", "rs485测试"))
@@ -1521,6 +1521,7 @@ class Ui_MainWindow(object):
 
         config_file = open('config.json')
         js = json.load(config_file)
+        target_ip = js["ip"]
         auto_item_config = js["autoTest"]
         auto_item_test_times = auto_item_config["testTimes"]
         auto_item_timeout = auto_item_config["timeout"]
@@ -1569,7 +1570,7 @@ class Ui_MainWindow(object):
         self.groupBox.setTitle(_translate("MainWindow", "connect"))
         self.label_70.setText(_translate("MainWindow", "IP"))
         self.label_71.setText(_translate("MainWindow", "PORT"))
-        self.line_ip.setText(_translate("MainWindow", "192.168.192.6"))
+        self.line_ip.setText(_translate("MainWindow", str(target_ip)))
         self.line_port.setText(_translate("MainWindow", "4822"))
         self.manual_test_push_openpc.setText(_translate("MainWindow", "开机"))
         self.manual_test_push_closepc.setText(_translate("MainWindow", "关机"))
