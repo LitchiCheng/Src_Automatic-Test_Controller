@@ -426,7 +426,8 @@ class Ui_MainWindow(object):
         self.label_29.setMinimumSize(QtCore.QSize(0, 21))
         self.label_29.setMaximumSize(QtCore.QSize(16777215, 21))
         self.label_29.setObjectName("label_29")
-        # self.label_29.setVisible(False)
+        #auto delay test
+        self.label_29.setVisible(False)
         self.gridLayout.addWidget(self.label_29, 12, 0, 1, 1)
         self.label_31 = QtWidgets.QLabel(self.layoutWidget1)
         self.label_31.setMinimumSize(QtCore.QSize(0, 21))
@@ -570,7 +571,7 @@ class Ui_MainWindow(object):
         self.auto_line_text_delay.setMaximumSize(QtCore.QSize(16777215, 21))
         self.auto_line_text_delay.setAlignment(QtCore.Qt.AlignCenter)
         self.auto_line_text_delay.setObjectName("auto_line_text_delay")
-        # self.auto_line_text_delay.setVisible(False)
+        self.auto_line_text_delay.setVisible(False)
         self.gridLayout_7.addWidget(self.auto_line_text_delay, 12, 0, 1, 1)
         self.auto_line_text_warninglight = QtWidgets.QLineEdit(self.layoutWidget1)
         self.auto_line_text_warninglight.setMinimumSize(QtCore.QSize(0, 21))
@@ -624,7 +625,7 @@ class Ui_MainWindow(object):
         self.auto_label_delay_state.setText("")
         self.auto_label_delay_state.setPixmap(QtGui.QPixmap("../x.png"))
         self.auto_label_delay_state.setObjectName("auto_label_delay_state")
-        # self.auto_label_delay_state.setVisible(False)
+        self.auto_label_delay_state.setVisible(False)
         self.gridLayout_8.addWidget(self.auto_label_delay_state, 12, 0, 1, 1)
         self.auto_label_can_state = QtWidgets.QLabel(self.layoutWidget1)
         self.auto_label_can_state.setMinimumSize(QtCore.QSize(21, 21))
@@ -719,7 +720,7 @@ class Ui_MainWindow(object):
         self.auto_line_text_delay_timeout.setMaximumSize(QtCore.QSize(16777215, 21))
         self.auto_line_text_delay_timeout.setAlignment(QtCore.Qt.AlignCenter)
         self.auto_line_text_delay_timeout.setObjectName("auto_line_text_delay_timeout")
-        # self.auto_line_text_delay_timeout.setVisible(False)
+        self.auto_line_text_delay_timeout.setVisible(False)
         self.gridLayout_17.addWidget(self.auto_line_text_delay_timeout, 12, 0, 1, 1)
         self.auto_line_text_can_timeout = QtWidgets.QLineEdit(self.layoutWidget1)
         self.auto_line_text_can_timeout.setMinimumSize(QtCore.QSize(0, 21))
@@ -1142,7 +1143,7 @@ class Ui_MainWindow(object):
         self.manual_test_push_warn_off.clicked.connect(self.manualwarnLightClose)
 
     def printBarcode(self):
-        if self.uid_string != "" or self.uid_string != "解析失败":
+        if self.uid_string != "" or self.uid_string != "decode failed":
             pDll = CDLL("./postek_q8/postekq8.dll")
             charPointer = bytes(self.uid_string,"gbk")
             pDll.printBarCode(charPointer)
@@ -1232,119 +1233,119 @@ class Ui_MainWindow(object):
         closepc_test_times = int(self.auto_line_text_total.text())*int(self.auto_line_text_poweroff.text())
         key_word_file = ".\\report\\" + text_name + ".txt"
         file = open(key_word_file,'w+', encoding='utf-8')
-        file.write("******测试报告******\n")
-        file.write("时间：" + time.strftime('%Y-%m-%d-%H-%M-%S',time.localtime(time.time())) + "\n")
+        file.write("******Test Report******\n")
+        file.write("Time：" + time.strftime('%Y-%m-%d-%H-%M-%S',time.localtime(time.time())) + "\n")
         file.write("UID："+ self.uid_string + "\n")
-        file.write("主控版本：" + self.mainversion_string + "\n")
-        file.write("陀螺仪版本：" + self.gyroversion_string + "\n")
-        file.write("总循环次数：" + self.auto_line_text_total.text() + "\n")
-        file.write("开机次数：" + str(openpc_test_times) + "\n")
-        file.write("关机次数：" + str(closepc_test_times) + "\n")
+        file.write("Controller verison：" + self.mainversion_string + "\n")
+        file.write("Gyro Verison：" + self.gyroversion_string + "\n")
+        file.write("Total Cycle Times：" + self.auto_line_text_total.text() + "\n")
+        file.write("OpenPc Times：" + str(openpc_test_times) + "\n")
+        file.write("ShutdownPc Times：" + str(closepc_test_times) + "\n")
 
-        file.write("rs232测试：\n")
-        file.write("\t总次数：" + str(rs232_test_times)+"\n")
-        file.write("\t成功："+str(self.auto_rs232_yes_counter)+ "\n")
-        rs232_result = self.auto_rs232_yes_counter >= finished_percent*rs232_test_times
-        if rs232_result:
-            file.write("\t结果：" + "pass\n")
-        else:
-            file.write("\t结果：" + "fail\n")
+        # file.write("rs232 test：\n")
+        # file.write("\tTotal Times：" + str(rs232_test_times)+"\n")
+        # file.write("\tSuccess："+str(self.auto_rs232_yes_counter)+ "\n")
+        # rs232_result = self.auto_rs232_yes_counter >= finished_percent*rs232_test_times
+        # if rs232_result:
+        #     file.write("\tResult：" + "pass\n")
+        # else:
+        #     file.write("\tResult：" + "fail\n")
 
-        file.write("rs485测试：\n")
-        file.write("\t总次数：" + str(rs485_test_times)+"\n")
-        file.write("\t成功："+str(self.auto_rs485_yes_counter)+ "\n")
+        file.write("rs485 test：\n")
+        file.write("\tTotal Times：" + str(rs485_test_times)+"\n")
+        file.write("\tsuccess："+str(self.auto_rs485_yes_counter)+ "\n")
         rs485_result = self.auto_rs485_yes_counter >= finished_percent*rs485_test_times
         if rs485_result:
-            file.write("\t结果：" + "pass\n")
+            file.write("\tResult：" + "pass\n")
         else:
-            file.write("\t结果：" + "fail\n")
+            file.write("\tResult：" + "fail\n")
 
-        file.write("can测试：\n")
-        file.write("\t总次数：" + str(can_test_times)+"\n")
-        file.write("\t成功："+str(self.auto_can_yes_counter)+ "\n")
+        file.write("can test：\n")
+        file.write("\tTotal Times：" + str(can_test_times)+"\n")
+        file.write("\tsuccess："+str(self.auto_can_yes_counter)+ "\n")
         can_result = self.auto_can_yes_counter >= finished_percent*can_test_times
         if can_result:
-            file.write("\t结果：" + "pass\n")
+            file.write("\tResult：" + "pass\n")
         else:
-            file.write("\t结果：" + "fail\n")
+            file.write("\tResult：" + "fail\n")
 
-        file.write("DO测试：\n")
-        file.write("\t总次数：" + str(do_test_times)+"\n")
-        file.write("\t成功："+str(self.auto_do_yes_counter)+ "\n")
+        file.write("DO test：\n")
+        file.write("\tTotal Times：" + str(do_test_times)+"\n")
+        file.write("\tsuccess："+str(self.auto_do_yes_counter)+ "\n")
         do_result = self.auto_do_yes_counter >= finished_percent*do_test_times
         if do_result:
-            file.write("\t结果：" + "pass\n")
+            file.write("\tResult：" + "pass\n")
         else:
-            file.write("\t结果：" + "fail\n")
+            file.write("\tResult：" + "fail\n")
 
-        file.write("开机灯测试：\n")
-        file.write("\t总次数：" + str(bootlight_test_times)+"\n")
-        file.write("\t成功："+str(self.auto_bootlight_yes_counter)+ "\n")
+        file.write("OpenPCLight test：\n")
+        file.write("\tTotal Times：" + str(bootlight_test_times)+"\n")
+        file.write("\tsuccess："+str(self.auto_bootlight_yes_counter)+ "\n")
         bootlight_result = self.auto_bootlight_yes_counter >= finished_percent*bootlight_test_times
         if bootlight_result:
-            file.write("\t结果：" + "pass\n")
+            file.write("\tResult：" + "pass\n")
         else:
-            file.write("\t结果：" + "fail\n")
+            file.write("\tResult：" + "fail\n")
 
-        file.write("急停测试：\n")
-        file.write("\t总次数：" + str(emc_test_times)+"\n")
-        file.write("\t成功："+str(self.auto_emc_yes_counter)+ "\n")
+        file.write("EMCkey test：\n")
+        file.write("\tTotal Times：" + str(emc_test_times)+"\n")
+        file.write("\tsuccess："+str(self.auto_emc_yes_counter)+ "\n")
         emc_result = self.auto_emc_yes_counter >= finished_percent*emc_test_times
         if emc_result:
-            file.write("\t结果：" + "pass\n")
+            file.write("\tResult：" + "pass\n")
         else:
-            file.write("\t结果：" + "fail\n")
+            file.write("\tResult：" + "fail\n")
 
-        file.write("充电测试：\n")
-        file.write("\t总次数：" + str(charge_test_times)+"\n")
-        file.write("\t成功："+str(self.auto_charge_yes_counter)+ "\n")
+        file.write("Charge test：\n")
+        file.write("\tTotal Times：" + str(charge_test_times)+"\n")
+        file.write("\tsuccess："+str(self.auto_charge_yes_counter)+ "\n")
         charge_result = self.auto_charge_yes_counter >= finished_percent*charge_test_times
         if charge_result:
-            file.write("\t结果：" + "pass\n")
+            file.write("\tResult：" + "pass\n")
         else:
-            file.write("\t结果：" + "fail\n")
+            file.write("\tResult：" + "fail\n")
 
-        file.write("抱闸测试：\n")
-        file.write("\t总次数：" + str(brake_test_times)+"\n")
-        file.write("\t成功："+str(self.auto_brake_yes_counter)+ "\n")
+        file.write("Brake test：\n")
+        file.write("\tTotal Times：" + str(brake_test_times)+"\n")
+        file.write("\tsuccess："+str(self.auto_brake_yes_counter)+ "\n")
         brake_result = self.auto_brake_yes_counter >= finished_percent*brake_test_times
         if brake_result:
-            file.write("\t结果：" + "pass\n")
+            file.write("\tResult：" + "pass\n")
         else:
-            file.write("\t结果：" + "fail\n") 
+            file.write("\tResult：" + "fail\n") 
 
-        file.write("DI测试：\n")
-        file.write("\t总次数：" + str(di_test_times)+"\n")
-        file.write("\t成功："+str(self.auto_di_yes_counter)+ "\n")
+        file.write("DI test：\n")
+        file.write("\tTotal Times：" + str(di_test_times)+"\n")
+        file.write("\tsuccess："+str(self.auto_di_yes_counter)+ "\n")
         di_result = self.auto_di_yes_counter >= finished_percent*di_test_times
         if di_result:
-            file.write("\t结果：" + "pass\n")
+            file.write("\tResult：" + "pass\n")
         else:
-            file.write("\t结果：" + "fail\n") 
+            file.write("\tResult：" + "fail\n") 
 
-        file.write("继电器测试：\n")
-        file.write("\t总次数：" + str(delay_test_times)+"\n")
-        file.write("\t成功："+str(self.auto_delay_yes_counter)+ "\n")
-        delay_result = self.auto_delay_yes_counter >= finished_percent*delay_test_times
-        if delay_result:
-            file.write("\t结果：" + "pass\n")
-        else:
-            file.write("\t结果：" + "fail\n")
+        # file.write("Relay test：\n")
+        # file.write("\tTotal Times：" + str(delay_test_times)+"\n")
+        # file.write("\tsuccess："+str(self.auto_delay_yes_counter)+ "\n")
+        # delay_result = self.auto_delay_yes_counter >= finished_percent*delay_test_times
+        # if delay_result:
+        #     file.write("\tResult：" + "pass\n")
+        # else:
+        #     file.write("\tResult：" + "fail\n")
 
-        file.write("报警灯测试：\n")
-        file.write("\t总次数：" + str(warn_test_times)+"\n")
-        file.write("\t成功："+str(self.auto_warn_yes_counter)+ "\n")
+        file.write("WarningLight test：\n")
+        file.write("\tTotal Times：" + str(warn_test_times)+"\n")
+        file.write("\tsuccess："+str(self.auto_warn_yes_counter)+ "\n")
         warn_result = self.auto_warn_yes_counter >= finished_percent*warn_test_times
         if warn_result:
-            file.write("\t结果：" + "pass\n")
+            file.write("\tResult：" + "pass\n")
         else:
-            file.write("\t结果：" + "fail\n")
-        if warn_result and delay_result and di_result and brake_result and charge_result and emc_result and bootlight_result and do_result and can_result and rs485_result and rs232_result:
-            file.write("结论：" + "pass\n")
-            self.statusbar.showMessage("测试结果全部成功，请查看...", 99999)
+            file.write("\tResult：" + "fail\n")
+        if warn_result  and di_result and brake_result and charge_result and emc_result and bootlight_result and do_result and can_result and rs485_result:
+            file.write("result：" + "pass\n")
+            self.statusbar.showMessage("All pass...", 99999)
         else:
-            file.write("结论：" + "fail\n")
-            self.statusbar.showMessage("测试结果存在失败，请查看...", 99999)
+            file.write("result：" + "fail\n")
+            self.statusbar.showMessage("Exist fail...", 99999)
         file.close()
         document = open(key_word_file,'r',encoding = "utf-8") 
         self.textBrowser.setText("")
@@ -1370,7 +1371,7 @@ class Ui_MainWindow(object):
     def handleGyroVersion(self, version):
         self.gyroversion_string = version
         self.gyroversion_label.setText(version)
-        if version == "解析失败" or self.forbidden:
+        if version == "decode failed" or self.forbidden:
             self.tabWidget.setEnabled(False)
         else:
             self.tabWidget.setEnabled(True)   
@@ -1378,13 +1379,13 @@ class Ui_MainWindow(object):
     def handleMainVersion(self, version, is_connected):
         self.mainversion_string = version
         self.mainversion_label.setText(version)
-        if version == "解析失败":
+        if version == "decode failed":
             self.forbidden = True
 
     def handleUID(self, version, code_bar_address):
         self.uid_string = version
         self.uid_label.setText(version)
-        if version == "解析失败":
+        if version == "decode failed":
             self.forbidden = True
         if code_bar_address != "NULL":
             self.uidcode_bar_label.setScaledContents(True)
@@ -1493,40 +1494,40 @@ class Ui_MainWindow(object):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "AutoTest v1.4"))
         self.push_reset.setText(_translate("MainWindow", "Reset"))
-        self.manual_test_push_rs232.setText(_translate("MainWindow", "rs232测试"))
-        self.manual_test_push_485.setText(_translate("MainWindow", "rs485测试"))
-        self.manual_test_push_can.setText(_translate("MainWindow", "can测试"))
-        self.manual_test_push_do_on.setText(_translate("MainWindow", "DO全开测试"))
-        self.manual_test_push_do_off.setText(_translate("MainWindow", "DO全关测试"))
-        self.manual_test_push_bootlight.setText(_translate("MainWindow", "bootlight测试"))
-        self.manual_test_push_emc_on.setText(_translate("MainWindow", "emc输出开测试"))
-        self.manual_test_push_emc_off.setText(_translate("MainWindow", "emc输出关测试"))
-        self.manual_test_push_charge_groud.setText(_translate("MainWindow", "charge接地测试"))
-        self.manual_test_push_charge_brake.setText(_translate("MainWindow", "charge断开测试"))
-        self.manual_test_push_brake_on.setText(_translate("MainWindow", "brake输出24-12V测试"))
-        self.manual_test_push_brake_off.setText(_translate("MainWindow", "brake输出关测试"))
-        self.manual_test_push_di_brake.setText(_translate("MainWindow", "DI断开测试"))
-        self.manual_test_push_di_ground.setText(_translate("MainWindow", "DI接地测试"))
-        self.manual_test_push_delay_brake.setText(_translate("MainWindow", "delay断开测试"))
-        self.manual_test_push_delay_on.setText(_translate("MainWindow", "delay闭合测试"))
-        self.manual_test_push_warn_on.setText(_translate("MainWindow", "warninglight开测试"))
-        self.manual_test_push_warn_off.setText(_translate("MainWindow", "warninglight关测试"))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_3), _translate("MainWindow", "手动测试"))
-        self.label_19.setText(_translate("MainWindow", "<html><head/><body><p align=\"center\">rs485测试</p></body></html>"))
-        self.label_37.setText(_translate("MainWindow", "<html><head/><body><p align=\"center\">bootlight测试</p></body></html>"))
-        self.label_33.setText(_translate("MainWindow", "<html><head/><body><p align=\"center\">brake输出测试</p></body></html>"))
-        self.label_29.setText(_translate("MainWindow", "<html><head/><body><p align=\"center\">delay测试</p></body></html>"))
-        self.label_31.setText(_translate("MainWindow", "<html><head/><body><p align=\"center\">warninglight测试</p></body></html>"))
-        self.label_21.setText(_translate("MainWindow", "<html><head/><body><p align=\"center\">can测试</p></body></html>"))
-        self.label_38.setText(_translate("MainWindow", "<html><head/><body><p align=\"center\">emc输出测试</p></body></html>"))
-        self.label_59.setText(_translate("MainWindow", "<html><head/><body><p align=\"center\">测试项</p></body></html>"))
-        self.label_22.setText(_translate("MainWindow", "<html><head/><body><p align=\"center\">DO测试</p></body></html>"))
-        self.label_23.setText(_translate("MainWindow", "<html><head/><body><p align=\"center\">charge测试</p></body></html>"))
-        self.label_36.setText(_translate("MainWindow", "<html><head/><body><p align=\"center\">DI测试</p></body></html>"))
-        self.label_32.setText(_translate("MainWindow", "<html><head/><body><p align=\"center\">关机测试</p></body></html>"))
-        self.label_20.setText(_translate("MainWindow", "<html><head/><body><p align=\"center\">rs232测试</p></body></html>"))
-        self.label_30.setText(_translate("MainWindow", "<html><head/><body><p align=\"center\">开机测试</p></body></html>"))
-        self.label_60.setText(_translate("MainWindow", "<html><head/><body><p align=\"center\">测试次数</p></body></html>"))
+        self.manual_test_push_rs232.setText(_translate("MainWindow", "rs232"))
+        self.manual_test_push_485.setText(_translate("MainWindow", "rs485"))
+        self.manual_test_push_can.setText(_translate("MainWindow", "can"))
+        self.manual_test_push_do_on.setText(_translate("MainWindow", "DO Open"))
+        self.manual_test_push_do_off.setText(_translate("MainWindow", "DO Close"))
+        self.manual_test_push_bootlight.setText(_translate("MainWindow", "bootlight"))
+        self.manual_test_push_emc_on.setText(_translate("MainWindow", "emc output open"))
+        self.manual_test_push_emc_off.setText(_translate("MainWindow", "emc output close"))
+        self.manual_test_push_charge_groud.setText(_translate("MainWindow", "charge attach gnd"))
+        self.manual_test_push_charge_brake.setText(_translate("MainWindow", "charge open circuit"))
+        self.manual_test_push_brake_on.setText(_translate("MainWindow", "brake output 12-24v"))
+        self.manual_test_push_brake_off.setText(_translate("MainWindow", "brake output"))
+        self.manual_test_push_di_brake.setText(_translate("MainWindow", "DI open circuit"))
+        self.manual_test_push_di_ground.setText(_translate("MainWindow", "DI attach gnd"))
+        self.manual_test_push_delay_brake.setText(_translate("MainWindow", "delay open circuit"))
+        self.manual_test_push_delay_on.setText(_translate("MainWindow", "delay close"))
+        self.manual_test_push_warn_on.setText(_translate("MainWindow", "warninglight open"))
+        self.manual_test_push_warn_off.setText(_translate("MainWindow", "warninglight close"))
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_3), _translate("MainWindow", "Manual Test"))
+        self.label_19.setText(_translate("MainWindow", "<html><head/><body><p align=\"center\">rs485</p></body></html>"))
+        self.label_37.setText(_translate("MainWindow", "<html><head/><body><p align=\"center\">bootlight</p></body></html>"))
+        self.label_33.setText(_translate("MainWindow", "<html><head/><body><p align=\"center\">brake</p></body></html>"))
+        self.label_29.setText(_translate("MainWindow", "<html><head/><body><p align=\"center\">delay</p></body></html>"))
+        self.label_31.setText(_translate("MainWindow", "<html><head/><body><p align=\"center\">warninglight</p></body></html>"))
+        self.label_21.setText(_translate("MainWindow", "<html><head/><body><p align=\"center\">can</p></body></html>"))
+        self.label_38.setText(_translate("MainWindow", "<html><head/><body><p align=\"center\">emc</p></body></html>"))
+        self.label_59.setText(_translate("MainWindow", "<html><head/><body><p align=\"center\">Test Items</p></body></html>"))
+        self.label_22.setText(_translate("MainWindow", "<html><head/><body><p align=\"center\">DO</p></body></html>"))
+        self.label_23.setText(_translate("MainWindow", "<html><head/><body><p align=\"center\">charge</p></body></html>"))
+        self.label_36.setText(_translate("MainWindow", "<html><head/><body><p align=\"center\">DI</p></body></html>"))
+        self.label_32.setText(_translate("MainWindow", "<html><head/><body><p align=\"center\">shutdownPc</p></body></html>"))
+        self.label_20.setText(_translate("MainWindow", "<html><head/><body><p align=\"center\">rs232</p></body></html>"))
+        self.label_30.setText(_translate("MainWindow", "<html><head/><body><p align=\"center\">oepnPc</p></body></html>"))
+        self.label_60.setText(_translate("MainWindow", "<html><head/><body><p align=\"center\">Test Times</p></body></html>"))
 
         config_file = open('config.json')
         js = json.load(config_file)
@@ -1551,9 +1552,9 @@ class Ui_MainWindow(object):
         self.auto_line_text_warninglight.setText(_translate("MainWindow", str(auto_item_test_times["warninglight"])))
         self.auto_line_text_emc.setText(_translate("MainWindow", str(auto_item_test_times["emc"])))
 
-        self.label_61.setText(_translate("MainWindow", "<html><head/><body><p align=\"center\">状态</p></body></html>"))
+        self.label_61.setText(_translate("MainWindow", "<html><head/><body><p align=\"center\">Status</p></body></html>"))
 
-        self.label_62.setText(_translate("MainWindow", "<html><head/><body><p align=\"center\">超时时间</p></body></html>"))
+        self.label_62.setText(_translate("MainWindow", "<html><head/><body><p align=\"center\">Timeout threshold</p></body></html>"))
         self.auto_line_text_warninglight_timeout.setText(_translate("MainWindow", str(auto_item_timeout["warninglight"])))
         self.auto_line_text_rs485_timeout.setText(_translate("MainWindow", str(auto_item_timeout["rs485"])))
         self.auto_line_text_brake_timeout.setText(_translate("MainWindow", str(auto_item_timeout["brake"])))
@@ -1568,22 +1569,22 @@ class Ui_MainWindow(object):
         self.auto_line_text_bootlight_timeout.setText(_translate("MainWindow", str(auto_item_timeout["bootlight"])))
         self.auto_line_text_di_timeout.setText(_translate("MainWindow", str(auto_item_timeout["di"])))
 
-        self.auto_push_button_report.setText(_translate("MainWindow", "一键生成报告"))
-        self.auto_push_button_test.setText(_translate("MainWindow", "一键自动测试"))
-        self.auto_push_button_pause.setText(_translate("MainWindow", "暂停"))
-        self.label_69.setText(_translate("MainWindow", "<html><head/><body><p align=\"center\">总循环次数</p></body></html>"))
+        self.auto_push_button_report.setText(_translate("MainWindow", "Generate Reporter"))
+        self.auto_push_button_test.setText(_translate("MainWindow", "Auto Test Start"))
+        self.auto_push_button_pause.setText(_translate("MainWindow", "Pause"))
+        self.label_69.setText(_translate("MainWindow", "<html><head/><body><p align=\"center\">Total Cycle Times</p></body></html>"))
         self.auto_line_text_total.setText(_translate("MainWindow", str(auto_item_total_times)))
         self.auto_line_text_pass_percent.setText(_translate("MainWindow", str(auto_item_pass_percent)))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_4), _translate("MainWindow", "自动测试"))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_7), _translate("MainWindow", "测试报告"))
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_4), _translate("MainWindow", "Auto Test"))
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_7), _translate("MainWindow", "Test Reporter"))
         self.groupBox.setTitle(_translate("MainWindow", "connect"))
         self.label_70.setText(_translate("MainWindow", "IP"))
         self.label_71.setText(_translate("MainWindow", "PORT"))
         self.line_ip.setText(_translate("MainWindow", str(target_ip)))
         self.line_port.setText(_translate("MainWindow", "4822"))
-        self.manual_test_push_openpc.setText(_translate("MainWindow", "开机"))
-        self.manual_test_push_closepc.setText(_translate("MainWindow", "关机"))
-        self.manual_print_barcode.setText(_translate("MainWindow", "打印条形码"))
+        self.manual_test_push_openpc.setText(_translate("MainWindow", "OpenPc"))
+        self.manual_test_push_closepc.setText(_translate("MainWindow", "ShutdownPc"))
+        self.manual_print_barcode.setText(_translate("MainWindow", "PrintBarCode"))
         self.push_connect.setText(_translate("MainWindow", "connect"))
         self.groupBox_2.setTitle(_translate("MainWindow", "info"))
         self.label_74.setText(_translate("MainWindow", "MainVersion:"))
@@ -1626,7 +1627,7 @@ class connectThread(QThread):
             self.main_signal.emit(self.mainversion_string, self.is_connected)
         except:
             self.is_connected = False
-            self.main_signal.emit("解析失败", self.is_connected) 
+            self.main_signal.emit("decode failed", self.is_connected) 
 
         self.so.sendto(struct.pack('>HB',0x1234,0x17),TESTBOART_ADDR)
         self.so.settimeout(2)
@@ -1638,11 +1639,11 @@ class connectThread(QThread):
             head, item_index, gyro1,gyro2,gyro3 = struct.unpack('>H4B',ret)
             self.gyroversion_string = "f"+str(gyro1)+"."+str(gyro2)+"."+str(gyro3)
             if self.gyroversion_string == "f0.0.0":
-                self.gyro_signal.emit("解析失败")
+                self.gyro_signal.emit("decode failed")
             else:
                 self.gyro_signal.emit(self.gyroversion_string)
         except:
-            self.gyro_signal.emit("解析失败")
+            self.gyro_signal.emit("decode failed")
 
         self.so.sendto(struct.pack('>HB',0x1234,0x15),TESTBOART_ADDR)
         self.so.settimeout(2)
@@ -1653,6 +1654,10 @@ class connectThread(QThread):
         except socket.timeout:
             pass
         try:
+            fontdir = os.path.dirname(os.path.abspath(__file__))
+            fontfile = os.path.join(fontdir,"courR14.pil")
+            from PIL import ImageFont
+            font = ImageFont.load_path(fontfile)
             head, item_index, uid1,uid2,uid3,uid4,uid5,uid6 = struct.unpack('>H7B',ret)
             print(str(hex(uid1)) + " " + str(hex(uid2)) + " " + str(hex(uid3)) + " " + str(hex(uid4)) + " " + str(hex(uid5)) + " " + str(hex(uid6)))
             uid1_string = self.hex2string(uid1)
@@ -1670,7 +1675,7 @@ class connectThread(QThread):
         except Exception as e:
             print(e)
             self.uid_string = ""
-            self.uid_signal.emit("解析失败", "NULL")
+            self.uid_signal.emit("decode failed", "NULL")
 
 class autoTestSendCmdThread(QThread):
     result_signal = pyqtSignal(int, bool)
@@ -1764,7 +1769,7 @@ class autoTestSendCmdThread(QThread):
                 delay_times = 00
                 warnlight_times = 0
                 
-                self.abnormal_msg_signal.emit("测试次数必须为整数!")
+                self.abnormal_msg_signal.emit("This items must be integer!")
                 self.total_times = 0
                 cycle_times = 0
                 cycle_time_for_pc = 0
@@ -1797,7 +1802,7 @@ class autoTestSendCmdThread(QThread):
                 di_time = float(0.0)
                 delay_time = float(0.0)
                 warnlight_time = float(0.0)
-                self.abnormal_msg_signal.emit("超时时间必须为浮点数!")
+                self.abnormal_msg_signal.emit("This items must be float!")
 
             self.process_bar_signal.emit(self.total_times, self.total_times_counter)
             
